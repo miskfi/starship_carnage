@@ -1,0 +1,21 @@
+{
+  "name": "untitled-game",
+  "version": "1.0.0",
+  "description": "To make it easy for you to get started with GitLab, here's a list of recommended next steps.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "parcel view/index.html",
+    "build": "parcel build view/index.html"
+  },
+  "author": "Filip Miskarik",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^2.10.3",
+    "parcel-reporter-static-files-copy": "^1.5.3"
+  },
+  "dependencies": {
+    "@pixi/loaders": "^6.5.10",
+    "colfio": "^0.3.1",
+    "pixi.js": "^7.3.2"
+  }
+}
