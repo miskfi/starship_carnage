@@ -3,6 +3,7 @@ import {ProjectileMovement} from "./projectile";
 import {EnemyMovement} from "./enemy";
 import {Tags} from "./constants";
 import {PlayerController} from "./player";
+import {getRandomInteger} from "./utils";
 
 export const createProjectile = (scene: Colfio.Scene): Colfio.Graphics =>
 {
@@ -29,8 +30,8 @@ export const createEnemyCircle = (scene: Colfio.Scene): Colfio.Graphics =>
     const enemyCircle = new Colfio.Graphics();
     const size = 50;
 
-    const randomPosX = Math.random() * (scene.app.screen.width / 2);
-    const randomPosY = Math.random() * (scene.app.screen.height / 2);
+    const randomPosX = getRandomInteger(size, scene.app.screen.width - size);
+    const randomPosY = getRandomInteger(size, scene.app.screen.height / 2 - size);
 
     enemyCircle.beginFill(0xFF0000);
     enemyCircle.drawCircle(0, 0, size / 2);

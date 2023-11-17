@@ -1,6 +1,7 @@
 import * as Colfio from "colfio";
 import {GameState} from "./game";
 import {Attributes} from "./constants";
+import {getRandomInteger} from "./utils";
 
 export class EnemyMovement extends Colfio.Component
 {
@@ -11,7 +12,7 @@ export class EnemyMovement extends Colfio.Component
     {
         const minAngle = 45;
         const maxAngle = 135;
-        const randomAngle = Math.floor(Math.random() * (maxAngle - minAngle + 1)) + minAngle;
+        const randomAngle = getRandomInteger(minAngle, maxAngle);
         this.angleRad = randomAngle * (Math.PI / 180);
         this.velocity = new Colfio.Vector(Math.cos(this.angleRad), Math.sin(this.angleRad)).normalize();
     }
