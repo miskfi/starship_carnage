@@ -1,8 +1,15 @@
 import * as Colfio from 'colfio';
+import {projectileEmitter} from "./factory";
 
 export class PlayerController extends Colfio.Component
 {
     keyInput: Colfio.KeyInputComponent;
+    playerID: number;
+
+    constructor(playerID) {
+        super();
+        this.playerID = playerID;
+    }
 
     onInit()
     {
@@ -36,6 +43,14 @@ export class PlayerController extends Colfio.Component
         {
             if (boundRect.top > 0)
                 pos.y -= movementDiff;
+        }
+
+        if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_SPACE))
+        {
+            this.keyInput.handleKey(Colfio.Keys.KEY_SPACE);
+
+            const newProjectile = projectileEmitter(this.scene, this.playerID);
+            this.scene.stage.addChild(newProjectile);
         }
     }
 }

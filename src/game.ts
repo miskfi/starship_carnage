@@ -3,7 +3,8 @@ import * as PIXI from 'pixi.js';
 import {KeyInputComponent} from "colfio";
 import {PlayerController} from "./player";
 
-class Game {
+class Game
+{
     engine: Colfio.Engine;
 
     constructor()
@@ -22,8 +23,6 @@ class Game {
         this.initGame();
     }
 
-    text: PIXI.Text;
-
     initGame() {
         const keyInput = new KeyInputComponent();
         this.engine.scene.addGlobalComponent(keyInput);
@@ -32,11 +31,10 @@ class Game {
         const player = new Colfio.Graphics();
         player.beginFill(0xFFFFFF);
         player.drawRect(0, 0, 40, 40);
-        player.name = "PLAYER";
+        player["name"] = "PLAYER";
         player.endFill();
-        player.position.set(200, 200);
 
-        player.addComponent(new PlayerController());
+        player.addComponent(new PlayerController(player.id));
         this.engine.scene.stage.addChild(player);
     }
 
