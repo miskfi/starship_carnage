@@ -22,13 +22,9 @@ export class EnemyMovement extends Colfio.Component
         const boundRect = this.owner.getBounds();
 
         if (boundRect.right >= screenWidth || boundRect.left <= 0)
-        {
             this.velocity = new Colfio.Vector(-this.velocity.x, this.velocity.y);
-        }
-        else if (boundRect.bottom >= screenHeight || boundRect.top <= 0)
-        {
+        if (boundRect.bottom >= screenHeight || boundRect.top <= 0)
             this.velocity = new Colfio.Vector(this.velocity.x, -this.velocity.y);
-        }
 
         pos.x += delta * this.velocity.x * 0.15;
         pos.y += delta * this.velocity.y * 0.15;

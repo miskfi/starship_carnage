@@ -4,9 +4,9 @@ import {EnemyMovement} from "./enemy";
 import {Tags} from "./constants";
 import {PlayerController} from "./player";
 
-export const createProjectile = (scene: Colfio.Scene, playerID: number): Colfio.Graphics =>
+export const createProjectile = (scene: Colfio.Scene): Colfio.Graphics =>
 {
-    const player = scene.findObjectById(playerID);
+    const player = scene.findObjectByTag(Tags.PLAYER);
 
     const projectile = new Colfio.Graphics();
     projectile.beginFill(0xFFFFFF);
@@ -52,6 +52,6 @@ export const createPlayer = (scene: Colfio.Scene): Colfio.Graphics =>
     player.addTag(Tags.PLAYER);
     player.endFill();
 
-    player.addComponent(new PlayerController(player.id));
+    player.addComponent(new PlayerController());
     return player;
 }

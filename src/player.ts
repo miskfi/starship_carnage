@@ -1,19 +1,23 @@
 import * as Colfio from 'colfio';
 import {createProjectile} from "./factory";
+import {Messages} from "./constants";
 
 export class PlayerController extends Colfio.Component
 {
     keyInput: Colfio.KeyInputComponent;
-    playerID: number;
-
-    constructor(playerID) {
-        super();
-        this.playerID = playerID;
-    }
 
     onInit()
     {
         this.keyInput = this.scene.getGlobalAttribute("key_input");
+        this.subscribe(Messages.PLAYER_HIT);
+    }
+
+    onMessage(msg: Colfio.Message)
+    {
+        if (msg.action === Messages.PLAYER_HIT)
+        {
+            this.owner.destroy();  // TODO add Game Over
+        }
     }
 
     onUpdate(delta: number, absolute: number)
@@ -54,7 +58,7 @@ export class PlayerController extends Colfio.Component
 
     shootProjectile()
     {
-        const newProjectile = createProjectile(this.scene, this.playerID);
+        const newProjectile = createProjectile(this.scene);
         this.scene.stage.addChild(newProjectile);
     }
 }

@@ -4,3 +4,8 @@ export enum Tags
     PLAYER_PROJECTILE = "PLAYER_PROJECTILE",
     PLAYER = "PLAYER"
 }
+
+export enum Messages
+{
+    PLAYER_HIT = "PLAYER_HIT"
+}
