@@ -1,10 +1,13 @@
 import * as Colfio from 'colfio';
 import * as PIXI from 'pixi.js';
+import {KeyInputComponent} from "colfio";
+import {PlayerController} from "./player";
 
-class MyGame {
+class Game {
     engine: Colfio.Engine;
 
-    constructor() {
+    constructor()
+    {
         this.engine = new Colfio.Engine();
         let canvas = (document.getElementById('gameCanvas') as HTMLCanvasElement);
 
@@ -16,27 +19,28 @@ class MyGame {
             resolution: 1,
         });
 
-        this.load();
+        this.initGame();
     }
 
     text: PIXI.Text;
 
-    load() {
-        const style = new PIXI.TextStyle({
-            fontFamily: 'Arial',
-            fontSize: 36,
-            fill: ['#ffffff', '#00ff99'],
-            stroke: '#4a1850',
-            strokeThickness: 5
-        });
+    initGame() {
+        const keyInput = new KeyInputComponent();
+        this.engine.scene.addGlobalComponent(keyInput);
+        this.engine.scene.assignGlobalAttribute("key_input", keyInput);
 
-        this.text = new PIXI.Text('Hello World', style);
-        this.text.position.set(this.engine.config.width / 2, this.engine.config.width / 2);
-        this.text.anchor.set(0.5);
-        this.engine.scene.stage.addChild(this.text);
+        const player = new Colfio.Graphics();
+        player.beginFill(0xFFFFFF);
+        player.drawRect(0, 0, 40, 40);
+        player.name = "PLAYER";
+        player.endFill();
+        player.position.set(200, 200);
+
+        player.addComponent(new PlayerController());
+        this.engine.scene.stage.addChild(player);
     }
 
 }
 
 // this will create a new instance as soon as this file is loaded
-export default new MyGame();
+export default new Game();
