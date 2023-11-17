@@ -1,7 +1,7 @@
 import * as Colfio from 'colfio';
 import {ProjectileMovement} from "./projectile";
 import {EnemyMovement} from "./enemy";
-import {Tags} from "./constants";
+import {Attributes, Tags} from "./constants";
 import {PlayerController} from "./player";
 import {getRandomInteger} from "./utils";
 
@@ -15,7 +15,6 @@ export const createProjectile = (scene: Colfio.Scene): Colfio.Graphics =>
     projectile["name"] = Tags.PLAYER_PROJECTILE;
     projectile.addTag(Tags.PLAYER_PROJECTILE);
     projectile.endFill();
-
     projectile.addComponent(new ProjectileMovement());
     return projectile;
 }
@@ -38,8 +37,10 @@ export const createEnemyCircle = (scene: Colfio.Scene): Colfio.Graphics =>
     enemyCircle.position.set(randomPosX, randomPosY);
     enemyCircle["name"] = Tags.ENEMY_CIRCLE;
     enemyCircle.addTag(Tags.ENEMY_CIRCLE);
-
     enemyCircle.addComponent(new EnemyMovement());
+
+    const enemies = scene.getGlobalAttribute<number>(Attributes.ENEMIES_COUNT);
+    scene.assignGlobalAttribute(Attributes.ENEMIES_COUNT, enemies + 1);
     return enemyCircle;
 }
 
@@ -52,7 +53,6 @@ export const createPlayer = (scene: Colfio.Scene): Colfio.Graphics =>
     player["name"] = Tags.PLAYER;
     player.addTag(Tags.PLAYER);
     player.endFill();
-
     player.addComponent(new PlayerController());
     return player;
 }

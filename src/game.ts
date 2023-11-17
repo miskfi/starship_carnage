@@ -37,6 +37,7 @@ class Game
         this.engine.scene.addGlobalComponent(new CollisionHandler());
         this.engine.scene.addGlobalComponent(new GameManager());
 
+        this.engine.scene.assignGlobalAttribute(Attributes.ENEMIES_COUNT, 0);
         this.engine.scene.assignGlobalAttribute(Attributes.GAME_STATE, {
             isRunning: true
         } as GameState)
