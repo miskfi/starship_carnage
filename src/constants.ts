@@ -1,0 +1,6 @@
+export enum Tags
+{
+    ENEMY_CIRCLE = "ENEMY_CIRCLE",
+    PLAYER_PROJECTILE = "PLAYER_PROJECTILE",
+    PLAYER = "PLAYER"
+}

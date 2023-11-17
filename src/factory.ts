@@ -1,15 +1,18 @@
 import * as Colfio from 'colfio';
 import {ProjectileMovement} from "./projectile";
 import {EnemyMovement} from "./enemy";
+import {Tags} from "./constants";
+import {PlayerController} from "./player";
 
-export const projectileEmitter = (scene: Colfio.Scene, playerID: number): Colfio.Graphics =>
+export const createProjectile = (scene: Colfio.Scene, playerID: number): Colfio.Graphics =>
 {
     const player = scene.findObjectById(playerID);
 
     const projectile = new Colfio.Graphics();
     projectile.beginFill(0xFFFFFF);
     projectile.drawCircle(player.position.x + player.width/2, player.position.y + player.height/2, 5);
-    projectile["name"] = "PLAYER_PROJECTILE";
+    projectile["name"] = Tags.PLAYER_PROJECTILE;
+    projectile.addTag(Tags.PLAYER_PROJECTILE);
     projectile.endFill();
 
     projectile.addComponent(new ProjectileMovement());
@@ -21,7 +24,7 @@ export const projectileEmitter = (scene: Colfio.Scene, playerID: number): Colfio
  * @param scene game scene
  * @return Graphics object with the circle
  */
-export const enemyCircleEmitter = (scene: Colfio.Scene): Colfio.Graphics =>
+export const createEnemyCircle = (scene: Colfio.Scene): Colfio.Graphics =>
 {
     const enemyCircle = new Colfio.Graphics();
     const size = 50;
@@ -32,8 +35,23 @@ export const enemyCircleEmitter = (scene: Colfio.Scene): Colfio.Graphics =>
     enemyCircle.beginFill(0xFF0000);
     enemyCircle.drawCircle(0, 0, size / 2);
     enemyCircle.position.set(randomPosX, randomPosY);
-    enemyCircle["name"] = "ENEMY_CIRCLE";
+    enemyCircle["name"] = Tags.ENEMY_CIRCLE;
+    enemyCircle.addTag(Tags.ENEMY_CIRCLE);
 
     enemyCircle.addComponent(new EnemyMovement());
     return enemyCircle;
+}
+
+export const createPlayer = (scene: Colfio.Scene): Colfio.Graphics =>
+{
+    const player = new Colfio.Graphics();
+    player.beginFill(0xFFFFFF);
+    player.drawRect(0, 0, 40, 40);
+    player.position.set(scene.width/2, scene.height - 40);
+    player["name"] = Tags.PLAYER;
+    player.addTag(Tags.PLAYER);
+    player.endFill();
+
+    player.addComponent(new PlayerController(player.id));
+    return player;
 }

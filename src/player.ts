@@ -1,5 +1,5 @@
 import * as Colfio from 'colfio';
-import {projectileEmitter} from "./factory";
+import {createProjectile} from "./factory";
 
 export class PlayerController extends Colfio.Component
 {
@@ -54,7 +54,7 @@ export class PlayerController extends Colfio.Component
 
     shootProjectile()
     {
-        const newProjectile = projectileEmitter(this.scene, this.playerID);
+        const newProjectile = createProjectile(this.scene, this.playerID);
         this.scene.stage.addChild(newProjectile);
     }
 }
