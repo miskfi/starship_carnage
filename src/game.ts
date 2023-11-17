@@ -1,6 +1,7 @@
 import * as Colfio from 'colfio';
 import {KeyInputComponent} from "colfio";
 import {PlayerController} from "./player";
+import {enemyCircleEmitter} from "./factory";
 
 class Game
 {
@@ -37,6 +38,10 @@ class Game
 
         player.addComponent(new PlayerController(player.id));
         this.engine.scene.stage.addChild(player);
+
+        // create enemy circle
+        const enemy = enemyCircleEmitter(this.engine.scene);
+        this.engine.scene.stage.addChild(enemy);
     }
 
 }

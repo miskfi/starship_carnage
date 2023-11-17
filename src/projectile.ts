@@ -9,7 +9,7 @@ export class ProjectileMovement extends Colfio.Component
         const pos = this.owner.position;
         const boundRect = this.owner.getBounds();
 
-        pos.y -= delta * 0.25;
+        pos.y -= delta * 0.4;
 
         if (boundRect.bottom <= 0)
             this.owner.destroy();
