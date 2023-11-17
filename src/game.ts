@@ -1,5 +1,4 @@
 import * as Colfio from 'colfio';
-import * as PIXI from 'pixi.js';
 import {KeyInputComponent} from "colfio";
 import {PlayerController} from "./player";
 
@@ -28,9 +27,11 @@ class Game
         this.engine.scene.addGlobalComponent(keyInput);
         this.engine.scene.assignGlobalAttribute("key_input", keyInput);
 
+        // create the player square
         const player = new Colfio.Graphics();
         player.beginFill(0xFFFFFF);
         player.drawRect(0, 0, 40, 40);
+        player.position.set(this.engine.scene.width/2, this.engine.scene.height - 40);
         player["name"] = "PLAYER";
         player.endFill();
 

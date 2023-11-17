@@ -27,30 +27,34 @@ export class PlayerController extends Colfio.Component
         if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_LEFT) || this.keyInput.isKeyPressed(Colfio.Keys.KEY_A))
         {
             if (boundRect.left > 0)
-                pos.x -= movementDiff;
+                pos.x -= Math.min(movementDiff, boundRect.left);
         }
         else if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_RIGHT) || this.keyInput.isKeyPressed(Colfio.Keys.KEY_D))
         {
             if (boundRect.right < screenWidth)
-                pos.x += movementDiff;
+                pos.x += Math.min(movementDiff, screenWidth - boundRect.right);
         }
         else if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_DOWN) || this.keyInput.isKeyPressed(Colfio.Keys.KEY_S))
         {
             if (boundRect.bottom < screenHeight)
-                pos.y += movementDiff;
+                pos.y += Math.min(movementDiff, screenHeight - boundRect.bottom);
         }
         else if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_UP) || this.keyInput.isKeyPressed(Colfio.Keys.KEY_W))
         {
             if (boundRect.top > 0)
-                pos.y -= movementDiff;
+                pos.y -= Math.min(movementDiff, boundRect.top);
         }
 
         if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_SPACE))
         {
             this.keyInput.handleKey(Colfio.Keys.KEY_SPACE);
-
-            const newProjectile = projectileEmitter(this.scene, this.playerID);
-            this.scene.stage.addChild(newProjectile);
+            this.shootProjectile();
         }
+    }
+
+    shootProjectile()
+    {
+        const newProjectile = projectileEmitter(this.scene, this.playerID);
+        this.scene.stage.addChild(newProjectile);
     }
 }
