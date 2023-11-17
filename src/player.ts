@@ -1,6 +1,7 @@
 import * as Colfio from 'colfio';
 import {createProjectile} from "./factory";
-import {Messages} from "./constants";
+import {Attributes, Messages} from "./constants";
+import {GameState} from "./game";
 
 export class PlayerController extends Colfio.Component
 {
@@ -8,20 +9,14 @@ export class PlayerController extends Colfio.Component
 
     onInit()
     {
-        this.keyInput = this.scene.getGlobalAttribute("key_input");
-        this.subscribe(Messages.PLAYER_HIT);
-    }
-
-    onMessage(msg: Colfio.Message)
-    {
-        if (msg.action === Messages.PLAYER_HIT)
-        {
-            this.owner.destroy();  // TODO add Game Over
-        }
+        this.keyInput = this.scene.getGlobalAttribute(Attributes.KEY_INPUT);
     }
 
     onUpdate(delta: number, absolute: number)
     {
+        if (! this.scene.getGlobalAttribute<GameState>(Attributes.GAME_STATE).isRunning)
+            return;
+
         const pos = this.owner.position;
         const screenWidth = this.scene.app.screen.width;
         const screenHeight = this.scene.app.screen.height;
@@ -58,7 +53,11 @@ export class PlayerController extends Colfio.Component
 
     shootProjectile()
     {
-        const newProjectile = createProjectile(this.scene);
-        this.scene.stage.addChild(newProjectile);
+        if (this.scene.getGlobalAttribute(Attributes.PROJECTILES_AVAILABLE) > 0)
+        {
+            const newProjectile = createProjectile(this.scene);
+            this.scene.stage.addChild(newProjectile);
+            this.sendMessage(Messages.PROJECTILE_SHOT);
+        }
     }
 }

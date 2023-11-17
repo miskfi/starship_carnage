@@ -1,4 +1,6 @@
 import * as Colfio from "colfio";
+import {GameState} from "./game";
+import {Attributes} from "./constants";
 
 export class EnemyMovement extends Colfio.Component
 {
@@ -16,6 +18,9 @@ export class EnemyMovement extends Colfio.Component
 
     onUpdate(delta: number, absolute: number)
     {
+        if (! this.scene.getGlobalAttribute<GameState>(Attributes.GAME_STATE).isRunning)
+            return;
+
         const pos = this.owner.position;
         const screenWidth = this.scene.app.screen.width;
         const screenHeight = this.scene.app.screen.height;

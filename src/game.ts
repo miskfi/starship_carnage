@@ -2,6 +2,13 @@ import * as Colfio from 'colfio';
 import {KeyInputComponent} from "colfio";
 import {createEnemyCircle, createPlayer} from "./factory";
 import {CollisionHandler} from "./collision_handler";
+import {Attributes} from "./constants";
+import {GameManager} from "./game_manager";
+
+export class GameState
+{
+    isRunning: boolean
+}
 
 class Game
 {
@@ -27,8 +34,15 @@ class Game
     {
         const keyInput = new KeyInputComponent();
         this.engine.scene.addGlobalComponent(keyInput);
-        this.engine.scene.assignGlobalAttribute("key_input", keyInput);
         this.engine.scene.addGlobalComponent(new CollisionHandler());
+        this.engine.scene.addGlobalComponent(new GameManager());
+
+        this.engine.scene.assignGlobalAttribute(Attributes.GAME_STATE, {
+            isRunning: true
+        } as GameState)
+        this.engine.scene.assignGlobalAttribute(Attributes.KEY_INPUT, keyInput);
+        this.engine.scene.assignGlobalAttribute(Attributes.PROJECTILES_MAX, 3);
+        this.engine.scene.assignGlobalAttribute(Attributes.PROJECTILES_AVAILABLE, 3);
 
         // create the player square
         const player = createPlayer(this.engine.scene);

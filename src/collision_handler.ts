@@ -21,12 +21,16 @@ export class CollisionHandler extends Colfio.Component
                     // FIXME currently, there can be only one collision per frame
                     projectile.destroy();
                     enemy.destroy();
+                    this.sendMessage(Messages.PROJECTILE_DESTROYED);
                     return;
                 }
             }
 
-            if (this.collide(player.getBounds(), enemyBounds))
-                this.sendMessage(Messages.PLAYER_HIT);
+            if (player !== null)
+            {
+                if (this.collide(player?.getBounds(), enemyBounds))
+                    this.sendMessage(Messages.PLAYER_HIT);
+            }
         }
     }
 
