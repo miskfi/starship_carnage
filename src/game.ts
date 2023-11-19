@@ -1,8 +1,8 @@
 import * as Colfio from 'colfio';
-import {KeyInputComponent} from "colfio";
+import {KeyInputComponent} from 'colfio';
 import {createEnemyCircle, createPlayer} from "./factory";
 import {CollisionHandler} from "./collision_handler";
-import {Attributes} from "./constants";
+import {Attributes, EnemyType} from "./constants";
 import {GameManager} from "./game_manager";
 
 export class GameState
@@ -50,7 +50,7 @@ class Game
         this.engine.scene.stage.addChild(player);
 
         // create enemy circle
-        const enemy = createEnemyCircle(this.engine.scene);
+        const enemy = createEnemyCircle(this.engine.scene, EnemyType.SMALL);
         this.engine.scene.stage.addChild(enemy);
     }
 }

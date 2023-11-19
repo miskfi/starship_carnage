@@ -1,7 +1,7 @@
 import * as Colfio from 'colfio';
 import {ProjectileMovement} from "./projectile";
 import {EnemyMovement} from "./enemy";
-import {Attributes, Tags} from "./constants";
+import {Attributes, EnemySizes, EnemyType, Tags} from "./constants";
 import {PlayerController} from "./player";
 import {getRandomInteger} from "./utils";
 
@@ -22,22 +22,49 @@ export const createProjectile = (scene: Colfio.Scene): Colfio.Graphics =>
 /**
  * Create enemy circle at a random position in the top half of the screen.
  * @param scene game scene
+ * @param enemyType type (size) of the enemy to create
+ * @param initialPos position at which the enemy will be created
+ *  (optional, if not defined, the position will be selected randomly)
+ * @param initialVelocity initial velocity of the enemy
+ *  (optional, if not defined, the velocity will be downward at a random angle between 45 and 135 degrees)
  * @return Graphics object with the circle
  */
-export const createEnemyCircle = (scene: Colfio.Scene): Colfio.Graphics =>
+export const createEnemyCircle = (
+    scene: Colfio.Scene,
+    enemyType: EnemyType,
+    initialPos: [number, number] | null = null,
+    initialVelocity: Colfio.Vector | null = null
+): Colfio.Graphics =>
 {
     const enemyCircle = new Colfio.Graphics();
-    const size = 50;
+    const size = EnemySizes[enemyType];
 
-    const randomPosX = getRandomInteger(size, scene.app.screen.width - size);
-    const randomPosY = getRandomInteger(size, scene.app.screen.height / 2 - size);
+    // TODO přidat kontrolu, abych nevytvářel kruh v pozici, kde už něco je
+    if (initialPos === null)
+    {
+        initialPos = [0, 0];
+        initialPos[0] = getRandomInteger(size, scene.app.screen.width - size);
+        initialPos[1] = getRandomInteger(size, scene.app.screen.height / 2 - size);
+    }
+    if (initialVelocity == null)
+    {
+        const minAngle = 45;
+        const maxAngle = 135;
+        const randomAngle = getRandomInteger(minAngle, maxAngle);
+        const angleRad = randomAngle * (Math.PI / 180);
+
+        initialVelocity = new Colfio.Vector(Math.cos(angleRad), Math.sin(angleRad)).normalize();
+    }
 
     enemyCircle.beginFill(0xFF0000);
     enemyCircle.drawCircle(0, 0, size / 2);
-    enemyCircle.position.set(randomPosX, randomPosY);
+    enemyCircle.position.set(initialPos[0], initialPos[1]);
     enemyCircle["name"] = Tags.ENEMY_CIRCLE;
     enemyCircle.addTag(Tags.ENEMY_CIRCLE);
     enemyCircle.addComponent(new EnemyMovement());
+    enemyCircle.assignAttribute(Attributes.ENEMY_TYPE, enemyType);
+
+    enemyCircle.assignAttribute(Attributes.ENEMY_VELOCITY, initialVelocity);
 
     const enemies = scene.getGlobalAttribute<number>(Attributes.ENEMIES_COUNT);
     scene.assignGlobalAttribute(Attributes.ENEMIES_COUNT, enemies + 1);
