@@ -48,11 +48,16 @@ export const createEnemyCircle = (
     }
     if (initialVelocity == null)
     {
-        const minAngle = 45;
-        const maxAngle = 135;
-        const randomAngle = getRandomInteger(minAngle, maxAngle);
-        const angleRad = randomAngle * (Math.PI / 180);
+        const angleIntervalLeft = [20, 70];
+        const angleIntervalRight = [110, 160];
+        let randomAngle;
 
+        if (Math.random() > 0.5)
+            randomAngle = getRandomInteger(angleIntervalLeft[0], angleIntervalLeft[1]);
+        else
+            randomAngle = getRandomInteger(angleIntervalRight[0], angleIntervalRight[1]);
+
+        const angleRad = randomAngle * (Math.PI / 180);
         initialVelocity = new Colfio.Vector(Math.cos(angleRad), Math.sin(angleRad)).normalize();
     }
 
