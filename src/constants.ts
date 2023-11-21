@@ -18,6 +18,7 @@ export enum Attributes
     GAME_STATE = "GAME_STATE",
     ENEMIES_COUNT = "ENEMIES_COUNT",
     ENEMY_TYPE = "ENEMY_TYPE",
+    ENEMY_SPEED = "ENEMY_SPEED",
     ENEMY_VELOCITY = "ENEMY_VELOCITY",
     KEY_INPUT = "KEY_INPUT",
     PROJECTILES_AVAILABLE = "PROJECTILES_AVAILABLE",
@@ -48,4 +49,13 @@ export const EnemySizes =
     "MEDIUM": 40,
     "BIG": 50,
     "BIGGEST": 60
+}
+
+export const EnemySpeeds =
+{
+    "SMALLEST": 0.2,
+    "SMALL": 0.175,
+    "MEDIUM": 0.15,
+    "BIG": 0.125,
+    "BIGGEST": 0.1
 }

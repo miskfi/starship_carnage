@@ -4,6 +4,8 @@ import {GameState} from "./game";
 
 export class ProjectileMovement extends Colfio.Component
 {
+    projectileSpeed = 0.5;
+
     onInit() {}
 
     onUpdate(delta: number, absolute: number)
@@ -14,7 +16,7 @@ export class ProjectileMovement extends Colfio.Component
         const pos = this.owner.position;
         const boundRect = this.owner.getBounds();
 
-        pos.y -= delta * 0.4;
+        pos.y -= delta * this.projectileSpeed;
 
         if (boundRect.bottom <= 0)
             this.sendMessage(Messages.PROJECTILE_DESTROYED, this.owner);

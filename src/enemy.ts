@@ -29,7 +29,9 @@ export class EnemyMovement extends Colfio.Component
             )
 
         velocity = this.owner.getAttribute<Colfio.Vector>(Attributes.ENEMY_VELOCITY);
-        pos.x += delta * velocity.x * 0.15;
-        pos.y += delta * velocity.y * 0.15;
+        const speed = this.owner.getAttribute<number>(Attributes.ENEMY_SPEED);
+
+        pos.x += delta * velocity.x * speed;
+        pos.y += delta * velocity.y * speed;
     }
 }

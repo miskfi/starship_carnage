@@ -50,7 +50,7 @@ class Game
         this.engine.scene.stage.addChild(player);
 
         // create enemy circle
-        const enemy = createEnemyCircle(this.engine.scene, EnemyType.SMALL);
+        const enemy = createEnemyCircle(this.engine.scene, EnemyType.MEDIUM);
         this.engine.scene.stage.addChild(enemy);
     }
 }
