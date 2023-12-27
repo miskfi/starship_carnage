@@ -12,36 +12,11 @@ export class CollisionTrigger extends Colfio.Component
     {
         const projectiles = this.scene.findObjectsByTag(Tags.PLAYER_PROJECTILE);
         const player = this.scene.findObjectByTag(Tags.PLAYER);
+        const enemies = this.scene.findObjectsByTag(Tags.ENEMY_CIRCLE);
 
         const screenWidth = this.scene.app.screen.width;
         const screenHeight = this.scene.app.screen.height;
 
-        for (let projectile of projectiles)
-        {
-            const projectileBounds = projectile.getBounds();
-            const enemies = this.scene.findObjectsByTag(Tags.ENEMY_CIRCLE);
-
-            for (let enemy of enemies)
-            {
-                // collision of enemy and projectile
-                if (this.collide(projectileBounds, enemy.getBounds()))
-                {
-                    this.sendMessage(Messages.PROJECTILE_COLLISION, {
-                        projectile, collider: enemy, type: ProjectileCollisionType.ENEMY
-                    })
-                }
-            }
-
-            // collision of enemy and border
-            if (projectileBounds.bottom <= 0)
-            {
-                this.sendMessage(Messages.PROJECTILE_COLLISION, {
-                    projectile, type: ProjectileCollisionType.BORDER
-                })
-            }
-        }
-
-        const enemies = this.scene.findObjectsByTag(Tags.ENEMY_CIRCLE);
         for (let enemy of enemies)
         {
             const enemyBounds = enemy.getBounds();
@@ -74,6 +49,31 @@ export class CollisionTrigger extends Colfio.Component
 
             if (enemyBounds.bottom >= screenHeight || enemyBounds.top <= 0)
                 this.sendMessage(Messages.ENEMY_COLLISION, {enemy, type: EnemyCollisionType.BORDER_VERTICAL})
+        }
+
+        for (let projectile of projectiles)
+        {
+            const projectileBounds = projectile.getBounds();
+            const enemies = this.scene.findObjectsByTag(Tags.ENEMY_CIRCLE);
+
+            for (let enemy of enemies)
+            {
+                // collision of enemy and projectile
+                if (this.collide(projectileBounds, enemy.getBounds()))
+                {
+                    this.sendMessage(Messages.PROJECTILE_COLLISION, {
+                        projectile, collider: enemy, type: ProjectileCollisionType.ENEMY
+                    })
+                }
+            }
+
+            // collision of enemy and border
+            if (projectileBounds.bottom <= 0)
+            {
+                this.sendMessage(Messages.PROJECTILE_COLLISION, {
+                    projectile, type: ProjectileCollisionType.BORDER
+                })
+            }
         }
     }
 
