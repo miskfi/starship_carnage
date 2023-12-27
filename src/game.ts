@@ -1,9 +1,10 @@
 import * as Colfio from 'colfio';
 import {KeyInputComponent} from 'colfio';
 import {createEnemyCircle, createPlayer} from "./factory";
-import {CollisionHandler} from "./collision_handler";
+import {CollisionTrigger} from "./collision_trigger";
 import {Attributes, EnemyType} from "./constants";
 import {GameManager} from "./game_manager";
+import {CollisionResolver} from "./collision_resolver";
 
 export class GameState
 {
@@ -34,7 +35,8 @@ class Game
     {
         const keyInput = new KeyInputComponent();
         this.engine.scene.addGlobalComponent(keyInput);
-        this.engine.scene.addGlobalComponent(new CollisionHandler());
+        this.engine.scene.addGlobalComponent(new CollisionTrigger());
+        this.engine.scene.addGlobalComponent(new CollisionResolver());
         this.engine.scene.addGlobalComponent(new GameManager());
 
         this.engine.scene.assignGlobalAttribute(Attributes.ENEMIES_COUNT, 0);

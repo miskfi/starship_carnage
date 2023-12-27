@@ -14,11 +14,6 @@ export class ProjectileMovement extends Colfio.Component
             return;
 
         const pos = this.owner.position;
-        const boundRect = this.owner.getBounds();
-
         pos.y -= delta * this.projectileSpeed;
-
-        if (boundRect.bottom <= 0)
-            this.sendMessage(Messages.PROJECTILE_DESTROYED, this.owner);
     }
 }
