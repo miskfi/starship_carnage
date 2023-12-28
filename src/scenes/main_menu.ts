@@ -63,8 +63,8 @@ export class MainMenu extends Colfio.Component
         this.menuContainer.addChild(graphics);
 
         this.createTitle("Space Destructor");
-        this.buttonSingleplayer = this.createButton("Singleplayer", sceneWidth / 2, sceneHeight / 2);
-        this.buttonMultiplayer = this.createButton("Multiplayer", sceneWidth / 2, sceneHeight / 2 + 50);
+        this.buttonSingleplayer = this.createButton("1 player", sceneWidth / 2, sceneHeight / 2);
+        this.buttonMultiplayer = this.createButton("2 players", sceneWidth / 2, sceneHeight / 2 + 50);
 
         this.buttonSingleplayer.style["fill"] = this.colorButtonActive;
         this.buttonHighlight = this.buttonSingleplayer;

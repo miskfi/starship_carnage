@@ -35,19 +35,11 @@ class Game
     initGame()
     {
         const keyInput = new KeyInputComponent();
+        this.engine.scene.assignGlobalAttribute(Attributes.KEY_INPUT, keyInput);
         this.engine.scene.addGlobalComponent(keyInput);
         this.engine.scene.addGlobalComponent(new CollisionTrigger());
         this.engine.scene.addGlobalComponent(new CollisionResolver());
         this.engine.scene.addGlobalComponent(new GameManager());
-
-        this.engine.scene.assignGlobalAttribute(Attributes.ENEMIES_COUNT, 0);
-        this.engine.scene.assignGlobalAttribute(Attributes.GAME_STATE, {
-            isRunning: true
-        } as GameState)
-        this.engine.scene.assignGlobalAttribute(Attributes.KEY_INPUT, keyInput);
-        this.engine.scene.assignGlobalAttribute(Attributes.PROJECTILES_MAX, 3);
-        this.engine.scene.assignGlobalAttribute(Attributes.PROJECTILES_AVAILABLE, 3);
-
         this.engine.scene.addGlobalComponent(new SceneManager());
     }
 }

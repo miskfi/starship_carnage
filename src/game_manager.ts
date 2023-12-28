@@ -74,32 +74,18 @@ export class GameManager extends Colfio.Component
             else
             {
                 this.setGameNotRunning();
-                setTimeout(() => this.showScreenOverlay(0x00FF00, 0.5), 20);
+                this.sendMessage(Messages.GAME_WON);
             }
         }
         else if (msg.action === Messages.PLAYER_HIT)
         {
             this.setGameNotRunning();
-            setTimeout(() => this.showScreenOverlay(0x4D4D4D, 0.1), 20);
+            this.sendMessage(Messages.GAME_OVER);
         }
     }
 
     setGameNotRunning()
     {
-        this.scene.assignGlobalAttribute(Attributes.GAME_STATE, {
-            isRunning: false
-        } as GameState)
-    }
-
-    showScreenOverlay(color: number, alpha: number)
-    {
-        const overlay = new Colfio.Graphics();
-
-        overlay.beginFill(color, alpha);
-        overlay.drawRect(0, 0, this.scene.app.screen.width, this.scene.app.screen.height);
-        overlay.endFill();
-
-        // Add the overlay to the stage
-        this.scene.stage.addChild(overlay);
+        this.scene.assignGlobalAttribute(Attributes.GAME_STATE, {isRunning: false} as GameState);
     }
 }

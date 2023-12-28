@@ -14,7 +14,9 @@ export enum Messages
     PROJECTILE_COLLISION = "PROJECTILE_COLLISION",
     ENEMY_COLLISION = "ENEMY_COLLISION",
     GAME_START = "GAME_START",
-    GAME_OVER = "GAME_OVER"
+    GAME_OVER = "GAME_OVER",
+    GAME_WON = "GAME_WON",
+    MAIN_MENU = "MAIN_MENU"
 }
 
 export enum Attributes
