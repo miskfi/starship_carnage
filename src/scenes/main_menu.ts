@@ -1,5 +1,5 @@
 import * as Colfio from 'colfio';
-import {Attributes, Messages} from "./constants";
+import {Attributes, Messages} from "../constants";
 
 export class MainMenu extends Colfio.Component
 {

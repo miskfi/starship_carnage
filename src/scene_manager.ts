@@ -1,6 +1,6 @@
 import * as Colfio from 'colfio';
 import {Messages, EnemyType} from "./constants";
-import {MainMenu} from "./main_menu";
+import {MainMenu} from "./scenes/main_menu";
 import {createEnemyCircle, createPlayer} from "./factory";
 
 export class SceneManager extends Colfio.Component

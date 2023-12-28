@@ -1,8 +1,11 @@
 import * as Colfio from 'colfio';
-import {Attributes, Messages} from "./constants";
-import {GameState} from "./game";
+import {Attributes} from "../constants";
+import {GameState} from "../game";
 
-export class ProjectileMovement extends Colfio.Component
+/**
+ * A component that controls projectile movement.
+ */
+export class ProjectileController extends Colfio.Component
 {
     projectileSpeed = 0.5;
 

@@ -1,8 +1,8 @@
 import * as Colfio from 'colfio';
-import {ProjectileMovement} from "./projectile";
-import {EnemyMovement} from "./enemy";
+import {ProjectileController} from "./components/projectile_controller";
+import {EnemyController} from "./components/enemy_controller";
 import {Attributes, EnemySizes, EnemyType, Tags, EnemySpeeds} from "./constants";
-import {PlayerController} from "./player";
+import {PlayerController} from "./components/player_controller";
 import {getRandomInteger} from "./utils";
 
 export const createProjectile = (scene: Colfio.Scene): Colfio.Graphics =>
@@ -15,7 +15,7 @@ export const createProjectile = (scene: Colfio.Scene): Colfio.Graphics =>
     projectile["name"] = Tags.PLAYER_PROJECTILE;
     projectile.addTag(Tags.PLAYER_PROJECTILE);
     projectile.endFill();
-    projectile.addComponent(new ProjectileMovement());
+    projectile.addComponent(new ProjectileController());
     return projectile;
 }
 
@@ -66,7 +66,7 @@ export const createEnemyCircle = (
     enemyCircle.position.set(initialPos[0], initialPos[1]);
     enemyCircle["name"] = Tags.ENEMY_CIRCLE;
     enemyCircle.addTag(Tags.ENEMY_CIRCLE);
-    enemyCircle.addComponent(new EnemyMovement());
+    enemyCircle.addComponent(new EnemyController());
     enemyCircle.assignAttribute(Attributes.ENEMY_TYPE, enemyType);
 
     enemyCircle.assignAttribute(Attributes.ENEMY_VELOCITY, initialVelocity);

@@ -1,10 +1,10 @@
 import * as Colfio from 'colfio';
 import {KeyInputComponent} from 'colfio';
 
-import {CollisionTrigger} from "./collision_trigger";
+import {CollisionTrigger} from "./collisions/collision_trigger";
 import {Attributes} from "./constants";
 import {GameManager} from "./game_manager";
-import {CollisionResolver} from "./collision_resolver";
+import {CollisionResolver} from "./collisions/collision_resolver";
 import {SceneManager} from "./scene_manager";
 
 export class GameState

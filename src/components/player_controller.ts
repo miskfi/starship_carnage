@@ -1,7 +1,7 @@
 import * as Colfio from 'colfio';
-import {createProjectile} from "./factory";
-import {Attributes, Messages} from "./constants";
-import {GameState} from "./game";
+import {createProjectile} from "../factory";
+import {Attributes, Messages} from "../constants";
+import {GameState} from "../game";
 
 export class PlayerController extends Colfio.Component
 {

@@ -1,8 +1,11 @@
 import * as Colfio from "colfio";
-import {GameState} from "./game";
-import {Attributes} from "./constants";
+import {GameState} from "../game";
+import {Attributes} from "../constants";
 
-export class EnemyMovement extends Colfio.Component
+/**
+ * A component that controls enemy movement.
+ */
+export class EnemyController extends Colfio.Component
 {
     onInit() {}
 
