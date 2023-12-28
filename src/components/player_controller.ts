@@ -1,16 +1,18 @@
 import * as Colfio from 'colfio';
 import {createProjectile} from "../factory";
-import {GlobalAttributes, Messages} from "../constants/enums";
+import {Attributes, GlobalAttributes, Messages} from "../constants/enums";
 import {GameState} from "../game";
 import {PLAYER_SPEED} from "../constants/constants";
 
 export class PlayerController extends Colfio.Component
 {
     keyInput: Colfio.KeyInputComponent;
+    controls: Record<any, any>;
 
     onInit()
     {
         this.keyInput = this.scene.getGlobalAttribute(GlobalAttributes.KEY_INPUT);
+        this.controls = this.owner.getAttribute(Attributes.CONTROLS);
     }
 
     onUpdate(delta: number, absolute: number)
@@ -24,41 +26,41 @@ export class PlayerController extends Colfio.Component
         const boundRect = this.owner.getBounds();
         const movementDiff = delta * PLAYER_SPEED;
 
-        if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_LEFT) || this.keyInput.isKeyPressed(Colfio.Keys.KEY_A))
+        if (this.controls["left"].some(key => this.keyInput.isKeyPressed(key)))
         {
             if (boundRect.left > 0)
                 pos.x -= Math.min(movementDiff, boundRect.left);
         }
-        else if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_RIGHT) || this.keyInput.isKeyPressed(Colfio.Keys.KEY_D))
+        else if (this.controls["right"].some(key => this.keyInput.isKeyPressed(key)))
         {
             if (boundRect.right < screenWidth)
                 pos.x += Math.min(movementDiff, screenWidth - boundRect.right);
         }
-        else if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_DOWN) || this.keyInput.isKeyPressed(Colfio.Keys.KEY_S))
+        else if (this.controls["down"].some(key => this.keyInput.isKeyPressed(key)))
         {
             if (boundRect.bottom < screenHeight)
                 pos.y += Math.min(movementDiff, screenHeight - boundRect.bottom);
         }
-        else if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_UP) || this.keyInput.isKeyPressed(Colfio.Keys.KEY_W))
+        else if (this.controls["up"].some(key => this.keyInput.isKeyPressed(key)))
         {
             if (boundRect.top > 0)
                 pos.y -= Math.min(movementDiff, boundRect.top);
         }
 
-        if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_SPACE))
+        if (this.controls["shoot"].some(key => this.keyInput.isKeyPressed(key)))
         {
-            this.keyInput.handleKey(Colfio.Keys.KEY_SPACE);
+            this.controls["shoot"].forEach(key => this.keyInput.handleKey(key));
             this.shootProjectile();
         }
     }
 
     shootProjectile()
     {
-        if (this.scene.getGlobalAttribute(GlobalAttributes.PROJECTILES_AVAILABLE) > 0)
+        if (this.owner.getAttribute<number>(Attributes.PROJECTILES_AVAILABLE) > 0)
         {
-            const newProjectile = createProjectile(this.scene);
+            const newProjectile = createProjectile(this.scene, this.owner);
             this.scene.stage.addChild(newProjectile);
-            this.sendMessage(Messages.PROJECTILE_SHOT);
+            this.sendMessage(Messages.PROJECTILE_SHOT, this.owner);
         }
     }
 }

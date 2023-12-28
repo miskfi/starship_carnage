@@ -22,7 +22,7 @@ export class GameOver extends Colfio.Component
         if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_ENTER))
         {
             this.keyInput.handleKey(Colfio.Keys.KEY_ENTER);
-            this.sendMessage(Messages.GAME_START);
+            this.sendMessage(Messages.GAME_START, this.scene.getGlobalAttribute(GlobalAttributes.GAME_MODE));
             this.sceneContainer.destroy();
         }
         if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_SHIFT))
@@ -37,14 +37,11 @@ export class GameOver extends Colfio.Component
     {
         // TODO destrukci přesunout jinam
         const projectiles = this.scene.findObjectsByTag(Tags.PLAYER_PROJECTILE) as Colfio.Graphics[];
-        const player = this.scene.findObjectByTag(Tags.PLAYER) as Colfio.Graphics;
         const enemies = this.scene.findObjectsByTag(Tags.ENEMY_CIRCLE) as Colfio.Graphics[];
+        const objects = [...projectiles, ...enemies]
 
-        for (let projectile of projectiles)
-            projectile.destroy();
-        for (let enemy of enemies)
-            enemy.destroy();
-        player.destroy();
+        for (let obj of objects)
+            obj.destroy();
     }
 
     createScreen()

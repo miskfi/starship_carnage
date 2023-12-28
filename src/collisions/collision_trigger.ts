@@ -11,7 +11,7 @@ export class CollisionTrigger extends Colfio.Component
     onUpdate(delta: number, absolute: number)
     {
         const projectiles = this.scene.findObjectsByTag(Tags.PLAYER_PROJECTILE);
-        const player = this.scene.findObjectByTag(Tags.PLAYER);
+        const players = this.scene.findObjectsByTag(Tags.PLAYER);
         const enemies = this.scene.findObjectsByTag(Tags.ENEMY_CIRCLE);
 
         const screenWidth = this.scene.app.screen.width;
@@ -33,13 +33,16 @@ export class CollisionTrigger extends Colfio.Component
             }
 
             // collision of enemy and player
-            if (player !== null)
+            for (let player of players)
             {
-                if (this.collide(player?.getBounds(), enemyBounds))
+                if (player !== null)
                 {
-                    this.sendMessage(Messages.ENEMY_COLLISION, {
-                        enemy, collider: player, type: EnemyCollisionType.PLAYER
-                    })
+                    if (this.collide(player?.getBounds(), enemyBounds))
+                    {
+                        this.sendMessage(Messages.ENEMY_COLLISION, {
+                            enemy, collider: player, type: EnemyCollisionType.PLAYER
+                        })
+                    }
                 }
             }
 

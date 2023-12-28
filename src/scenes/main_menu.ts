@@ -24,11 +24,13 @@ export class MainMenu extends Colfio.Component
         if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_ENTER))
         {
             this.keyInput.handleKey(Colfio.Keys.KEY_ENTER);
+
             if (this.buttonHighlight === this.buttonSingleplayer)
-            {
-                this.sendMessage(Messages.GAME_START);
-                this.menuContainer.destroy();
-            }
+                this.sendMessage(Messages.GAME_START, 1);
+            else if (this.buttonHighlight === this.buttonMultiplayer)
+                this.sendMessage(Messages.GAME_START, 2)
+
+            this.menuContainer.destroy();
         }
         if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_DOWN))
         {

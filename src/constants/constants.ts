@@ -1,3 +1,5 @@
+import * as Colfio from 'colfio';
+
 // projectiles
 export const PROJECTILES_MAX = 3;
 export const PROJECTILE_SIZE = 5;
@@ -11,6 +13,30 @@ export const ENEMY_COLOR = 0xFF0000;
 export const PLAYER_SIZE = 40;
 export const PLAYER_COLOR = 0xFFFFFF;
 export const PLAYER_SPEED = 0.15;
+
+export const SINGLEPLAYER_CONTROLS = {
+    "left": [Colfio.Keys.KEY_LEFT, Colfio.Keys.KEY_A],
+    "right": [Colfio.Keys.KEY_RIGHT, Colfio.Keys.KEY_D],
+    "up": [Colfio.Keys.KEY_UP, Colfio.Keys.KEY_W],
+    "down": [Colfio.Keys.KEY_DOWN, Colfio.Keys.KEY_S],
+    "shoot": [Colfio.Keys.KEY_SPACE]
+}
+
+export const P1_CONTROLS = {
+    "left": [Colfio.Keys.KEY_A],
+    "right": [Colfio.Keys.KEY_D],
+    "up": [Colfio.Keys.KEY_W],
+    "down": [Colfio.Keys.KEY_S],
+    "shoot": [Colfio.Keys.KEY_SPACE]
+}
+
+export const P2_CONTROLS = {
+    "left": [Colfio.Keys.KEY_LEFT],
+    "right": [Colfio.Keys.KEY_RIGHT],
+    "up": [Colfio.Keys.KEY_UP],
+    "down": [Colfio.Keys.KEY_DOWN],
+    "shoot": [Colfio.Keys.KEY_CTRL]
+}
 
 // text colors
 export const COLOR_TEXT_PASSIVE = 0x6B6261;

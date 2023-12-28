@@ -50,7 +50,7 @@ export class CollisionResolver extends Colfio.Component
             }
             else if (type === EnemyCollisionType.PLAYER)
             {
-                this.sendMessage(Messages.PLAYER_HIT);
+                this.sendMessage(Messages.PLAYER_HIT, collider);
             }
             else if (type === EnemyCollisionType.BORDER_HORIZONTAL)
             {

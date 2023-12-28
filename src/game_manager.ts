@@ -23,16 +23,18 @@ export class GameManager extends Colfio.Component
     {
         if (msg.action === Messages.PROJECTILE_SHOT)
         {
-            const projectiles = this.scene.getGlobalAttribute<number>(GlobalAttributes.PROJECTILES_AVAILABLE);
-            this.scene.assignGlobalAttribute(GlobalAttributes.PROJECTILES_AVAILABLE, projectiles - 1);
+            const player = msg.data as Colfio.Graphics;
+            const projectiles = player.getAttribute<number>(Attributes.PROJECTILES_AVAILABLE);
+            player.assignAttribute(Attributes.PROJECTILES_AVAILABLE, projectiles - 1);
         }
         else if (msg.action === Messages.PROJECTILE_DESTROYED)
         {
             const projectileToDestroy = msg.data as Colfio.Graphics;
+            const player = projectileToDestroy.getAttribute<Colfio.Graphics>(Attributes.PROJECTILE_SHOOTER);
             projectileToDestroy.destroy();
 
-            const projectiles = this.scene.getGlobalAttribute<number>(GlobalAttributes.PROJECTILES_AVAILABLE);
-            this.scene.assignGlobalAttribute(GlobalAttributes.PROJECTILES_AVAILABLE, projectiles + 1);
+            const projectiles = player.getAttribute<number>(Attributes.PROJECTILES_AVAILABLE);
+            player.assignAttribute(Attributes.PROJECTILES_AVAILABLE, projectiles + 1);
         }
         else if (msg.action === Messages.ENEMY_DESTROYED)
         {
@@ -80,8 +82,16 @@ export class GameManager extends Colfio.Component
         }
         else if (msg.action === Messages.PLAYER_HIT)
         {
-            this.setGameNotRunning();
-            this.sendMessage(Messages.GAME_OVER);
+            const playersCount = this.scene.getGlobalAttribute<number>(GlobalAttributes.PLAYERS_COUNT);
+            const player = msg.data as Colfio.Graphics;
+
+            player.destroy();
+            this.scene.assignGlobalAttribute(GlobalAttributes.PLAYERS_COUNT, playersCount - 1);
+
+            if (playersCount - 1 === 0) {
+                this.setGameNotRunning();
+                this.sendMessage(Messages.GAME_OVER);
+            }
         }
     }
 

@@ -21,17 +21,21 @@ export enum Messages
 
 export enum Attributes
 {
+    CONTROLS = "CONTROLS",
     ENEMY_TYPE = "ENEMY_TYPE",
     ENEMY_SPEED = "ENEMY_SPEED",
     ENEMY_VELOCITY = "ENEMY_VELOCITY",
+    PROJECTILES_AVAILABLE = "PROJECTILES_AVAILABLE",
+    PROJECTILE_SHOOTER = "PROJECTILE_SHOOTER"  // the person that shot the projectile
 }
 
 export enum GlobalAttributes
 {
+    GAME_MODE = "GAME_MODE",  // singleplayer (1) or multiplayer (2)
     GAME_STATE = "GAME_STATE",
     ENEMIES_COUNT = "ENEMIES_COUNT",
     KEY_INPUT = "KEY_INPUT",
-    PROJECTILES_AVAILABLE = "PROJECTILES_AVAILABLE",
+    PLAYERS_COUNT = "PLAYERS_COUNT",  // number of players currently alive
     PROJECTILES_MAX = "PROJECTILES_MAX",
 }
 

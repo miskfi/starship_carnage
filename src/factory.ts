@@ -5,12 +5,17 @@ import {Attributes, GlobalAttributes, Tags} from "./constants/enums";
 import {PlayerController} from "./components/player_controller";
 import {getRandomInteger} from "./utils";
 import {EnemyType, EnemyTypeAttributes} from "./constants/enemy_attributes";
-import {ENEMY_COLOR, PLAYER_COLOR, PLAYER_SIZE, PROJECTILE_COLOR, PROJECTILE_SIZE} from "./constants/constants";
+import {
+    ENEMY_COLOR,
+    PLAYER_COLOR,
+    PLAYER_SIZE,
+    PROJECTILE_COLOR,
+    PROJECTILE_SIZE,
+    PROJECTILES_MAX
+} from "./constants/constants";
 
-export const createProjectile = (scene: Colfio.Scene): Colfio.Graphics =>
+export const createProjectile = (scene: Colfio.Scene, player: Colfio.Container): Colfio.Graphics =>
 {
-    const player = scene.findObjectByTag(Tags.PLAYER);
-
     const projectile = new Colfio.Graphics();
     projectile.beginFill(PROJECTILE_COLOR);
     projectile.drawCircle(player.position.x + player.width/2, player.position.y + player.height/2, PROJECTILE_SIZE);
@@ -18,6 +23,7 @@ export const createProjectile = (scene: Colfio.Scene): Colfio.Graphics =>
     projectile.addTag(Tags.PLAYER_PROJECTILE);
     projectile.endFill();
     projectile.addComponent(new ProjectileController());
+    projectile.assignAttribute(Attributes.PROJECTILE_SHOOTER, player);
     return projectile;
 }
 
@@ -79,15 +85,16 @@ export const createEnemyCircle = (
     return enemyCircle;
 }
 
-export const createPlayer = (scene: Colfio.Scene): Colfio.Graphics =>
+export const createPlayer = (scene: Colfio.Scene, xPos): Colfio.Graphics =>
 {
     const player = new Colfio.Graphics();
     player.beginFill(PLAYER_COLOR);
     player.drawRect(0, 0, PLAYER_SIZE, PLAYER_SIZE);
-    player.position.set(scene.width/2, scene.height - PLAYER_SIZE);
+    player.position.set(xPos, scene.height - PLAYER_SIZE);
     player["name"] = Tags.PLAYER;
     player.addTag(Tags.PLAYER);
     player.endFill();
     player.addComponent(new PlayerController());
+    player.assignAttribute(Attributes.PROJECTILES_AVAILABLE, PROJECTILES_MAX);
     return player;
 }
