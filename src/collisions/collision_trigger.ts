@@ -1,6 +1,6 @@
 import * as Colfio from "colfio";
 import * as PIXI from "pixi.js"
-import {Tags, Messages} from "../constants/enums";
+import {Tags, Messages, Attributes} from "../constants/enums";
 import {
     EnemyCollisionType,
     ProjectileCollisionType
@@ -11,11 +11,51 @@ export class CollisionTrigger extends Colfio.Component
     onUpdate(delta: number, absolute: number)
     {
         const projectiles = this.scene.findObjectsByTag(Tags.PLAYER_PROJECTILE);
-        const players = this.scene.findObjectsByTag(Tags.PLAYER);
-        const enemies = this.scene.findObjectsByTag(Tags.ENEMY_CIRCLE);
 
         const screenWidth = this.scene.app.screen.width;
         const screenHeight = this.scene.app.screen.height;
+
+        // TODO hrozná ifovačka
+        for (let projectile of projectiles)
+        {
+            const projectileBounds = projectile.getBounds();
+            const enemies = this.scene.findObjectsByTag(Tags.ENEMY_CIRCLE);
+            const players = this.scene.findObjectsByTag(Tags.PLAYER);
+
+            for (let enemy of enemies)
+            {
+                // collision of enemy and projectile
+                if (this.collide(projectileBounds, enemy.getBounds()))
+                {
+                    this.sendMessage(Messages.PROJECTILE_COLLISION, {
+                        projectile, collider: enemy, type: ProjectileCollisionType.ENEMY
+                    })
+                }
+            }
+
+            for (let player of players)
+            {
+                // collision of projectile with other player
+                if (player !== projectile.getAttribute(Attributes.PROJECTILE_SHOOTER)
+                    && this.collide(projectileBounds, player.getBounds()))
+                {
+                    this.sendMessage(Messages.PROJECTILE_COLLISION, {
+                        projectile, collider: player, type: ProjectileCollisionType.PLAYER
+                    })
+                }
+            }
+
+            // collision of enemy and border
+            if (projectileBounds.bottom <= 0)
+            {
+                this.sendMessage(Messages.PROJECTILE_COLLISION, {
+                    projectile, type: ProjectileCollisionType.BORDER
+                })
+            }
+        }
+
+        const players = this.scene.findObjectsByTag(Tags.PLAYER);
+        const enemies = this.scene.findObjectsByTag(Tags.ENEMY_CIRCLE);
 
         for (let enemy of enemies)
         {
@@ -52,31 +92,6 @@ export class CollisionTrigger extends Colfio.Component
 
             if (enemyBounds.bottom >= screenHeight || enemyBounds.top <= 0)
                 this.sendMessage(Messages.ENEMY_COLLISION, {enemy, type: EnemyCollisionType.BORDER_VERTICAL})
-        }
-
-        for (let projectile of projectiles)
-        {
-            const projectileBounds = projectile.getBounds();
-            const enemies = this.scene.findObjectsByTag(Tags.ENEMY_CIRCLE);
-
-            for (let enemy of enemies)
-            {
-                // collision of enemy and projectile
-                if (this.collide(projectileBounds, enemy.getBounds()))
-                {
-                    this.sendMessage(Messages.PROJECTILE_COLLISION, {
-                        projectile, collider: enemy, type: ProjectileCollisionType.ENEMY
-                    })
-                }
-            }
-
-            // collision of enemy and border
-            if (projectileBounds.bottom <= 0)
-            {
-                this.sendMessage(Messages.PROJECTILE_COLLISION, {
-                    projectile, type: ProjectileCollisionType.BORDER
-                })
-            }
         }
     }
 

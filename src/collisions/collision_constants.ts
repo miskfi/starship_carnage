@@ -3,7 +3,8 @@ import * as Colfio from "colfio";
 export enum ProjectileCollisionType
 {
     ENEMY = "ENEMY",
-    BORDER = "BORDER"
+    BORDER = "BORDER",
+    PLAYER = "PLAYER"
 }
 
 export enum EnemyCollisionType

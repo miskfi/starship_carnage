@@ -20,14 +20,11 @@ export class CollisionResolver extends Colfio.Component
         {
             const { projectile, collider, type } = msg.data as ProjectileCollisionMessage;
             if (type === ProjectileCollisionType.ENEMY)
-            {
-                this.sendMessage(Messages.PROJECTILE_DESTROYED, projectile);
                 this.sendMessage(Messages.ENEMY_DESTROYED, collider);
-            }
-            else if (type === ProjectileCollisionType.BORDER)
-            {
-                this.sendMessage(Messages.PROJECTILE_DESTROYED, projectile);
-            }
+            else if (type === ProjectileCollisionType.PLAYER)
+                this.sendMessage(Messages.PLAYER_HIT, collider);
+
+            this.sendMessage(Messages.PROJECTILE_DESTROYED, projectile);
         }
         else if (msg.action === Messages.ENEMY_COLLISION)
         {
