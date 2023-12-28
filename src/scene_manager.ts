@@ -1,5 +1,5 @@
 import * as Colfio from 'colfio';
-import {Attributes, Messages} from "./constants/enums";
+import {GlobalAttributes, Messages} from "./constants/enums";
 import {EnemyType} from "./constants/enemy_attributes";
 import {MainMenu} from "./scenes/main_menu";
 import {GameOver} from "./scenes/game_over";
@@ -36,9 +36,9 @@ export class SceneManager extends Colfio.Component
     {
         this.removePreviousComponent();
 
-        this.scene.assignGlobalAttribute(Attributes.ENEMIES_COUNT, 0);
-        this.scene.assignGlobalAttribute(Attributes.PROJECTILES_MAX, PROJECTILES_MAX);
-        this.scene.assignGlobalAttribute(Attributes.PROJECTILES_AVAILABLE, PROJECTILES_MAX);
+        this.scene.assignGlobalAttribute(GlobalAttributes.ENEMIES_COUNT, 0);
+        this.scene.assignGlobalAttribute(GlobalAttributes.PROJECTILES_MAX, PROJECTILES_MAX);
+        this.scene.assignGlobalAttribute(GlobalAttributes.PROJECTILES_AVAILABLE, PROJECTILES_MAX);
 
         // create the player square
         const player = createPlayer(this.scene);
@@ -48,7 +48,7 @@ export class SceneManager extends Colfio.Component
         const enemy = createEnemyCircle(this.scene, EnemyType.MEDIUM);
         this.owner.scene.stage.addChild(enemy);
 
-        this.scene.assignGlobalAttribute(Attributes.GAME_STATE, {isRunning: true} as GameState);
+        this.scene.assignGlobalAttribute(GlobalAttributes.GAME_STATE, {isRunning: true} as GameState);
     }
 
     loadSceneComponent(componentType)

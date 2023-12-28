@@ -2,7 +2,7 @@ import * as Colfio from 'colfio';
 import {KeyInputComponent} from 'colfio';
 
 import {CollisionTrigger} from "./collisions/collision_trigger";
-import {Attributes} from "./constants/enums";
+import {GlobalAttributes} from "./constants/enums";
 import {GameManager} from "./game_manager";
 import {CollisionResolver} from "./collisions/collision_resolver";
 import {SceneManager} from "./scene_manager";
@@ -35,7 +35,7 @@ class Game
     initGame()
     {
         const keyInput = new KeyInputComponent();
-        this.engine.scene.assignGlobalAttribute(Attributes.KEY_INPUT, keyInput);
+        this.engine.scene.assignGlobalAttribute(GlobalAttributes.KEY_INPUT, keyInput);
         this.engine.scene.addGlobalComponent(keyInput);
         this.engine.scene.addGlobalComponent(new CollisionTrigger());
         this.engine.scene.addGlobalComponent(new CollisionResolver());

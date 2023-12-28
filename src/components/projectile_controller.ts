@@ -1,5 +1,5 @@
 import * as Colfio from 'colfio';
-import {Attributes} from "../constants/enums";
+import {GlobalAttributes} from "../constants/enums";
 import {GameState} from "../game";
 import {PROJECTILE_SPEED} from "../constants/constants";
 
@@ -12,7 +12,7 @@ export class ProjectileController extends Colfio.Component
 
     onUpdate(delta: number, absolute: number)
     {
-        if (! this.scene.getGlobalAttribute<GameState>(Attributes.GAME_STATE).isRunning)
+        if (! this.scene.getGlobalAttribute<GameState>(GlobalAttributes.GAME_STATE).isRunning)
             return;
 
         const pos = this.owner.position;

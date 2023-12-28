@@ -1,5 +1,5 @@
 import * as Colfio from 'colfio';
-import {Attributes, Messages, Tags} from "../constants/enums";
+import {GlobalAttributes, Messages, Tags} from "../constants/enums";
 import {COLOR_GAME_OVER} from "../constants/constants";
 
 export class GameOver extends Colfio.Component
@@ -9,7 +9,7 @@ export class GameOver extends Colfio.Component
 
     onInit()
     {
-        this.keyInput = this.scene.getGlobalAttribute(Attributes.KEY_INPUT);
+        this.keyInput = this.scene.getGlobalAttribute(GlobalAttributes.KEY_INPUT);
         this.sceneContainer = new Colfio.Container();
         this.owner.addChild(this.sceneContainer);
 

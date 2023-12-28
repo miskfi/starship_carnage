@@ -1,7 +1,7 @@
 import * as Colfio from 'colfio';
 import {ProjectileController} from "./components/projectile_controller";
 import {EnemyController} from "./components/enemy_controller";
-import {Attributes, Tags} from "./constants/enums";
+import {Attributes, GlobalAttributes, Tags} from "./constants/enums";
 import {PlayerController} from "./components/player_controller";
 import {getRandomInteger} from "./utils";
 import {EnemyType, EnemyTypeAttributes} from "./constants/enemy_attributes";
@@ -74,8 +74,8 @@ export const createEnemyCircle = (
     enemyCircle.assignAttribute(Attributes.ENEMY_VELOCITY, initialVelocity);
     enemyCircle.assignAttribute(Attributes.ENEMY_SPEED, speed);
 
-    const enemies = scene.getGlobalAttribute<number>(Attributes.ENEMIES_COUNT);
-    scene.assignGlobalAttribute(Attributes.ENEMIES_COUNT, enemies + 1);
+    const enemies = scene.getGlobalAttribute<number>(GlobalAttributes.ENEMIES_COUNT);
+    scene.assignGlobalAttribute(GlobalAttributes.ENEMIES_COUNT, enemies + 1);
     return enemyCircle;
 }
 

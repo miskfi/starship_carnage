@@ -1,6 +1,6 @@
 import * as Colfio from 'colfio';
 import {createProjectile} from "../factory";
-import {Attributes, Messages} from "../constants/enums";
+import {GlobalAttributes, Messages} from "../constants/enums";
 import {GameState} from "../game";
 import {PLAYER_SPEED} from "../constants/constants";
 
@@ -10,12 +10,12 @@ export class PlayerController extends Colfio.Component
 
     onInit()
     {
-        this.keyInput = this.scene.getGlobalAttribute(Attributes.KEY_INPUT);
+        this.keyInput = this.scene.getGlobalAttribute(GlobalAttributes.KEY_INPUT);
     }
 
     onUpdate(delta: number, absolute: number)
     {
-        if (! this.scene.getGlobalAttribute<GameState>(Attributes.GAME_STATE).isRunning)
+        if (! this.scene.getGlobalAttribute<GameState>(GlobalAttributes.GAME_STATE).isRunning)
             return;
 
         const pos = this.owner.position;
@@ -54,7 +54,7 @@ export class PlayerController extends Colfio.Component
 
     shootProjectile()
     {
-        if (this.scene.getGlobalAttribute(Attributes.PROJECTILES_AVAILABLE) > 0)
+        if (this.scene.getGlobalAttribute(GlobalAttributes.PROJECTILES_AVAILABLE) > 0)
         {
             const newProjectile = createProjectile(this.scene);
             this.scene.stage.addChild(newProjectile);

@@ -1,5 +1,5 @@
 import * as Colfio from 'colfio';
-import {Attributes, Messages} from "../constants/enums";
+import {GlobalAttributes, Messages} from "../constants/enums";
 import {COLOR_TEXT_ACTIVE, COLOR_TEXT_PASSIVE} from "../constants/constants";
 
 export class MainMenu extends Colfio.Component
@@ -13,7 +13,7 @@ export class MainMenu extends Colfio.Component
 
     onInit()
     {
-        this.keyInput = this.scene.getGlobalAttribute(Attributes.KEY_INPUT);
+        this.keyInput = this.scene.getGlobalAttribute(GlobalAttributes.KEY_INPUT);
         this.menuContainer = new Colfio.Container();
         this.owner.addChild(this.menuContainer);
         this.createMenu();

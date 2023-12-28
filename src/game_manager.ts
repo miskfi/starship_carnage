@@ -1,5 +1,5 @@
 import * as Colfio from "colfio";
-import {Attributes, Messages} from "./constants/enums";
+import {GlobalAttributes, Attributes, Messages} from "./constants/enums";
 import {GameState} from "./game";
 import {createEnemyCircle} from "./factory";
 import {EnemyType, EnemyTypeOrder} from "./constants/enemy_attributes";
@@ -23,23 +23,23 @@ export class GameManager extends Colfio.Component
     {
         if (msg.action === Messages.PROJECTILE_SHOT)
         {
-            const projectiles = this.scene.getGlobalAttribute<number>(Attributes.PROJECTILES_AVAILABLE);
-            this.scene.assignGlobalAttribute(Attributes.PROJECTILES_AVAILABLE, projectiles - 1);
+            const projectiles = this.scene.getGlobalAttribute<number>(GlobalAttributes.PROJECTILES_AVAILABLE);
+            this.scene.assignGlobalAttribute(GlobalAttributes.PROJECTILES_AVAILABLE, projectiles - 1);
         }
         else if (msg.action === Messages.PROJECTILE_DESTROYED)
         {
             const projectileToDestroy = msg.data as Colfio.Graphics;
             projectileToDestroy.destroy();
 
-            const projectiles = this.scene.getGlobalAttribute<number>(Attributes.PROJECTILES_AVAILABLE);
-            this.scene.assignGlobalAttribute(Attributes.PROJECTILES_AVAILABLE, projectiles + 1);
+            const projectiles = this.scene.getGlobalAttribute<number>(GlobalAttributes.PROJECTILES_AVAILABLE);
+            this.scene.assignGlobalAttribute(GlobalAttributes.PROJECTILES_AVAILABLE, projectiles + 1);
         }
         else if (msg.action === Messages.ENEMY_DESTROYED)
         {
             const enemyToDestroy = msg.data as Colfio.Graphics;
             const enemyType = enemyToDestroy.getAttribute<EnemyType>(Attributes.ENEMY_TYPE);
             const enemyPosition: [number, number] = [enemyToDestroy.position.x, enemyToDestroy.position.y];
-            let enemyCount = this.scene.getGlobalAttribute<number>(Attributes.ENEMIES_COUNT);
+            let enemyCount = this.scene.getGlobalAttribute<number>(GlobalAttributes.ENEMIES_COUNT);
 
             if (enemyType !== EnemyType.SMALLEST)
             {
@@ -71,7 +71,7 @@ export class GameManager extends Colfio.Component
 
             enemyToDestroy.destroy();
             if (enemyCount > 1)
-                this.scene.assignGlobalAttribute(Attributes.ENEMIES_COUNT, enemyCount - 1);
+                this.scene.assignGlobalAttribute(GlobalAttributes.ENEMIES_COUNT, enemyCount - 1);
             else
             {
                 this.setGameNotRunning();
@@ -87,6 +87,6 @@ export class GameManager extends Colfio.Component
 
     setGameNotRunning()
     {
-        this.scene.assignGlobalAttribute(Attributes.GAME_STATE, {isRunning: false} as GameState);
+        this.scene.assignGlobalAttribute(GlobalAttributes.GAME_STATE, {isRunning: false} as GameState);
     }
 }
