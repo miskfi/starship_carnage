@@ -1,10 +1,11 @@
 import * as Colfio from 'colfio';
 import {KeyInputComponent} from 'colfio';
-import {createEnemyCircle, createPlayer} from "./factory";
+
 import {CollisionTrigger} from "./collision_trigger";
-import {Attributes, EnemyType} from "./constants";
+import {Attributes} from "./constants";
 import {GameManager} from "./game_manager";
 import {CollisionResolver} from "./collision_resolver";
+import {SceneManager} from "./scene_manager";
 
 export class GameState
 {
@@ -47,13 +48,7 @@ class Game
         this.engine.scene.assignGlobalAttribute(Attributes.PROJECTILES_MAX, 3);
         this.engine.scene.assignGlobalAttribute(Attributes.PROJECTILES_AVAILABLE, 3);
 
-        // create the player square
-        const player = createPlayer(this.engine.scene);
-        this.engine.scene.stage.addChild(player);
-
-        // create enemy circle
-        const enemy = createEnemyCircle(this.engine.scene, EnemyType.MEDIUM);
-        this.engine.scene.stage.addChild(enemy);
+        this.engine.scene.addGlobalComponent(new SceneManager());
     }
 }
 

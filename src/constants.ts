@@ -12,7 +12,8 @@ export enum Messages
     PROJECTILE_SHOT = "PROJECTILE_SHOT",
     PROJECTILE_DESTROYED = "PROJECTILE_DESTROYED",
     PROJECTILE_COLLISION = "PROJECTILE_COLLISION",
-    ENEMY_COLLISION = "ENEMY_COLLISION"
+    ENEMY_COLLISION = "ENEMY_COLLISION",
+    GAME_START = "GAME_START"
 }
 
 export enum Attributes
@@ -60,4 +61,9 @@ export const EnemySpeeds =
     "MEDIUM": 0.15,
     "BIG": 0.125,
     "BIGGEST": 0.1
+}
+
+export enum Assets
+{
+    FONT = "FONT"
 }
