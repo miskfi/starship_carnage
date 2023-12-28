@@ -1,7 +1,8 @@
 import * as Colfio from 'colfio';
 import {createProjectile} from "../factory";
-import {Attributes, Messages} from "../constants";
+import {Attributes, Messages} from "../constants/enums";
 import {GameState} from "../game";
+import {PLAYER_SPEED} from "../constants/constants";
 
 export class PlayerController extends Colfio.Component
 {
@@ -21,7 +22,7 @@ export class PlayerController extends Colfio.Component
         const screenWidth = this.scene.app.screen.width;
         const screenHeight = this.scene.app.screen.height;
         const boundRect = this.owner.getBounds();
-        const movementDiff = delta * 0.15;
+        const movementDiff = delta * PLAYER_SPEED;
 
         if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_LEFT) || this.keyInput.isKeyPressed(Colfio.Keys.KEY_A))
         {

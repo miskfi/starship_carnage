@@ -31,41 +31,6 @@ export enum Attributes
     PROJECTILES_MAX = "PROJECTILES_MAX",
 }
 
-export enum EnemyType
-{
-    SMALLEST = "SMALLEST",
-    SMALL = "SMALL",
-    MEDIUM = "MEDIUM",
-    BIG = "BIG",
-    BIGGEST = "BIGGEST"
-}
-
-export const EnemyTypeOrder = [
-    EnemyType.BIGGEST,
-    EnemyType.BIG,
-    EnemyType.MEDIUM,
-    EnemyType.SMALL,
-    EnemyType.SMALLEST
-]
-
-export const EnemySizes =
-{
-    "SMALLEST": 20,
-    "SMALL": 30,
-    "MEDIUM": 40,
-    "BIG": 50,
-    "BIGGEST": 60
-}
-
-export const EnemySpeeds =
-{
-    "SMALLEST": 0.2,
-    "SMALL": 0.175,
-    "MEDIUM": 0.15,
-    "BIG": 0.125,
-    "BIGGEST": 0.1
-}
-
 export enum Assets
 {
     FONT = "FONT"

@@ -1,5 +1,6 @@
 import * as Colfio from 'colfio';
-import {Attributes, Messages, Tags} from "../constants";
+import {Attributes, Messages, Tags} from "../constants/enums";
+import {COLOR_GAME_OVER} from "../constants/constants";
 
 export class GameOver extends Colfio.Component
 {
@@ -49,13 +50,13 @@ export class GameOver extends Colfio.Component
     createScreen()
     {
         let game_over = new Colfio.Text("Game Over", "Game Over");
-        game_over.style = {fontFamily: "Arial", fontSize: 50, fill: 0xff0000, align: "center"};
+        game_over.style = {fontFamily: "Arial", fontSize: 50, fill: COLOR_GAME_OVER, align: "center"};
         game_over.anchor.set(0.5);
         game_over.position.set(this.scene.width / 2, this.scene.height / 4);
         this.sceneContainer.addChild(game_over);
 
         let instructions = new Colfio.Text("Instructions", "Press ENTER to play again, \npress SHIFT to go to the main menu");
-        instructions.style = {fontFamily: "Arial", fontSize: 20, fill: 0xffffff, align: "center"};
+        instructions.style = {fontFamily: "Arial", fontSize: 20, fill: 0xFFFFFF, align: "center"};
         instructions.anchor.set(0.5);
         instructions.position.set(this.scene.width / 2, this.scene.height / 2);
         this.sceneContainer.addChild(instructions);

@@ -1,7 +1,8 @@
 import * as Colfio from "colfio";
-import {Attributes, EnemyType, EnemyTypeOrder, Messages} from "./constants";
+import {Attributes, Messages} from "./constants/enums";
 import {GameState} from "./game";
 import {createEnemyCircle} from "./factory";
+import {EnemyType, EnemyTypeOrder} from "./constants/enemy_attributes";
 
 /**
  * Class responsible for global game logic.

@@ -1,6 +1,6 @@
 import * as Colfio from "colfio";
 import * as PIXI from "pixi.js"
-import {Tags, Messages} from "../constants";
+import {Tags, Messages} from "../constants/enums";
 import {
     EnemyCollisionType,
     ProjectileCollisionType

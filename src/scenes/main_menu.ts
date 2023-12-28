@@ -1,5 +1,6 @@
 import * as Colfio from 'colfio';
-import {Attributes, Messages} from "../constants";
+import {Attributes, Messages} from "../constants/enums";
+import {COLOR_TEXT_ACTIVE, COLOR_TEXT_PASSIVE} from "../constants/constants";
 
 export class MainMenu extends Colfio.Component
 {
@@ -9,9 +10,6 @@ export class MainMenu extends Colfio.Component
     buttonSingleplayer: Colfio.Text;
     buttonMultiplayer: Colfio.Text;
     buttonHighlight: Colfio.Text;
-
-    colorButtonActive: number = 0x5225e6;
-    colorButtonPassive: number = 0x6b6261;
 
     onInit()
     {
@@ -36,8 +34,8 @@ export class MainMenu extends Colfio.Component
         {
             if (this.buttonHighlight === this.buttonSingleplayer)
             {
-                this.buttonSingleplayer.style["fill"] = this.colorButtonPassive;
-                this.buttonMultiplayer.style["fill"] = this.colorButtonActive;
+                this.buttonSingleplayer.style["fill"] = COLOR_TEXT_PASSIVE;
+                this.buttonMultiplayer.style["fill"] = COLOR_TEXT_ACTIVE;
                 this.buttonHighlight = this.buttonMultiplayer;
             }
         }
@@ -45,8 +43,8 @@ export class MainMenu extends Colfio.Component
         {
             if (this.buttonHighlight === this.buttonMultiplayer)
             {
-                this.buttonSingleplayer.style["fill"] = this.colorButtonActive;
-                this.buttonMultiplayer.style["fill"] = this.colorButtonPassive;
+                this.buttonSingleplayer.style["fill"] = COLOR_TEXT_ACTIVE;
+                this.buttonMultiplayer.style["fill"] = COLOR_TEXT_PASSIVE;
                 this.buttonHighlight = this.buttonSingleplayer;
             }
         }
@@ -66,14 +64,14 @@ export class MainMenu extends Colfio.Component
         this.buttonSingleplayer = this.createButton("1 player", sceneWidth / 2, sceneHeight / 2);
         this.buttonMultiplayer = this.createButton("2 players", sceneWidth / 2, sceneHeight / 2 + 50);
 
-        this.buttonSingleplayer.style["fill"] = this.colorButtonActive;
+        this.buttonSingleplayer.style["fill"] = COLOR_TEXT_ACTIVE;
         this.buttonHighlight = this.buttonSingleplayer;
     }
 
     createTitle(name: string)
     {
         let title = new Colfio.Text(name, name);
-        title.style = {fontFamily: "Arial", fontSize: 40, fill: 0xff1010, align: "center"};
+        title.style = {fontFamily: "Arial", fontSize: 40, fill: 0xFFFFFF, align: "center"};
         title.anchor.set(0.5);
         title.position.set(this.scene.width / 2, this.scene.height / 4);
         this.menuContainer.addChild(title);
@@ -82,7 +80,7 @@ export class MainMenu extends Colfio.Component
     createButton(text: string, x, y)
     {
         let button = new Colfio.Text(text, text);
-        button.style = {fontFamily: "Arial", fontSize: 30, fill: this.colorButtonPassive, align: "center"};
+        button.style = {fontFamily: "Arial", fontSize: 30, fill: COLOR_TEXT_PASSIVE, align: "center"};
         button.anchor.set(0.5);
         button.position.set(x, y);
 

@@ -1,17 +1,19 @@
 import * as Colfio from 'colfio';
 import {ProjectileController} from "./components/projectile_controller";
 import {EnemyController} from "./components/enemy_controller";
-import {Attributes, EnemySizes, EnemyType, Tags, EnemySpeeds} from "./constants";
+import {Attributes, Tags} from "./constants/enums";
 import {PlayerController} from "./components/player_controller";
 import {getRandomInteger} from "./utils";
+import {EnemyType, EnemyTypeAttributes} from "./constants/enemy_attributes";
+import {ENEMY_COLOR, PLAYER_COLOR, PLAYER_SIZE, PROJECTILE_COLOR, PROJECTILE_SIZE} from "./constants/constants";
 
 export const createProjectile = (scene: Colfio.Scene): Colfio.Graphics =>
 {
     const player = scene.findObjectByTag(Tags.PLAYER);
 
     const projectile = new Colfio.Graphics();
-    projectile.beginFill(0xFFFFFF);
-    projectile.drawCircle(player.position.x + player.width/2, player.position.y + player.height/2, 5);
+    projectile.beginFill(PROJECTILE_COLOR);
+    projectile.drawCircle(player.position.x + player.width/2, player.position.y + player.height/2, PROJECTILE_SIZE);
     projectile["name"] = Tags.PLAYER_PROJECTILE;
     projectile.addTag(Tags.PLAYER_PROJECTILE);
     projectile.endFill();
@@ -37,7 +39,7 @@ export const createEnemyCircle = (
 ): Colfio.Graphics =>
 {
     const enemyCircle = new Colfio.Graphics();
-    const size = EnemySizes[enemyType];
+    const {size, speed} = EnemyTypeAttributes[enemyType];
 
     // TODO přidat kontrolu, abych nevytvářel kruh v pozici, kde už něco je
     if (initialPos === null)
@@ -61,7 +63,7 @@ export const createEnemyCircle = (
         initialVelocity = new Colfio.Vector(Math.cos(angleRad), Math.sin(angleRad)).normalize();
     }
 
-    enemyCircle.beginFill(0xFF0000);
+    enemyCircle.beginFill(ENEMY_COLOR);
     enemyCircle.drawCircle(0, 0, size / 2);
     enemyCircle.position.set(initialPos[0], initialPos[1]);
     enemyCircle["name"] = Tags.ENEMY_CIRCLE;
@@ -70,7 +72,7 @@ export const createEnemyCircle = (
     enemyCircle.assignAttribute(Attributes.ENEMY_TYPE, enemyType);
 
     enemyCircle.assignAttribute(Attributes.ENEMY_VELOCITY, initialVelocity);
-    enemyCircle.assignAttribute(Attributes.ENEMY_SPEED, EnemySpeeds[enemyType]);
+    enemyCircle.assignAttribute(Attributes.ENEMY_SPEED, speed);
 
     const enemies = scene.getGlobalAttribute<number>(Attributes.ENEMIES_COUNT);
     scene.assignGlobalAttribute(Attributes.ENEMIES_COUNT, enemies + 1);
@@ -80,9 +82,9 @@ export const createEnemyCircle = (
 export const createPlayer = (scene: Colfio.Scene): Colfio.Graphics =>
 {
     const player = new Colfio.Graphics();
-    player.beginFill(0xFFFFFF);
-    player.drawRect(0, 0, 40, 40);
-    player.position.set(scene.width/2, scene.height - 40);
+    player.beginFill(PLAYER_COLOR);
+    player.drawRect(0, 0, PLAYER_SIZE, PLAYER_SIZE);
+    player.position.set(scene.width/2, scene.height - PLAYER_SIZE);
     player["name"] = Tags.PLAYER;
     player.addTag(Tags.PLAYER);
     player.endFill();

@@ -2,7 +2,7 @@ import * as Colfio from 'colfio';
 import {KeyInputComponent} from 'colfio';
 
 import {CollisionTrigger} from "./collisions/collision_trigger";
-import {Attributes} from "./constants";
+import {Attributes} from "./constants/enums";
 import {GameManager} from "./game_manager";
 import {CollisionResolver} from "./collisions/collision_resolver";
 import {SceneManager} from "./scene_manager";

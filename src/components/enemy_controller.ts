@@ -1,6 +1,6 @@
 import * as Colfio from "colfio";
 import {GameState} from "../game";
-import {Attributes} from "../constants";
+import {Attributes} from "../constants/enums";
 
 /**
  * A component that controls enemy movement.

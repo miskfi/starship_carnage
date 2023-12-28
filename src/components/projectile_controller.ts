@@ -1,14 +1,13 @@
 import * as Colfio from 'colfio';
-import {Attributes} from "../constants";
+import {Attributes} from "../constants/enums";
 import {GameState} from "../game";
+import {PROJECTILE_SPEED} from "../constants/constants";
 
 /**
  * A component that controls projectile movement.
  */
 export class ProjectileController extends Colfio.Component
 {
-    projectileSpeed = 0.5;
-
     onInit() {}
 
     onUpdate(delta: number, absolute: number)
@@ -17,6 +16,6 @@ export class ProjectileController extends Colfio.Component
             return;
 
         const pos = this.owner.position;
-        pos.y -= delta * this.projectileSpeed;
+        pos.y -= delta * PROJECTILE_SPEED;
     }
 }
