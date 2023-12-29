@@ -27,6 +27,7 @@ class Game
             width: 800,
             height: 600,
             resolution: 1,
+            antialias: true
         });
 
         this.initGame();

@@ -38,8 +38,3 @@ export enum GlobalAttributes
     PLAYERS_COUNT = "PLAYERS_COUNT",  // number of players currently alive
     PROJECTILES_MAX = "PROJECTILES_MAX",
 }
-
-export enum Assets
-{
-    FONT = "FONT"
-}

@@ -1,6 +1,7 @@
 import * as Colfio from 'colfio';
 import {GlobalAttributes, Messages} from "../constants/enums";
 import {COLOR_TEXT_ACTIVE, COLOR_TEXT_PASSIVE} from "../constants/constants";
+import {Assets} from "pixi.js";
 
 export class MainMenu extends Colfio.Component
 {
@@ -72,11 +73,13 @@ export class MainMenu extends Colfio.Component
 
     createTitle(name: string)
     {
-        let title = new Colfio.Text(name, name);
-        title.style = {fontFamily: "Arial", fontSize: 40, fill: 0xFFFFFF, align: "center"};
-        title.anchor.set(0.5);
-        title.position.set(this.scene.width / 2, this.scene.height / 4);
-        this.menuContainer.addChild(title);
+        Assets.load({name: "font", src: "font.fnt"}).then(() =>
+        {
+            let title = new Colfio.BitmapText(name, name, "Early GameBoy", 60, 0xFFFFFF);
+            title.anchor.set(0.5);
+            title.position.set(this.scene.width / 2, this.scene.height / 4);
+            this.menuContainer.addChild(title);
+        });
     }
 
     createButton(text: string, x, y)
