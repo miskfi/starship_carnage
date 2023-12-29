@@ -17,6 +17,7 @@ export class SceneManager extends Colfio.Component
         this.subscribe(Messages.GAME_START, Messages.GAME_OVER, Messages.GAME_WON, Messages.MAIN_MENU);
         this.currentSceneComponent = null;
 
+        this.sendMessage(Messages.MAIN_MENU);
         this.loadSceneComponent(MainMenu);
     }
 

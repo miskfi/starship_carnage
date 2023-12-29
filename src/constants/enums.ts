@@ -16,7 +16,8 @@ export enum Messages
     GAME_START = "GAME_START",
     GAME_OVER = "GAME_OVER",
     GAME_WON = "GAME_WON",
-    MAIN_MENU = "MAIN_MENU"
+    MAIN_MENU = "MAIN_MENU",
+    BUTTON_CHANGE = "BUTTON_CHANGE"
 }
 
 export enum Attributes
@@ -37,4 +38,15 @@ export enum GlobalAttributes
     KEY_INPUT = "KEY_INPUT",
     PLAYERS_COUNT = "PLAYERS_COUNT",  // number of players currently alive
     PROJECTILES_MAX = "PROJECTILES_MAX",
+}
+
+export enum Assets
+{
+    SOUND_BUTTON_CHANGE = "SOUND_BUTTON_CHANGE",
+    SOUND_ENEMY_DESTROYED = "SOUND_ENEMY_DESTROYED",
+    SOUND_GAME_OVER = "SOUND_GAME_OVER",
+    SOUND_GAME_WON = "SOUND_GAME_WON",
+    SOUND_MUSIC_GAME = "SOUND_MUSIC_GAME",
+    SOUND_MUSIC_MENU = "SOUND_MUSIC_MENU",
+    SOUND_SHOT = "SOUND_SHOT",
 }

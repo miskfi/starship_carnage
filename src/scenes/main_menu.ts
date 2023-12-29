@@ -33,22 +33,24 @@ export class MainMenu extends Colfio.Component
 
             this.menuContainer.destroy();
         }
-        if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_DOWN))
+        else if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_DOWN))
         {
             if (this.buttonHighlight === this.buttonSingleplayer)
             {
                 this.buttonSingleplayer.style["fill"] = COLOR_TEXT_PASSIVE;
                 this.buttonMultiplayer.style["fill"] = COLOR_TEXT_ACTIVE;
                 this.buttonHighlight = this.buttonMultiplayer;
+                this.sendMessage(Messages.BUTTON_CHANGE);
             }
         }
-        if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_UP))
+        else if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_UP))
         {
             if (this.buttonHighlight === this.buttonMultiplayer)
             {
                 this.buttonSingleplayer.style["fill"] = COLOR_TEXT_ACTIVE;
                 this.buttonMultiplayer.style["fill"] = COLOR_TEXT_PASSIVE;
                 this.buttonHighlight = this.buttonSingleplayer;
+                this.sendMessage(Messages.BUTTON_CHANGE);
             }
         }
     }

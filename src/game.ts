@@ -1,11 +1,13 @@
 import * as Colfio from 'colfio';
 import {KeyInputComponent} from 'colfio';
+import {sound} from "@pixi/sound";
 
 import {CollisionTrigger} from "./collisions/collision_trigger";
-import {GlobalAttributes} from "./constants/enums";
+import {Assets, GlobalAttributes} from "./constants/enums";
 import {GameManager} from "./game_manager";
 import {CollisionResolver} from "./collisions/collision_resolver";
 import {SceneManager} from "./scene_manager";
+import {SoundSystem} from "./components/sound";
 
 export class GameState
 {
@@ -30,6 +32,14 @@ class Game
             antialias: true
         });
 
+        sound.add(Assets.SOUND_SHOT, "sounds/shot.wav");
+        sound.add(Assets.SOUND_MUSIC_GAME, "sounds/music_game.wav");
+        sound.add(Assets.SOUND_MUSIC_MENU, "sounds/music_menu.wav");
+        sound.add(Assets.SOUND_GAME_OVER, "sounds/game_over.wav");
+        sound.add(Assets.SOUND_GAME_WON, "sounds/game_won.wav");
+        sound.add(Assets.SOUND_BUTTON_CHANGE, "sounds/button_change.wav");
+        sound.add(Assets.SOUND_ENEMY_DESTROYED, "sounds/break.wav");
+
         this.initGame();
     }
 
@@ -40,6 +50,7 @@ class Game
         this.engine.scene.addGlobalComponent(keyInput);
         this.engine.scene.addGlobalComponent(new CollisionTrigger());
         this.engine.scene.addGlobalComponent(new CollisionResolver());
+        this.engine.scene.addGlobalComponent(new SoundSystem());
         this.engine.scene.addGlobalComponent(new GameManager());
         this.engine.scene.addGlobalComponent(new SceneManager());
     }
