@@ -4,7 +4,7 @@ import {EnemyType} from "./constants/enemy_attributes";
 import {MainMenu} from "./scenes/main_menu";
 import {GameOver} from "./scenes/game_over";
 import {GameWon} from "./scenes/game_won";
-import {createEnemyCircle, createPlayer} from "./factory";
+import {createBackground, createEnemyCircle, createPlayer} from "./factory";
 import {GameState} from "./game";
 import {P1_CONTROLS, P2_CONTROLS, PROJECTILES_MAX, SINGLEPLAYER_CONTROLS} from "./constants/constants"
 
@@ -44,6 +44,8 @@ export class SceneManager extends Colfio.Component
 
         this.scene.assignGlobalAttribute(GlobalAttributes.ENEMIES_COUNT, 0);
         this.scene.assignGlobalAttribute(GlobalAttributes.PROJECTILES_MAX, PROJECTILES_MAX);
+
+        this.owner.scene.stage.addChild(createBackground(this.scene));
 
         if (players === 1)
         {

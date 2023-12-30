@@ -19,9 +19,8 @@ import {
 export const createProjectile = (scene: Colfio.Scene, player: Colfio.Container): Colfio.Sprite =>
 {
     const playerNumber = player.getAttribute<number>(Attributes.PLAYER_NUMBER);
-    let texture = PIXI.Texture.from(GameAssets.SPRITESHEET_PROJECTILES);
+    let texture = PIXI.Texture.from(GameAssets.SPRITESHEET_PROJECTILES).clone();
     texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
-    texture = texture.clone();
     texture.frame = new PIXI.Rectangle(playerNumber == 1 ? 6: 20, 7, PROJECTILE_SIZE, PROJECTILE_SIZE);
 
     let projectile = new Colfio.Sprite("Projectile", texture);
@@ -96,9 +95,8 @@ export const createPlayer = (scene: Colfio.Scene, xPos, playerNumber): Colfio.Sp
 {
     const spritesheet = playerNumber == 1 ? GameAssets.SPRITESHEET_PLAYER_1 : GameAssets.SPRITESHEET_PLAYER_2;
 
-    let texture = PIXI.Texture.from(spritesheet);
+    let texture = PIXI.Texture.from(spritesheet).clone();
     texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
-    texture = texture.clone();
     texture.frame = new PIXI.Rectangle(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT);
 
     let player = new Colfio.Sprite("Player", texture);
@@ -110,4 +108,16 @@ export const createPlayer = (scene: Colfio.Scene, xPos, playerNumber): Colfio.Sp
     player.assignAttribute(Attributes.PROJECTILES_AVAILABLE, PROJECTILES_MAX);
 
     return player;
+}
+
+export const createBackground = (scene: Colfio.Scene): Colfio.Sprite =>
+{
+    let texture = PIXI.Texture.from(GameAssets.BACKGROUND).clone();
+    texture.frame = new PIXI.Rectangle(0, 0, 1000, 750);
+
+    let background = new Colfio.Sprite("Background", texture);
+    background.width = scene.width;
+    background.height = scene.height;
+    background.addTag(Tags.BACKGROUND);
+    return background;
 }

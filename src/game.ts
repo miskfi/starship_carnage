@@ -49,6 +49,7 @@ class Game
             .add(GameAssets.SPRITESHEET_PLAYER_1, "spritesheets/ship.png")
             .add(GameAssets.SPRITESHEET_PLAYER_2, "spritesheets/ship2.png")
             .add(GameAssets.SPRITESHEET_PROJECTILES, "spritesheets/laser-bolts.png")
+            .add(GameAssets.BACKGROUND, "background.png")
             .load(() => this.initGame());
     }
 

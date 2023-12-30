@@ -36,11 +36,12 @@ export class GameWon extends Colfio.Component
     clear()
     {
         // TODO destrukci přesunout jinam
-        const projectiles = this.scene.findObjectsByTag(Tags.PLAYER_PROJECTILE) as Colfio.Graphics[];
-        const players = this.scene.findObjectsByTag(Tags.PLAYER) as Colfio.Graphics[];
-        const enemies = this.scene.findObjectsByTag(Tags.ENEMY_CIRCLE) as Colfio.Graphics[];
+        const projectiles = this.scene.findObjectsByTag(Tags.PLAYER_PROJECTILE) as Colfio.Container[];
+        const players = this.scene.findObjectsByTag(Tags.PLAYER) as Colfio.Container[];
+        const enemies = this.scene.findObjectsByTag(Tags.ENEMY_CIRCLE) as Colfio.Container[];
+        const background = this.scene.findObjectByTag(Tags.BACKGROUND) as Colfio.Container;
 
-        const objects = [...players, ...projectiles, ...enemies]
+        const objects = [...players, ...projectiles, ...enemies, background];
 
         for (let obj of objects)
             obj.destroy();

@@ -38,7 +38,9 @@ export class GameOver extends Colfio.Component
         // TODO destrukci přesunout jinam
         const projectiles = this.scene.findObjectsByTag(Tags.PLAYER_PROJECTILE) as Colfio.Graphics[];
         const enemies = this.scene.findObjectsByTag(Tags.ENEMY_CIRCLE) as Colfio.Graphics[];
-        const objects = [...projectiles, ...enemies]
+        const background = this.scene.findObjectByTag(Tags.BACKGROUND) as Colfio.Container;
+
+        const objects = [...projectiles, ...enemies, background];
 
         for (let obj of objects)
             obj.destroy();
