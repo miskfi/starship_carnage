@@ -6,3 +6,5 @@
 [music_game.wav](https://freesound.org/people/Zetauri/sounds/277251/)
 [music_menu.wav](https://freesound.org/people/Zetauri/sounds/326984/)
 [shot.wav](https://freesound.org/people/Julien%20Matthey/sounds/268343/)
+
+[Spaceship sprites](https://ansimuz.com/site/art-assets-space-ship-shooter/)

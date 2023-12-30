@@ -10,23 +10,27 @@ import {EnemyType, EnemyTypeAttributes} from "./constants/enemy_attributes";
 import {
     ENEMY_COLOR,
     PLAYER_HEIGHT,
-    PLAYER_SCALE,
     PLAYER_WIDTH,
-    PROJECTILE_COLOR,
     PROJECTILE_SIZE,
-    PROJECTILES_MAX
+    PROJECTILES_MAX,
+    TEXTURE_SCALE
 } from "./constants/constants";
 
-export const createProjectile = (scene: Colfio.Scene, player: Colfio.Container): Colfio.Graphics =>
+export const createProjectile = (scene: Colfio.Scene, player: Colfio.Container): Colfio.Sprite =>
 {
-    const projectile = new Colfio.Graphics();
-    projectile.beginFill(PROJECTILE_COLOR);
-    projectile.drawCircle(player.position.x + player.width/2, player.position.y + player.height/2, PROJECTILE_SIZE);
-    projectile["name"] = Tags.PLAYER_PROJECTILE;
+    const playerNumber = player.getAttribute<number>(Attributes.PLAYER_NUMBER);
+    let texture = PIXI.Texture.from(GameAssets.SPRITESHEET_PROJECTILES);
+    texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+    texture = texture.clone();
+    texture.frame = new PIXI.Rectangle(playerNumber == 1 ? 6: 20, 7, PROJECTILE_SIZE, PROJECTILE_SIZE);
+
+    let projectile = new Colfio.Sprite("Projectile", texture);
+    projectile.scale.set(TEXTURE_SCALE);
+    projectile.position.set(player.position.x + player.width/2, player.position.y + player.height/2);
     projectile.addTag(Tags.PLAYER_PROJECTILE);
-    projectile.endFill();
     projectile.addComponent(new ProjectileController());
     projectile.assignAttribute(Attributes.PROJECTILE_SHOOTER, player);
+
     return projectile;
 }
 
@@ -88,18 +92,21 @@ export const createEnemyCircle = (
     return enemyCircle;
 }
 
-export const createPlayer = (scene: Colfio.Scene, xPos, spritesheet): Colfio.Sprite =>
+export const createPlayer = (scene: Colfio.Scene, xPos, playerNumber): Colfio.Sprite =>
 {
+    const spritesheet = playerNumber == 1 ? GameAssets.SPRITESHEET_PLAYER_1 : GameAssets.SPRITESHEET_PLAYER_2;
+
     let texture = PIXI.Texture.from(spritesheet);
+    texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
     texture = texture.clone();
     texture.frame = new PIXI.Rectangle(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT);
 
     let player = new Colfio.Sprite("Player", texture);
-    player.scale.set(PLAYER_SCALE);
-    player.position.set(xPos, scene.height - PLAYER_HEIGHT * PLAYER_SCALE);
-    player["name"] = Tags.PLAYER;
+    player.scale.set(TEXTURE_SCALE);
+    player.position.set(xPos, scene.height - PLAYER_HEIGHT * TEXTURE_SCALE);
     player.addTag(Tags.PLAYER);
     player.addComponent(new PlayerController());
+    player.assignAttribute(Attributes.PLAYER_NUMBER, playerNumber);
     player.assignAttribute(Attributes.PROJECTILES_AVAILABLE, PROJECTILES_MAX);
 
     return player;

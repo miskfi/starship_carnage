@@ -3,7 +3,6 @@ import * as Colfio from 'colfio';
 // projectiles
 export const PROJECTILES_MAX = 3;
 export const PROJECTILE_SIZE = 5;
-export const PROJECTILE_COLOR = 0xFFFFFF;
 export const PROJECTILE_SPEED = 0.5;
 
 // enemies
@@ -12,7 +11,6 @@ export const ENEMY_COLOR = 0xFF0000;
 // player
 export const PLAYER_HEIGHT = 24;
 export const PLAYER_WIDTH = 16;
-export const PLAYER_SCALE = 2.5;
 export const PLAYER_SPEED = 0.15;
 
 export const SINGLEPLAYER_CONTROLS = {
@@ -44,3 +42,6 @@ export const COLOR_TEXT_PASSIVE = 0x6B6261;
 export const COLOR_TEXT_ACTIVE = 0x00C3E6;
 export const COLOR_GAME_WON = 0x00FF00;
 export const COLOR_GAME_OVER = 0xFF0000;
+
+// textures
+export const TEXTURE_SCALE = 2.5;
