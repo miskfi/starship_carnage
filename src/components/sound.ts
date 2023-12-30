@@ -10,8 +10,8 @@ export class SoundSystem extends Colfio.Component
             Messages.PROJECTILE_SHOT,
             Messages.MAIN_MENU,
             Messages.GAME_OVER,
-            Messages.GAME_WON,
-            Messages.GAME_START,
+            Messages.LEVEL_FINISHED,
+            Messages.LEVEL_START,
             Messages.BUTTON_CHANGE,
             Messages.ENEMY_DESTROYED
         );
@@ -26,7 +26,7 @@ export class SoundSystem extends Colfio.Component
             sound.stop(GameAssets.SOUND_MUSIC_GAME);
             sound.play(GameAssets.SOUND_MUSIC_MENU, {loop: true, volume: 0.5});
         }
-        else if (msg.action === Messages.GAME_START)
+        else if (msg.action === Messages.LEVEL_START)
         {
             sound.stop(GameAssets.SOUND_MUSIC_MENU);
             sound.play(GameAssets.SOUND_MUSIC_GAME, {loop: true, volume: 0.3});
@@ -36,10 +36,10 @@ export class SoundSystem extends Colfio.Component
             sound.stop(GameAssets.SOUND_MUSIC_GAME);
             sound.play(GameAssets.SOUND_GAME_OVER, {volume: 0.5});
         }
-        else if (msg.action === Messages.GAME_WON)
+        else if (msg.action === Messages.LEVEL_FINISHED)
         {
             sound.stop(GameAssets.SOUND_MUSIC_GAME);
-            sound.play(GameAssets.SOUND_GAME_WON, {volume: 0.7});
+            sound.play(GameAssets.SOUND_LEVEL_FINISHED, {volume: 0.7});
         }
         else if (msg.action === Messages.BUTTON_CHANGE)
             sound.play(GameAssets.SOUND_BUTTON_CHANGE, {volume: 1})

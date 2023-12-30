@@ -77,7 +77,7 @@ export class GameManager extends Colfio.Component
             else
             {
                 this.setGameNotRunning();
-                this.sendMessage(Messages.GAME_WON);
+                this.sendMessage(Messages.LEVEL_FINISHED);
             }
         }
         else if (msg.action === Messages.PLAYER_HIT)

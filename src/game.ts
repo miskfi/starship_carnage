@@ -19,6 +19,7 @@ export class GameState
 class Game
 {
     engine: Colfio.Engine;
+    loader: Loader;
 
     constructor()
     {
@@ -38,30 +39,25 @@ class Game
         sound.add(GameAssets.SOUND_MUSIC_GAME, "sounds/music_game.wav");
         sound.add(GameAssets.SOUND_MUSIC_MENU, "sounds/music_menu.wav");
         sound.add(GameAssets.SOUND_GAME_OVER, "sounds/game_over.wav");
-        sound.add(GameAssets.SOUND_GAME_WON, "sounds/game_won.wav");
+        sound.add(GameAssets.SOUND_LEVEL_FINISHED, "sounds/game_won.wav");
         sound.add(GameAssets.SOUND_BUTTON_CHANGE, "sounds/button_change.wav");
         sound.add(GameAssets.SOUND_ENEMY_DESTROYED, "sounds/break.wav");
 
-        const loader = new Loader();
-        loader
+        this.loader = new Loader();
+        this.loader
             .reset()
-            .add("font.fnt")
+            .add("font/font.fnt")
             .add(GameAssets.SPRITESHEET_ENEMIES, "spritesheets/enemies.png")
             .add(GameAssets.SPRITESHEET_PLAYER_1, "spritesheets/ship.png")
             .add(GameAssets.SPRITESHEET_PLAYER_2, "spritesheets/ship2.png")
             .add(GameAssets.SPRITESHEET_PROJECTILES, "spritesheets/laser-bolts.png")
             .add(GameAssets.BACKGROUND, "background.png")
+            .add(GameAssets.LEVELS, "levels/levels.json")
             .load(() => this.initGame());
     }
 
     initGame()
     {
-        let sprite = new Colfio.Sprite('mySprite', PIXI.Texture.from("warrior"));
-        sprite.position.set(this.engine.app.screen.width / 2, this.engine.app.screen.height / 2);
-        sprite.anchor.set(0.5);
-        this.engine.scene.stage.addChild(sprite);
-
-
         const keyInput = new KeyInputComponent();
         this.engine.scene.assignGlobalAttribute(GlobalAttributes.KEY_INPUT, keyInput);
         this.engine.scene.addGlobalComponent(keyInput);
@@ -69,7 +65,7 @@ class Game
         this.engine.scene.addGlobalComponent(new CollisionResolver());
         this.engine.scene.addGlobalComponent(new SoundSystem());
         this.engine.scene.addGlobalComponent(new GameManager());
-        this.engine.scene.addGlobalComponent(new SceneManager());
+        this.engine.scene.addGlobalComponent(new SceneManager(this.loader.resources[GameAssets.LEVELS].data));
     }
 }
 

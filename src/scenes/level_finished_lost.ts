@@ -1,11 +1,18 @@
 import * as Colfio from 'colfio';
 import {GlobalAttributes, Messages, Tags} from "../constants/enums";
-import {COLOR_GAME_OVER} from "../constants/constants";
+import {COLOR_GAME_OVER, COLOR_GAME_WON} from "../constants/constants";
 
-export class GameOver extends Colfio.Component
+/**
+ * Parent class for Game Over, Game Won and Level Finished scenes.
+ */
+abstract class IntermediateScene extends Colfio.Component
 {
     keyInput: Colfio.KeyInputComponent;
     sceneContainer: Colfio.Container;
+
+    title: string;
+    instructions: string;
+    titleColor: number;
 
     onInit()
     {
@@ -22,7 +29,7 @@ export class GameOver extends Colfio.Component
         if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_ENTER))
         {
             this.keyInput.handleKey(Colfio.Keys.KEY_ENTER);
-            this.sendMessage(Messages.GAME_START, this.scene.getGlobalAttribute(GlobalAttributes.GAME_MODE));
+            this.sendMessage(Messages.LEVEL_START, this.scene.getGlobalAttribute(GlobalAttributes.GAME_MODE));
             this.sceneContainer.destroy();
         }
         if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_SHIFT))
@@ -36,24 +43,26 @@ export class GameOver extends Colfio.Component
     clear()
     {
         // TODO destrukci přesunout jinam
-        const projectiles = this.scene.findObjectsByTag(Tags.PLAYER_PROJECTILE) as Colfio.Graphics[];
-        const enemies = this.scene.findObjectsByTag(Tags.ENEMY_CIRCLE) as Colfio.Graphics[];
+        const projectiles = this.scene.findObjectsByTag(Tags.PLAYER_PROJECTILE) as Colfio.Container[];
+        const players = this.scene.findObjectsByTag(Tags.PLAYER) as Colfio.Container[];
+        const enemies = this.scene.findObjectsByTag(Tags.ENEMY_CIRCLE) as Colfio.Container[];
         const background = this.scene.findObjectByTag(Tags.BACKGROUND) as Colfio.Container;
 
-        const objects = [...projectiles, ...enemies, background];
+        const objects = [...players, ...projectiles, ...enemies, background];
 
         for (let obj of objects)
             obj.destroy();
+
     }
 
     createScreen()
     {
         let game_over = new Colfio.BitmapText(
-            "Game Over",
-            "Game Over",
+            this.title,
+            this.title,
             "Early GameBoy",
             50,
-            COLOR_GAME_OVER
+            this.titleColor
         );
         game_over.anchor.set(0.5);
         game_over.position.set(this.scene.width / 2, this.scene.height / 4);
@@ -61,7 +70,7 @@ export class GameOver extends Colfio.Component
 
         let instructions = new Colfio.BitmapText(
             "Instructions",
-            "Press ENTER to play again, \npress SHIFT to go to the main menu",
+            this.instructions,
             "Early GameBoy",
             20,
             0xFFFFFF
@@ -71,4 +80,25 @@ export class GameOver extends Colfio.Component
         instructions.position.set(this.scene.width / 2, this.scene.height / 2);
         this.sceneContainer.addChild(instructions);
     }
+}
+
+export class GameWon extends IntermediateScene
+{
+    title = "Game Won";
+    titleColor = COLOR_GAME_WON;
+    instructions = "Congratulations! You finished all the available levels! \nPress ENTER to play again, \npress SHIFT to go to the main menu";
+}
+
+export class GameOver extends IntermediateScene
+{
+    title = "Game Over";
+    titleColor = COLOR_GAME_OVER;
+    instructions = "Press ENTER to play again, \npress SHIFT to go to the main menu";
+}
+
+export class LevelFinished extends IntermediateScene
+{
+    title = "Level Finished";
+    titleColor = COLOR_GAME_WON;
+    instructions = "Press ENTER to play the next level, \npress SHIFT to go to the main menu";
 }

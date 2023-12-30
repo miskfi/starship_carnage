@@ -26,9 +26,9 @@ export class MainMenu extends Colfio.Component
             this.keyInput.handleKey(Colfio.Keys.KEY_ENTER);
 
             if (this.buttonHighlight === this.buttonSingleplayer)
-                this.sendMessage(Messages.GAME_START, 1);
+                this.sendMessage(Messages.LEVEL_START, 1);
             else if (this.buttonHighlight === this.buttonMultiplayer)
-                this.sendMessage(Messages.GAME_START, 2)
+                this.sendMessage(Messages.LEVEL_START, 2)
 
             this.menuContainer.destroy();
         }
