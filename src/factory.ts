@@ -20,7 +20,6 @@ export const createProjectile = (scene: Colfio.Scene, player: Colfio.Container):
 {
     const playerNumber = player.getAttribute<number>(Attributes.PLAYER_NUMBER);
     let texture = PIXI.Texture.from(GameAssets.SPRITESHEET_PROJECTILES).clone();
-    texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
     texture.frame = new PIXI.Rectangle(playerNumber == 1 ? 6: 20, 7, PROJECTILE_SIZE, PROJECTILE_SIZE);
 
     let projectile = new Colfio.Sprite("Projectile", texture);
@@ -75,7 +74,6 @@ export const createEnemyCircle = (
     }
 
     let texture = PIXI.Texture.from(GameAssets.SPRITESHEET_ENEMIES).clone();
-    texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
     // randomly choose one of the four textures
     texture.frame = new PIXI.Rectangle(Math.random() > 0.5 ? 0 : 16, Math.random() > 0.5 ? 0 : 16, ENEMY_SIZE, ENEMY_SIZE);
 
@@ -99,7 +97,6 @@ export const createPlayer = (scene: Colfio.Scene, xPos, playerNumber): Colfio.Sp
     const spritesheet = playerNumber == 1 ? GameAssets.SPRITESHEET_PLAYER_1 : GameAssets.SPRITESHEET_PLAYER_2;
 
     let texture = PIXI.Texture.from(spritesheet).clone();
-    texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
     texture.frame = new PIXI.Rectangle(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT);
 
     let player = new Colfio.Sprite("Player", texture);

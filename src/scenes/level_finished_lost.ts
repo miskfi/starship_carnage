@@ -86,7 +86,10 @@ export class GameWon extends IntermediateScene
 {
     title = "Game Won";
     titleColor = COLOR_GAME_WON;
-    instructions = "Congratulations! You finished all the available levels! \nPress ENTER to play again, \npress SHIFT to go to the main menu";
+    instructions = "Congratulations!\n" +
+        "You finished all the available levels!\n\n" +
+        "Press ENTER to play again,\n" +
+        "press SHIFT to go to the main menu\n";
 }
 
 export class GameOver extends IntermediateScene

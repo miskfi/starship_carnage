@@ -35,6 +35,8 @@ class Game
             antialias: false,
         });
 
+        PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+
         sound.add(GameAssets.SOUND_SHOT, "sounds/shot.wav");
         sound.add(GameAssets.SOUND_MUSIC_GAME, "sounds/music_game.wav");
         sound.add(GameAssets.SOUND_MUSIC_MENU, "sounds/music_menu.wav");
