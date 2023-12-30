@@ -1,5 +1,5 @@
 import * as Colfio from 'colfio';
-import {Attributes, GlobalAttributes, Messages} from "./constants/enums";
+import {Attributes, GameAssets, GlobalAttributes, Messages} from "./constants/enums";
 import {EnemyType} from "./constants/enemy_attributes";
 import {MainMenu} from "./scenes/main_menu";
 import {GameOver} from "./scenes/game_over";
@@ -47,17 +47,17 @@ export class SceneManager extends Colfio.Component
 
         if (players === 1)
         {
-            const player = createPlayer(this.scene, this.scene.width / 2);
+            const player = createPlayer(this.scene, this.scene.width / 2, GameAssets.SPRITESHEET_PLAYER_1);
             player.assignAttribute(Attributes.CONTROLS, SINGLEPLAYER_CONTROLS);
             this.owner.scene.stage.addChild(player);
         }
         if (players === 2)
         {
-            const player1 = createPlayer(this.scene, this.scene.width / 4);
+            const player1 = createPlayer(this.scene, this.scene.width / 4, GameAssets.SPRITESHEET_PLAYER_1);
             player1.assignAttribute(Attributes.CONTROLS, P1_CONTROLS);
             this.owner.scene.stage.addChild(player1);
 
-            const player2 = createPlayer(this.scene, this.scene.width / 4 * 3);
+            const player2 = createPlayer(this.scene, this.scene.width / 4 * 3, GameAssets.SPRITESHEET_PLAYER_2);
             player2.assignAttribute(Attributes.CONTROLS, P2_CONTROLS);
             this.owner.scene.stage.addChild(player2);
         }

@@ -10,8 +10,9 @@ export const PROJECTILE_SPEED = 0.5;
 export const ENEMY_COLOR = 0xFF0000;
 
 // player
-export const PLAYER_SIZE = 40;
-export const PLAYER_COLOR = 0xFFFFFF;
+export const PLAYER_HEIGHT = 24;
+export const PLAYER_WIDTH = 16;
+export const PLAYER_SCALE = 2.5;
 export const PLAYER_SPEED = 0.15;
 
 export const SINGLEPLAYER_CONTROLS = {

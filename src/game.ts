@@ -1,10 +1,11 @@
 import * as Colfio from 'colfio';
+import * as PIXI from  "pixi.js";
 import {KeyInputComponent} from 'colfio';
 import {sound} from "@pixi/sound";
 import {Loader} from '@pixi/loaders';
 
 import {CollisionTrigger} from "./collisions/collision_trigger";
-import {Assets, GlobalAttributes} from "./constants/enums";
+import {GameAssets, GlobalAttributes} from "./constants/enums";
 import {GameManager} from "./game_manager";
 import {CollisionResolver} from "./collisions/collision_resolver";
 import {SceneManager} from "./scene_manager";
@@ -33,23 +34,31 @@ class Game
             antialias: true
         });
 
-        sound.add(Assets.SOUND_SHOT, "sounds/shot.wav");
-        sound.add(Assets.SOUND_MUSIC_GAME, "sounds/music_game.wav");
-        sound.add(Assets.SOUND_MUSIC_MENU, "sounds/music_menu.wav");
-        sound.add(Assets.SOUND_GAME_OVER, "sounds/game_over.wav");
-        sound.add(Assets.SOUND_GAME_WON, "sounds/game_won.wav");
-        sound.add(Assets.SOUND_BUTTON_CHANGE, "sounds/button_change.wav");
-        sound.add(Assets.SOUND_ENEMY_DESTROYED, "sounds/break.wav");
+        sound.add(GameAssets.SOUND_SHOT, "sounds/shot.wav");
+        sound.add(GameAssets.SOUND_MUSIC_GAME, "sounds/music_game.wav");
+        sound.add(GameAssets.SOUND_MUSIC_MENU, "sounds/music_menu.wav");
+        sound.add(GameAssets.SOUND_GAME_OVER, "sounds/game_over.wav");
+        sound.add(GameAssets.SOUND_GAME_WON, "sounds/game_won.wav");
+        sound.add(GameAssets.SOUND_BUTTON_CHANGE, "sounds/button_change.wav");
+        sound.add(GameAssets.SOUND_ENEMY_DESTROYED, "sounds/break.wav");
 
         const loader = new Loader();
         loader
             .reset()
-            .add("font", "font.fnt")
+            .add("font.fnt")
+            .add(GameAssets.SPRITESHEET_PLAYER_1, "spritesheets/ship.png")
+            .add(GameAssets.SPRITESHEET_PLAYER_2, "spritesheets/ship2.png")
             .load(() => this.initGame());
     }
 
     initGame()
     {
+        let sprite = new Colfio.Sprite('mySprite', PIXI.Texture.from("warrior"));
+        sprite.position.set(this.engine.app.screen.width / 2, this.engine.app.screen.height / 2);
+        sprite.anchor.set(0.5);
+        this.engine.scene.stage.addChild(sprite);
+
+
         const keyInput = new KeyInputComponent();
         this.engine.scene.assignGlobalAttribute(GlobalAttributes.KEY_INPUT, keyInput);
         this.engine.scene.addGlobalComponent(keyInput);

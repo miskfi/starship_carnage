@@ -1,14 +1,17 @@
 import * as Colfio from 'colfio';
+import * as PIXI from 'pixi.js';
+
 import {ProjectileController} from "./components/projectile_controller";
 import {EnemyController} from "./components/enemy_controller";
-import {Attributes, GlobalAttributes, Tags} from "./constants/enums";
+import {Attributes, GameAssets, GlobalAttributes, Tags} from "./constants/enums";
 import {PlayerController} from "./components/player_controller";
 import {getRandomInteger} from "./utils";
 import {EnemyType, EnemyTypeAttributes} from "./constants/enemy_attributes";
 import {
     ENEMY_COLOR,
-    PLAYER_COLOR,
-    PLAYER_SIZE,
+    PLAYER_HEIGHT,
+    PLAYER_SCALE,
+    PLAYER_WIDTH,
     PROJECTILE_COLOR,
     PROJECTILE_SIZE,
     PROJECTILES_MAX
@@ -85,16 +88,19 @@ export const createEnemyCircle = (
     return enemyCircle;
 }
 
-export const createPlayer = (scene: Colfio.Scene, xPos): Colfio.Graphics =>
+export const createPlayer = (scene: Colfio.Scene, xPos, spritesheet): Colfio.Sprite =>
 {
-    const player = new Colfio.Graphics();
-    player.beginFill(PLAYER_COLOR);
-    player.drawRect(0, 0, PLAYER_SIZE, PLAYER_SIZE);
-    player.position.set(xPos, scene.height - PLAYER_SIZE);
+    let texture = PIXI.Texture.from(spritesheet);
+    texture = texture.clone();
+    texture.frame = new PIXI.Rectangle(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT);
+
+    let player = new Colfio.Sprite("Player", texture);
+    player.scale.set(PLAYER_SCALE);
+    player.position.set(xPos, scene.height - PLAYER_HEIGHT * PLAYER_SCALE);
     player["name"] = Tags.PLAYER;
     player.addTag(Tags.PLAYER);
-    player.endFill();
     player.addComponent(new PlayerController());
     player.assignAttribute(Attributes.PROJECTILES_AVAILABLE, PROJECTILES_MAX);
+
     return player;
 }
