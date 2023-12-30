@@ -8,7 +8,7 @@ import {PlayerController} from "./components/player_controller";
 import {getRandomInteger} from "./utils";
 import {EnemyType, EnemyTypeAttributes} from "./constants/enemy_attributes";
 import {
-    ENEMY_COLOR,
+    ENEMY_SIZE,
     PLAYER_HEIGHT,
     PLAYER_WIDTH,
     PROJECTILE_SIZE,
@@ -48,9 +48,8 @@ export const createEnemyCircle = (
     enemyType: EnemyType,
     initialPos: [number, number] | null = null,
     initialVelocity: Colfio.Vector | null = null
-): Colfio.Graphics =>
+): Colfio.Sprite =>
 {
-    const enemyCircle = new Colfio.Graphics();
     const {size, speed} = EnemyTypeAttributes[enemyType];
 
     // TODO přidat kontrolu, abych nevytvářel kruh v pozici, kde už něco je
@@ -75,20 +74,24 @@ export const createEnemyCircle = (
         initialVelocity = new Colfio.Vector(Math.cos(angleRad), Math.sin(angleRad)).normalize();
     }
 
-    enemyCircle.beginFill(ENEMY_COLOR);
-    enemyCircle.drawCircle(0, 0, size / 2);
-    enemyCircle.position.set(initialPos[0], initialPos[1]);
-    enemyCircle["name"] = Tags.ENEMY_CIRCLE;
-    enemyCircle.addTag(Tags.ENEMY_CIRCLE);
-    enemyCircle.addComponent(new EnemyController());
-    enemyCircle.assignAttribute(Attributes.ENEMY_TYPE, enemyType);
+    let texture = PIXI.Texture.from(GameAssets.SPRITESHEET_ENEMIES).clone();
+    texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+    // randomly choose one of the four textures
+    texture.frame = new PIXI.Rectangle(Math.random() > 0.5 ? 0 : 16, Math.random() > 0.5 ? 0 : 16, ENEMY_SIZE, ENEMY_SIZE);
 
-    enemyCircle.assignAttribute(Attributes.ENEMY_VELOCITY, initialVelocity);
-    enemyCircle.assignAttribute(Attributes.ENEMY_SPEED, speed);
+    let enemy = new Colfio.Sprite("Enemy", texture);
+    enemy.scale.set(size);
+    enemy.position.set(initialPos[0], initialPos[1]);
+    enemy.addTag(Tags.ENEMY_CIRCLE);
+    enemy.addComponent(new EnemyController());
+    enemy.assignAttribute(Attributes.ENEMY_TYPE, enemyType);
+    enemy.assignAttribute(Attributes.ENEMY_VELOCITY, initialVelocity);
+    enemy.assignAttribute(Attributes.ENEMY_SPEED, speed);
+
 
     const enemies = scene.getGlobalAttribute<number>(GlobalAttributes.ENEMIES_COUNT);
     scene.assignGlobalAttribute(GlobalAttributes.ENEMIES_COUNT, enemies + 1);
-    return enemyCircle;
+    return enemy;
 }
 
 export const createPlayer = (scene: Colfio.Scene, xPos, playerNumber): Colfio.Sprite =>

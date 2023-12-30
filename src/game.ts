@@ -31,7 +31,7 @@ class Game
             width: 800,
             height: 600,
             resolution: 1,
-            antialias: true,
+            antialias: false,
         });
 
         sound.add(GameAssets.SOUND_SHOT, "sounds/shot.wav");
@@ -46,6 +46,7 @@ class Game
         loader
             .reset()
             .add("font.fnt")
+            .add(GameAssets.SPRITESHEET_ENEMIES, "spritesheets/enemies.png")
             .add(GameAssets.SPRITESHEET_PLAYER_1, "spritesheets/ship.png")
             .add(GameAssets.SPRITESHEET_PLAYER_2, "spritesheets/ship2.png")
             .add(GameAssets.SPRITESHEET_PROJECTILES, "spritesheets/laser-bolts.png")

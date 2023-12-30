@@ -6,7 +6,7 @@ export const PROJECTILE_SIZE = 5;
 export const PROJECTILE_SPEED = 0.5;
 
 // enemies
-export const ENEMY_COLOR = 0xFF0000;
+export const ENEMY_SIZE = 16;
 
 // player
 export const PLAYER_HEIGHT = 24;

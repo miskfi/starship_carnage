@@ -22,9 +22,9 @@ export const EnemyTypeOrder = [
 
 export const EnemyTypeAttributes: Record<keyof typeof EnemyType, EnemyAttributes> =
 {
-    "SMALLEST": {size: 20, speed: 0.2},
-    "SMALL": {size: 30, speed: 0.175},
-    "MEDIUM": {size: 40, speed: 0.15},
-    "BIG": {size: 50, speed: 0.125},
-    "BIGGEST": {size: 60, speed: 0.2}
+    "SMALLEST": {size: 1.5, speed: 0.2},
+    "SMALL": {size: 2, speed: 0.175},
+    "MEDIUM": {size: 2.5, speed: 0.15},
+    "BIG": {size: 3, speed: 0.125},
+    "BIGGEST": {size: 3.5, speed: 0.2}
 }

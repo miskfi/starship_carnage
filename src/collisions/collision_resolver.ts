@@ -51,15 +51,7 @@ export class CollisionResolver extends Colfio.Component
             }
             else if (type === EnemyCollisionType.BORDER_HORIZONTAL)
             {
-                const screenWidth = this.scene.app.screen.width;
                 let velocity = enemy.getAttribute<Colfio.Vector>(Attributes.ENEMY_VELOCITY);
-                let pos = enemy.position;
-
-                // move the enemy to the furthest point where it doesn't collide with the border
-                if (velocity.x > 0)
-                    pos.x = screenWidth - enemy.width / 2 - 1;
-                else
-                    pos.x = enemy.width / 2 + 1;
 
                 enemy.assignAttribute(
                     Attributes.ENEMY_VELOCITY,
@@ -68,15 +60,7 @@ export class CollisionResolver extends Colfio.Component
             }
             else if (type === EnemyCollisionType.BORDER_VERTICAL)
             {
-                const screenHeight = this.scene.app.screen.height;
                 let velocity = enemy.getAttribute<Colfio.Vector>(Attributes.ENEMY_VELOCITY);
-                let pos = enemy.position;
-
-                // move the enemy to the furthest point where it doesn't collide with the border
-                if (velocity.y > 0)
-                    pos.y = screenHeight - enemy.height / 2 - 1;
-                else
-                    pos.y = enemy.height / 2 + 1;
 
                 enemy.assignAttribute(
                     Attributes.ENEMY_VELOCITY,
