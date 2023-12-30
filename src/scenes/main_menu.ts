@@ -1,16 +1,15 @@
 import * as Colfio from 'colfio';
 import {GlobalAttributes, Messages} from "../constants/enums";
 import {COLOR_TEXT_ACTIVE, COLOR_TEXT_PASSIVE} from "../constants/constants";
-import {Assets} from "pixi.js";
 
 export class MainMenu extends Colfio.Component
 {
     keyInput: Colfio.KeyInputComponent;
     menuContainer: Colfio.Container;
 
-    buttonSingleplayer: Colfio.Text;
-    buttonMultiplayer: Colfio.Text;
-    buttonHighlight: Colfio.Text;
+    buttonSingleplayer: Colfio.BitmapText;
+    buttonMultiplayer: Colfio.BitmapText;
+    buttonHighlight: Colfio.BitmapText;
 
     onInit()
     {
@@ -37,8 +36,8 @@ export class MainMenu extends Colfio.Component
         {
             if (this.buttonHighlight === this.buttonSingleplayer)
             {
-                this.buttonSingleplayer.style["fill"] = COLOR_TEXT_PASSIVE;
-                this.buttonMultiplayer.style["fill"] = COLOR_TEXT_ACTIVE;
+                this.buttonSingleplayer.tint = COLOR_TEXT_PASSIVE;
+                this.buttonMultiplayer.tint = COLOR_TEXT_ACTIVE;
                 this.buttonHighlight = this.buttonMultiplayer;
                 this.sendMessage(Messages.BUTTON_CHANGE);
             }
@@ -47,8 +46,8 @@ export class MainMenu extends Colfio.Component
         {
             if (this.buttonHighlight === this.buttonMultiplayer)
             {
-                this.buttonSingleplayer.style["fill"] = COLOR_TEXT_ACTIVE;
-                this.buttonMultiplayer.style["fill"] = COLOR_TEXT_PASSIVE;
+                this.buttonSingleplayer.tint = COLOR_TEXT_ACTIVE;
+                this.buttonMultiplayer.tint = COLOR_TEXT_PASSIVE;
                 this.buttonHighlight = this.buttonSingleplayer;
                 this.sendMessage(Messages.BUTTON_CHANGE);
             }
@@ -65,33 +64,22 @@ export class MainMenu extends Colfio.Component
         graphics.drawRect(0, 0, sceneWidth, sceneHeight);
         this.menuContainer.addChild(graphics);
 
-        this.createTitle("Space Destructor");
-        this.buttonSingleplayer = this.createButton("1 player", sceneWidth / 2, sceneHeight / 2);
-        this.buttonMultiplayer = this.createButton("2 players", sceneWidth / 2, sceneHeight / 2 + 50);
+        this.createText("Space Destructor", this.scene.width / 2, this.scene.height / 4, 60, 0xFFFFFF);
+        this.buttonSingleplayer = this.createText("1 player", this.scene.width / 2, this.scene.height / 2, 30, COLOR_TEXT_PASSIVE);
+        this.buttonMultiplayer = this.createText("2 players", this.scene.width / 2, this.scene.height / 2 + 50, 30, COLOR_TEXT_PASSIVE);
+        this.createText("Press ENTER to select", this.scene.width / 2, this.scene.height - 50, 15, 0xFFFFFF);
 
-        this.buttonSingleplayer.style["fill"] = COLOR_TEXT_ACTIVE;
+
+        this.buttonSingleplayer.tint = COLOR_TEXT_ACTIVE;
         this.buttonHighlight = this.buttonSingleplayer;
     }
 
-    createTitle(name: string)
+    createText(text: string, x, y, fontSize, fontColor)
     {
-        Assets.load({name: "font", src: "font.fnt"}).then(() =>
-        {
-            let title = new Colfio.BitmapText(name, name, "Early GameBoy", 60, 0xFFFFFF);
-            title.anchor.set(0.5);
-            title.position.set(this.scene.width / 2, this.scene.height / 4);
-            this.menuContainer.addChild(title);
-        });
-    }
-
-    createButton(text: string, x, y)
-    {
-        let button = new Colfio.Text(text, text);
-        button.style = {fontFamily: "Arial", fontSize: 30, fill: COLOR_TEXT_PASSIVE, align: "center"};
-        button.anchor.set(0.5);
-        button.position.set(x, y);
-
-        this.menuContainer.addChild(button);
-        return button;
+        const textObj = new Colfio.BitmapText(text, text, "Early GameBoy", fontSize, fontColor);
+        textObj.anchor.set(0.5);
+        textObj.position.set(x, y);
+        this.menuContainer.addChild(textObj);
+        return textObj;
     }
 }

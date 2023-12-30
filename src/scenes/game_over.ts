@@ -1,7 +1,6 @@
 import * as Colfio from 'colfio';
 import {GlobalAttributes, Messages, Tags} from "../constants/enums";
 import {COLOR_GAME_OVER} from "../constants/constants";
-import {Assets} from "pixi.js";
 
 export class GameOver extends Colfio.Component
 {
@@ -47,30 +46,27 @@ export class GameOver extends Colfio.Component
 
     createScreen()
     {
-        Assets.load({name: "font", src: "font.fnt"}).then(() =>
-        {
-            let game_over = new Colfio.BitmapText(
-                "Game Over",
-                "Game Over",
-                "Early GameBoy",
-                50,
-                COLOR_GAME_OVER
-            );
-            game_over.anchor.set(0.5);
-            game_over.position.set(this.scene.width / 2, this.scene.height / 4);
-            this.sceneContainer.addChild(game_over);
+        let game_over = new Colfio.BitmapText(
+            "Game Over",
+            "Game Over",
+            "Early GameBoy",
+            50,
+            COLOR_GAME_OVER
+        );
+        game_over.anchor.set(0.5);
+        game_over.position.set(this.scene.width / 2, this.scene.height / 4);
+        this.sceneContainer.addChild(game_over);
 
-            let instructions = new Colfio.BitmapText(
-                "Instructions",
-                "Press ENTER to play again, \npress SHIFT to go to the main menu",
-                "Early GameBoy",
-                20,
-                0xFFFFFF
-            );
-            instructions.align = "center";
-            instructions.anchor.set(0.5);
-            instructions.position.set(this.scene.width / 2, this.scene.height / 2);
-            this.sceneContainer.addChild(instructions);
-        });
+        let instructions = new Colfio.BitmapText(
+            "Instructions",
+            "Press ENTER to play again, \npress SHIFT to go to the main menu",
+            "Early GameBoy",
+            20,
+            0xFFFFFF
+        );
+        instructions.align = "center";
+        instructions.anchor.set(0.5);
+        instructions.position.set(this.scene.width / 2, this.scene.height / 2);
+        this.sceneContainer.addChild(instructions);
     }
 }

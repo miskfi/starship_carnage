@@ -1,6 +1,7 @@
 import * as Colfio from 'colfio';
 import {KeyInputComponent} from 'colfio';
 import {sound} from "@pixi/sound";
+import {Loader} from '@pixi/loaders';
 
 import {CollisionTrigger} from "./collisions/collision_trigger";
 import {Assets, GlobalAttributes} from "./constants/enums";
@@ -40,7 +41,11 @@ class Game
         sound.add(Assets.SOUND_BUTTON_CHANGE, "sounds/button_change.wav");
         sound.add(Assets.SOUND_ENEMY_DESTROYED, "sounds/break.wav");
 
-        this.initGame();
+        const loader = new Loader();
+        loader
+            .reset()
+            .add("font", "font.fnt")
+            .load(() => this.initGame());
     }
 
     initGame()
