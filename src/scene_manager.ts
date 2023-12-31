@@ -1,4 +1,5 @@
 import * as Colfio from 'colfio';
+
 import {Attributes, GlobalAttributes, Messages, Tags} from "./constants/enums";
 import {MainMenu} from "./scenes/main_menu";
 import {GameWon, GameOver, LevelFinished} from "./scenes/level_finished_lost";
@@ -23,9 +24,14 @@ export class SceneManager extends Colfio.Component
     currentLevelSingleplayer: number;
     currentLevelMultiplayer: number;
 
-    constructor(levelData) {
+    spritesheet1;
+    spritesheet2;
+
+    constructor(levelData, spritesheet1, spritesheet2) {
         super();
         this.loadLevels(levelData);
+        this.spritesheet1 = spritesheet1;
+        this.spritesheet2 = spritesheet2;
     }
 
     onInit()
@@ -137,17 +143,17 @@ export class SceneManager extends Colfio.Component
     {
         if (players === 1)
         {
-            const player = createPlayer(this.scene, this.scene.width / 2, 1);
+            const player = createPlayer(this.scene, this.scene.width / 2, 1, this.spritesheet1);
             player.assignAttribute(Attributes.CONTROLS, SINGLEPLAYER_CONTROLS);
             this.owner.scene.stage.addChild(player);
         }
         if (players === 2)
         {
-            const player1 = createPlayer(this.scene, this.scene.width / 4, 1);
+            const player1 = createPlayer(this.scene, this.scene.width / 4, 1, this.spritesheet1);
             player1.assignAttribute(Attributes.CONTROLS, P1_CONTROLS);
             this.owner.scene.stage.addChild(player1);
 
-            const player2 = createPlayer(this.scene, this.scene.width / 4 * 3, 2);
+            const player2 = createPlayer(this.scene, this.scene.width / 4 * 3, 2, this.spritesheet2);
             player2.assignAttribute(Attributes.CONTROLS, P2_CONTROLS);
             this.owner.scene.stage.addChild(player2);
         }

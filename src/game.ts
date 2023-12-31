@@ -52,8 +52,8 @@ class Game
             .reset()
             .add("font/font.fnt")
             .add(GameAssets.SPRITESHEET_ENEMIES, "spritesheets/enemies.png")
-            .add(GameAssets.SPRITESHEET_PLAYER_1, "spritesheets/ship.png")
-            .add(GameAssets.SPRITESHEET_PLAYER_2, "spritesheets/ship2.png")
+            .add(GameAssets.SPRITESHEET_PLAYER_1, "spritesheets/ship.json")
+            .add(GameAssets.SPRITESHEET_PLAYER_2, "spritesheets/ship2.json")
             .add(GameAssets.SPRITESHEET_PROJECTILES, "spritesheets/laser-bolts.png")
             .add(GameAssets.BACKGROUND, "background.png")
             .add(GameAssets.HEART, "heart.png")
@@ -63,6 +63,10 @@ class Game
 
     initGame()
     {
+        const sheet1 = this.loader.resources[GameAssets.SPRITESHEET_PLAYER_1].spritesheet;
+        const sheet2 = this.loader.resources[GameAssets.SPRITESHEET_PLAYER_2].spritesheet;
+        const levels = this.loader.resources[GameAssets.LEVELS].data;
+
         const keyInput = new KeyInputComponent();
         this.engine.scene.assignGlobalAttribute(GlobalAttributes.KEY_INPUT, keyInput);
         this.engine.scene.addGlobalComponent(keyInput);
@@ -70,7 +74,7 @@ class Game
         this.engine.scene.addGlobalComponent(new CollisionResolver());
         this.engine.scene.addGlobalComponent(new SoundSystem());
         this.engine.scene.addGlobalComponent(new GameManager());
-        this.engine.scene.addGlobalComponent(new SceneManager(this.loader.resources[GameAssets.LEVELS].data));
+        this.engine.scene.addGlobalComponent(new SceneManager(levels, sheet1, sheet2));
     }
 }
 
