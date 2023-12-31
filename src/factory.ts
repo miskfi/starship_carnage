@@ -52,12 +52,12 @@ export const createEnemyCircle = (
 {
     const {size, speed} = EnemyTypeAttributes[enemyType];
 
-    // TODO přidat kontrolu, abych nevytvářel kruh v pozici, kde už něco je
     if (initialPos === null)
     {
+        const margin = 10;
         initialPos = [0, 0];
-        initialPos[0] = getRandomInteger(size, scene.app.screen.width - size);
-        initialPos[1] = getRandomInteger(size, scene.app.screen.height / 2 - size);
+        initialPos[0] = getRandomInteger(size, scene.app.screen.width - size - margin);
+        initialPos[1] = getRandomInteger(size, scene.app.screen.height / 2 - size - margin);
     }
     if (initialVelocity == null)
     {

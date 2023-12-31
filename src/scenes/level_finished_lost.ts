@@ -1,5 +1,5 @@
 import * as Colfio from 'colfio';
-import {GlobalAttributes, Messages, Tags} from "../constants/enums";
+import {GlobalAttributes, Messages} from "../constants/enums";
 import {COLOR_GAME_OVER, COLOR_GAME_WON} from "../constants/constants";
 
 /**
@@ -20,8 +20,12 @@ abstract class IntermediateScene extends Colfio.Component
         this.sceneContainer = new Colfio.Container();
         this.owner.addChild(this.sceneContainer);
 
-        this.clear();
         this.createScreen();
+    }
+
+    onDetach()
+    {
+        this.sceneContainer.destroy();
     }
 
     onUpdate(delta: number, absolute: number)
@@ -30,30 +34,12 @@ abstract class IntermediateScene extends Colfio.Component
         {
             this.keyInput.handleKey(Colfio.Keys.KEY_ENTER);
             this.sendMessage(Messages.LEVEL_START, this.scene.getGlobalAttribute(GlobalAttributes.GAME_MODE));
-            this.sceneContainer.destroy();
         }
         if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_SHIFT))
         {
             this.keyInput.handleKey(Colfio.Keys.KEY_SHIFT);
             this.sendMessage(Messages.MAIN_MENU);
-            this.sceneContainer.destroy();
         }
-    }
-
-    clear()
-    {
-        // TODO destrukci přesunout jinam
-        const projectiles = this.scene.findObjectsByTag(Tags.PLAYER_PROJECTILE) as Colfio.Container[];
-        const players = this.scene.findObjectsByTag(Tags.PLAYER) as Colfio.Container[];
-        const enemies = this.scene.findObjectsByTag(Tags.ENEMY_CIRCLE) as Colfio.Container[];
-        const background = this.scene.findObjectByTag(Tags.BACKGROUND) as Colfio.Container;
-        const statusBar = this.scene.findObjectByTag(Tags.STATUS_BAR) as Colfio.Container;
-
-        const objects = [...players, ...projectiles, ...enemies, background, statusBar];
-
-        for (let obj of objects)
-            obj.destroy();
-
     }
 
     createScreen()

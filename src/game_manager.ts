@@ -29,16 +29,14 @@ export class GameManager extends Colfio.Component
         }
         else if (msg.action === Messages.PROJECTILE_DESTROYED)
         {
-            const projectileToDestroy = msg.data as Colfio.Graphics;
+            const projectileToDestroy = msg.data as Colfio.Container;
             const player = projectileToDestroy.getAttribute<Colfio.Graphics>(Attributes.PROJECTILE_SHOOTER);
-            projectileToDestroy.destroy();
-
             const projectiles = player.getAttribute<number>(Attributes.PROJECTILES_AVAILABLE);
             player.assignAttribute(Attributes.PROJECTILES_AVAILABLE, projectiles + 1);
         }
         else if (msg.action === Messages.ENEMY_DESTROYED)
         {
-            const enemyToDestroy = msg.data as Colfio.Graphics;
+            const enemyToDestroy = msg.data as Colfio.Container;
             const enemyType = enemyToDestroy.getAttribute<EnemyType>(Attributes.ENEMY_TYPE);
             const enemyPosition: [number, number] = [enemyToDestroy.position.x, enemyToDestroy.position.y];
             let enemyCount = this.scene.getGlobalAttribute<number>(GlobalAttributes.ENEMIES_COUNT);
@@ -71,7 +69,6 @@ export class GameManager extends Colfio.Component
                 this.scene.stage.addChild(enemyRight);
             }
 
-            enemyToDestroy.destroy();
             if (enemyCount > 1)
                 this.scene.assignGlobalAttribute(GlobalAttributes.ENEMIES_COUNT, enemyCount - 1);
             else
@@ -89,9 +86,8 @@ export class GameManager extends Colfio.Component
             if (lives - 1 === 0)
             {
                 const playersCount = this.scene.getGlobalAttribute<number>(GlobalAttributes.PLAYERS_COUNT);
-
-                player.destroy();
                 this.scene.assignGlobalAttribute(GlobalAttributes.PLAYERS_COUNT, playersCount - 1);
+                this.sendMessage(Messages.PLAYER_DEAD, player);
 
                 if (playersCount - 1 === 0)
                 {

@@ -1,5 +1,5 @@
 import * as Colfio from 'colfio';
-import {Attributes, GlobalAttributes, Messages} from "./constants/enums";
+import {Attributes, GlobalAttributes, Messages, Tags} from "./constants/enums";
 import {MainMenu} from "./scenes/main_menu";
 import {GameWon, GameOver, LevelFinished} from "./scenes/level_finished_lost";
 import {createBackground, createEnemyCircle, createPlayer, createStatusBar} from "./factory";
@@ -30,7 +30,15 @@ export class SceneManager extends Colfio.Component
 
     onInit()
     {
-        this.subscribe(Messages.LEVEL_START, Messages.GAME_OVER, Messages.LEVEL_FINISHED, Messages.MAIN_MENU, Messages.PLAYER_HIT);
+        this.subscribe(
+            Messages.LEVEL_START,
+            Messages.GAME_OVER,
+            Messages.LEVEL_FINISHED,
+            Messages.MAIN_MENU,
+            Messages.PLAYER_HIT,
+            Messages.PROJECTILE_DESTROYED,
+            Messages.ENEMY_DESTROYED
+        );
         this.currentSceneComponent = null;
 
         this.sendMessage(Messages.MAIN_MENU);
@@ -64,19 +72,28 @@ export class SceneManager extends Colfio.Component
                     gameWon = true;
             }
 
-            this.loadSceneComponent(gameWon ? GameWon : LevelFinished);
+            this.scene.callWithDelay(200, () => this.loadSceneComponent(gameWon ? GameWon : LevelFinished));
         }
         else if (msg.action === Messages.MAIN_MENU)
             this.loadSceneComponent(MainMenu);
         else if (msg.action === Messages.GAME_OVER)
-            this.loadSceneComponent(GameOver);
+            this.scene.callWithDelay(200, () => this.loadSceneComponent(GameOver));
         else if (msg.action === Messages.PLAYER_HIT)
+            this.overlayFlash();
+        else if (msg.action === Messages.PLAYER_DEAD)
         {
-            const playersCount = this.scene.getGlobalAttribute<number>(GlobalAttributes.PLAYERS_COUNT);
-
-            // if the last player lost the last life, don't make the overlay flash and go straight to Game Over scene
-            if (playersCount != 0)
-                this.overlayFlash();
+            const player = msg.data as Colfio.Container;
+            player.destroy();
+        }
+        else if (msg.action === Messages.PROJECTILE_DESTROYED)
+        {
+            const projectileToDestroy = msg.data as Colfio.Container;
+            projectileToDestroy.destroy();
+        }
+        else if (msg.action === Messages.ENEMY_DESTROYED)
+        {
+            const enemyToDestroy = msg.data as Colfio.Container;
+            enemyToDestroy.destroy();
         }
     }
 
@@ -137,6 +154,7 @@ export class SceneManager extends Colfio.Component
 
     loadSceneComponent(componentType)
     {
+        this.clearGameElements();
         this.removePreviousComponent();
         const component = new componentType();
         this.scene.addGlobalComponent(component);
@@ -167,5 +185,19 @@ export class SceneManager extends Colfio.Component
         this.owner.scene.stage.addChild(overlay);
 
         this.owner.scene.callWithDelay(200, () => overlay.destroy());
+    }
+
+    clearGameElements()
+    {
+        const projectiles = this.owner.scene.findObjectsByTag(Tags.PLAYER_PROJECTILE) as Colfio.Container[];
+        const players = this.owner.scene.findObjectsByTag(Tags.PLAYER) as Colfio.Container[];
+        const enemies = this.owner.scene.findObjectsByTag(Tags.ENEMY_CIRCLE) as Colfio.Container[];
+        const background = this.owner.scene.findObjectByTag(Tags.BACKGROUND) as Colfio.Container;
+        const statusBar = this.owner.scene.findObjectByTag(Tags.STATUS_BAR) as Colfio.Container;
+
+        const objects = [...players, ...projectiles, ...enemies, background, statusBar];
+
+        for (let obj of objects)
+            obj?.destroy();
     }
 }
