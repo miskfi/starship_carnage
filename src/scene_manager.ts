@@ -36,6 +36,7 @@ export class SceneManager extends Colfio.Component
             Messages.LEVEL_FINISHED,
             Messages.MAIN_MENU,
             Messages.PLAYER_HIT,
+            Messages.PLAYER_DEAD,
             Messages.PROJECTILE_DESTROYED,
             Messages.ENEMY_DESTROYED
         );

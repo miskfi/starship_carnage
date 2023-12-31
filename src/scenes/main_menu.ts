@@ -69,7 +69,6 @@ export class MainMenu extends Colfio.Component
         this.buttonMultiplayer = this.createText("2 players", this.scene.width / 2, this.scene.height / 2 + 50, 30, COLOR_TEXT_PASSIVE);
         this.createText("Press ENTER to select", this.scene.width / 2, this.scene.height - 50, 15, 0xFFFFFF);
 
-
         this.buttonSingleplayer.tint = COLOR_TEXT_ACTIVE;
         this.buttonHighlight = this.buttonSingleplayer;
     }
