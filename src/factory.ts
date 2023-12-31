@@ -54,10 +54,10 @@ export const createEnemyCircle = (
 
     if (initialPos === null)
     {
-        const margin = 10;
+        const margin = 5;
         initialPos = [0, 0];
-        initialPos[0] = getRandomInteger(size, scene.app.screen.width - size - margin);
-        initialPos[1] = getRandomInteger(size, scene.app.screen.height / 2 - size - margin);
+        initialPos[0] = getRandomInteger(ENEMY_SIZE * size + margin, scene.app.screen.width - ENEMY_SIZE * size - margin);
+        initialPos[1] = getRandomInteger(ENEMY_SIZE * size + margin, scene.app.screen.height / 2 - ENEMY_SIZE * size - margin);
     }
     if (initialVelocity == null)
     {
