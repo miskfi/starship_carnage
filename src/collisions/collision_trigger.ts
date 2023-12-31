@@ -5,7 +5,7 @@ import {
     EnemyCollisionType,
     ProjectileCollisionType
 } from "./collision_constants";
-import {GAME_HEIGHT, STATUS_BAR_HEIGHT} from "../constants/constants";
+import {GAME_HEIGHT, PLAYER_INVULNERABLE_TIME, STATUS_BAR_HEIGHT} from "../constants/constants";
 
 export class CollisionTrigger extends Colfio.Component
 {
@@ -14,7 +14,6 @@ export class CollisionTrigger extends Colfio.Component
         const projectiles = this.scene.findObjectsByTag(Tags.PLAYER_PROJECTILE);
 
         const screenWidth = this.scene.app.screen.width;
-        const screenHeight = this.scene.app.screen.height;
 
         // TODO hrozná ifovačka
         for (let projectile of projectiles)
@@ -30,19 +29,23 @@ export class CollisionTrigger extends Colfio.Component
                 {
                     this.sendMessage(Messages.PROJECTILE_COLLISION, {
                         projectile, collider: enemy, type: ProjectileCollisionType.ENEMY
-                    })
+                    });
                 }
             }
 
             for (let player of players)
             {
-                // collision of projectile with other player
-                if (player !== projectile.getAttribute(Attributes.PROJECTILE_SHOOTER)
-                    && this.collide(projectileBounds, player.getBounds()))
+                if (absolute - player.getAttribute<number>(Attributes.PLAYER_LAST_COLLISION) > PLAYER_INVULNERABLE_TIME)
                 {
-                    this.sendMessage(Messages.PROJECTILE_COLLISION, {
-                        projectile, collider: player, type: ProjectileCollisionType.PLAYER
-                    })
+                    // collision of projectile with other player
+                    if (player !== projectile.getAttribute(Attributes.PROJECTILE_SHOOTER)
+                        && this.collide(projectileBounds, player.getBounds()))
+                    {
+                        this.sendMessage(Messages.PROJECTILE_COLLISION, {
+                            projectile, collider: player, type: ProjectileCollisionType.PLAYER
+                        });
+                        player.assignAttribute(Attributes.PLAYER_LAST_COLLISION, absolute);
+                    }
                 }
             }
 
@@ -51,7 +54,7 @@ export class CollisionTrigger extends Colfio.Component
             {
                 this.sendMessage(Messages.PROJECTILE_COLLISION, {
                     projectile, type: ProjectileCollisionType.BORDER
-                })
+                });
             }
         }
 
@@ -69,30 +72,32 @@ export class CollisionTrigger extends Colfio.Component
                 {
                     this.sendMessage(Messages.ENEMY_COLLISION, {
                         enemy, collider: enemy2, type: EnemyCollisionType.ENEMY
-                    })
+                    });
                 }
             }
 
             // collision of enemy and player
             for (let player of players)
             {
-                if (player !== null)
+                if (player !== null && absolute - player.getAttribute<number>(Attributes.PLAYER_LAST_COLLISION) > PLAYER_INVULNERABLE_TIME)
                 {
                     if (this.collide(player?.getBounds(), enemyBounds))
                     {
                         this.sendMessage(Messages.ENEMY_COLLISION, {
                             enemy, collider: player, type: EnemyCollisionType.PLAYER
-                        })
+                        });
+                        player.assignAttribute(Attributes.PLAYER_LAST_COLLISION, absolute);
+
                     }
                 }
             }
 
             // collision of enemy and walls
             if (enemyBounds.right >= screenWidth || enemyBounds.left <= 0)
-                this.sendMessage(Messages.ENEMY_COLLISION, {enemy, type: EnemyCollisionType.BORDER_HORIZONTAL})
+                this.sendMessage(Messages.ENEMY_COLLISION, {enemy, type: EnemyCollisionType.BORDER_HORIZONTAL});
 
             if (enemyBounds.bottom >= GAME_HEIGHT - STATUS_BAR_HEIGHT || enemyBounds.top <= 0)
-                this.sendMessage(Messages.ENEMY_COLLISION, {enemy, type: EnemyCollisionType.BORDER_VERTICAL})
+                this.sendMessage(Messages.ENEMY_COLLISION, {enemy, type: EnemyCollisionType.BORDER_VERTICAL});
         }
     }
 

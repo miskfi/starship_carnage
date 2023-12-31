@@ -13,6 +13,7 @@ export const PLAYER_HEIGHT = 24;
 export const PLAYER_WIDTH = 16;
 export const PLAYER_SPEED = 0.15;
 export const PLAYER_LIVES = 3;
+export const PLAYER_INVULNERABLE_TIME = 1000;  // in ms
 
 export const SINGLEPLAYER_CONTROLS = {
     "left": [Colfio.Keys.KEY_LEFT, Colfio.Keys.KEY_A],

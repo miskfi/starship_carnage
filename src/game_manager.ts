@@ -82,16 +82,25 @@ export class GameManager extends Colfio.Component
         }
         else if (msg.action === Messages.PLAYER_HIT)
         {
-            const playersCount = this.scene.getGlobalAttribute<number>(GlobalAttributes.PLAYERS_COUNT);
-            const player = msg.data as Colfio.Graphics;
+            const player = msg.data as Colfio.Container;
+            const lives = player.getAttribute<number>(Attributes.PLAYER_LIVES);
 
-            player.destroy();
-            this.scene.assignGlobalAttribute(GlobalAttributes.PLAYERS_COUNT, playersCount - 1);
+            // player dead
+            if (lives - 1 === 0)
+            {
+                const playersCount = this.scene.getGlobalAttribute<number>(GlobalAttributes.PLAYERS_COUNT);
 
-            if (playersCount - 1 === 0) {
-                this.setGameNotRunning();
-                this.sendMessage(Messages.GAME_OVER);
+                player.destroy();
+                this.scene.assignGlobalAttribute(GlobalAttributes.PLAYERS_COUNT, playersCount - 1);
+
+                if (playersCount - 1 === 0)
+                {
+                    this.setGameNotRunning();
+                    this.sendMessage(Messages.GAME_OVER);
+                }
             }
+
+            player.assignAttribute(Attributes.PLAYER_LIVES, lives - 1);
         }
     }
 

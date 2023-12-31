@@ -4,7 +4,14 @@ import {MainMenu} from "./scenes/main_menu";
 import {GameWon, GameOver, LevelFinished} from "./scenes/level_finished_lost";
 import {createBackground, createEnemyCircle, createPlayer, createStatusBar} from "./factory";
 import {GameState} from "./game";
-import {P1_CONTROLS, P2_CONTROLS, PROJECTILES_MAX, SINGLEPLAYER_CONTROLS} from "./constants/constants"
+import {
+    GAME_HEIGHT,
+    GAME_WIDTH,
+    P1_CONTROLS,
+    P2_CONTROLS,
+    PROJECTILES_MAX,
+    SINGLEPLAYER_CONTROLS
+} from "./constants/constants"
 import {Level, LevelParser} from "./level";
 
 export class SceneManager extends Colfio.Component
@@ -23,7 +30,7 @@ export class SceneManager extends Colfio.Component
 
     onInit()
     {
-        this.subscribe(Messages.LEVEL_START, Messages.GAME_OVER, Messages.LEVEL_FINISHED, Messages.MAIN_MENU);
+        this.subscribe(Messages.LEVEL_START, Messages.GAME_OVER, Messages.LEVEL_FINISHED, Messages.MAIN_MENU, Messages.PLAYER_HIT);
         this.currentSceneComponent = null;
 
         this.sendMessage(Messages.MAIN_MENU);
@@ -63,6 +70,14 @@ export class SceneManager extends Colfio.Component
             this.loadSceneComponent(MainMenu);
         else if (msg.action === Messages.GAME_OVER)
             this.loadSceneComponent(GameOver);
+        else if (msg.action === Messages.PLAYER_HIT)
+        {
+            const playersCount = this.scene.getGlobalAttribute<number>(GlobalAttributes.PLAYERS_COUNT);
+
+            // if the last player lost the last life, don't make the overlay flash and go straight to Game Over scene
+            if (playersCount != 0)
+                this.overlayFlash();
+        }
     }
 
     loadLevel(players: number)
@@ -142,5 +157,15 @@ export class SceneManager extends Colfio.Component
         this.levelsMultiplayer = parser.parseMultiplayer(levelData);
         this.currentLevelSingleplayer = 0;
         this.currentLevelMultiplayer = 0;
+    }
+
+    overlayFlash()
+    {
+        let overlay = new Colfio.Graphics();
+        overlay.beginFill(0xFF0000, 0.3);
+        overlay.drawRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        this.owner.scene.stage.addChild(overlay);
+
+        this.owner.scene.callWithDelay(200, () => overlay.destroy());
     }
 }

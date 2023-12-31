@@ -9,7 +9,7 @@ import {getRandomInteger} from "./utils";
 import {EnemyType, EnemyTypeAttributes} from "./constants/enemy_attributes";
 import {
     ENEMY_SIZE, GAME_HEIGHT,
-    PLAYER_HEIGHT,
+    PLAYER_HEIGHT, PLAYER_LIVES,
     PLAYER_WIDTH,
     PROJECTILE_SIZE,
     PROJECTILES_MAX, STATUS_BAR_HEIGHT,
@@ -106,6 +106,8 @@ export const createPlayer = (scene: Colfio.Scene, xPos, playerNumber): Colfio.Sp
     player.addTag(Tags.PLAYER);
     player.addComponent(new PlayerController());
     player.assignAttribute(Attributes.PLAYER_NUMBER, playerNumber);
+    player.assignAttribute(Attributes.PLAYER_LIVES, PLAYER_LIVES);
+    player.assignAttribute(Attributes.PLAYER_LAST_COLLISION, 0);
     player.assignAttribute(Attributes.PROJECTILES_AVAILABLE, PROJECTILES_MAX);
 
     return player;

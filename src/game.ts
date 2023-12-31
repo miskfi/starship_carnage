@@ -45,6 +45,7 @@ class Game
         sound.add(GameAssets.SOUND_LEVEL_FINISHED, "sounds/game_won.wav");
         sound.add(GameAssets.SOUND_BUTTON_CHANGE, "sounds/button_change.wav");
         sound.add(GameAssets.SOUND_ENEMY_DESTROYED, "sounds/break.wav");
+        sound.add(GameAssets.SOUND_PLAYER_HIT, "sounds/player_hit.wav");
 
         this.loader = new Loader();
         this.loader

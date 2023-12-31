@@ -13,7 +13,8 @@ export class SoundSystem extends Colfio.Component
             Messages.LEVEL_FINISHED,
             Messages.LEVEL_START,
             Messages.BUTTON_CHANGE,
-            Messages.ENEMY_DESTROYED
+            Messages.ENEMY_DESTROYED,
+            Messages.PLAYER_HIT
         );
     }
 
@@ -45,5 +46,7 @@ export class SoundSystem extends Colfio.Component
             sound.play(GameAssets.SOUND_BUTTON_CHANGE, {volume: 1})
         else if (msg.action === Messages.ENEMY_DESTROYED)
             sound.play(GameAssets.SOUND_ENEMY_DESTROYED, {volume: 0.3})
+        else if (msg.action === Messages.PLAYER_HIT)
+            sound.play(GameAssets.SOUND_PLAYER_HIT, {volume: 0.5})
     }
 }

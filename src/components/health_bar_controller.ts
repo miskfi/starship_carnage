@@ -1,5 +1,5 @@
 import * as Colfio from "colfio";
-import {GameAssets, Messages} from "../constants/enums";
+import {Attributes, GameAssets, Messages} from "../constants/enums";
 import * as PIXI from "pixi.js";
 import {GAME_HEIGHT, GAME_WIDTH, PLAYER_LIVES, STATUS_BAR_HEIGHT, TEXTURE_SCALE} from "../constants/constants";
 
@@ -31,7 +31,7 @@ export class HealthBarController extends Colfio.Component
 
     onInit()
     {
-        this.subscribe(Messages.PLAYER_HIT, Messages.LEVEL_START);
+        this.subscribe(Messages.PLAYER_HIT);
         for (let i = 0; i < PLAYER_LIVES; i++)
             this.createHeart();
     }
@@ -39,7 +39,12 @@ export class HealthBarController extends Colfio.Component
     onMessage(msg: Colfio.Message): any
     {
         if (msg.action === Messages.PLAYER_HIT)
-            this.removeHeart();
+        {
+            const player = msg.data as Colfio.Graphics;
+            const playerHitNumber = player.getAttribute(Attributes.PLAYER_NUMBER);
+            if (playerHitNumber === this.playerNumber)
+                this.removeHeart();
+        }
     }
 
     createHeart()
