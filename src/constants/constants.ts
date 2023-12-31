@@ -12,6 +12,7 @@ export const ENEMY_SIZE = 16;
 export const PLAYER_HEIGHT = 24;
 export const PLAYER_WIDTH = 16;
 export const PLAYER_SPEED = 0.15;
+export const PLAYER_LIVES = 3;
 
 export const SINGLEPLAYER_CONTROLS = {
     "left": [Colfio.Keys.KEY_LEFT, Colfio.Keys.KEY_A],
@@ -45,3 +46,8 @@ export const COLOR_GAME_OVER = 0xFF0000;
 
 // textures
 export const TEXTURE_SCALE = 2.5;
+
+// sizes
+export const GAME_WIDTH = 800
+export const GAME_HEIGHT = 600
+export const STATUS_BAR_HEIGHT = 50

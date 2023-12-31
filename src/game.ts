@@ -10,6 +10,7 @@ import {GameManager} from "./game_manager";
 import {CollisionResolver} from "./collisions/collision_resolver";
 import {SceneManager} from "./scene_manager";
 import {SoundSystem} from "./components/sound";
+import {GAME_HEIGHT, GAME_WIDTH} from "./constants/constants";
 
 export class GameState
 {
@@ -29,8 +30,8 @@ class Game
         // init the game loop
         this.engine.init(canvas, {
             resizeToScreen: true,
-            width: 800,
-            height: 600,
+            width: GAME_WIDTH,
+            height: GAME_HEIGHT,
             resolution: 1,
             antialias: false,
         });
@@ -54,6 +55,7 @@ class Game
             .add(GameAssets.SPRITESHEET_PLAYER_2, "spritesheets/ship2.png")
             .add(GameAssets.SPRITESHEET_PROJECTILES, "spritesheets/laser-bolts.png")
             .add(GameAssets.BACKGROUND, "background.png")
+            .add(GameAssets.HEART, "heart.png")
             .add(GameAssets.LEVELS, "levels/levels.json")
             .load(() => this.initGame());
     }

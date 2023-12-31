@@ -2,7 +2,7 @@ import * as Colfio from 'colfio';
 import {Attributes, GlobalAttributes, Messages} from "./constants/enums";
 import {MainMenu} from "./scenes/main_menu";
 import {GameWon, GameOver, LevelFinished} from "./scenes/level_finished_lost";
-import {createBackground, createEnemyCircle, createPlayer} from "./factory";
+import {createBackground, createEnemyCircle, createPlayer, createStatusBar} from "./factory";
 import {GameState} from "./game";
 import {P1_CONTROLS, P2_CONTROLS, PROJECTILES_MAX, SINGLEPLAYER_CONTROLS} from "./constants/constants"
 import {Level, LevelParser} from "./level";
@@ -73,12 +73,22 @@ export class SceneManager extends Colfio.Component
         this.scene.assignGlobalAttribute(GlobalAttributes.ENEMIES_COUNT, 0);
         this.scene.assignGlobalAttribute(GlobalAttributes.PROJECTILES_MAX, PROJECTILES_MAX);
 
+        let level: Level;
+        let levelNumber: number;
+        if (this.scene.getGlobalAttribute(GlobalAttributes.GAME_MODE) === 1)
+        {
+            level = this.levelsSingleplayer[this.currentLevelSingleplayer];
+            levelNumber = this.currentLevelSingleplayer;
+        }
+        else
+        {
+            level = this.levelsMultiplayer[this.currentLevelMultiplayer];
+            levelNumber = this.currentLevelMultiplayer;
+        }
+
+        createStatusBar(this.scene, levelNumber, players);
         this.owner.scene.stage.addChild(createBackground(this.scene));
         this.loadPlayers(players);
-
-        const level = this.scene.getGlobalAttribute(GlobalAttributes.GAME_MODE) === 1
-            ? this.levelsSingleplayer[this.currentLevelSingleplayer]
-            : this.levelsMultiplayer[this.currentLevelMultiplayer];
 
         // load enemies
         for (let enemyType of level.enemies)

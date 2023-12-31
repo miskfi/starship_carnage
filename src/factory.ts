@@ -8,13 +8,14 @@ import {PlayerController} from "./components/player_controller";
 import {getRandomInteger} from "./utils";
 import {EnemyType, EnemyTypeAttributes} from "./constants/enemy_attributes";
 import {
-    ENEMY_SIZE,
+    ENEMY_SIZE, GAME_HEIGHT,
     PLAYER_HEIGHT,
     PLAYER_WIDTH,
     PROJECTILE_SIZE,
-    PROJECTILES_MAX,
+    PROJECTILES_MAX, STATUS_BAR_HEIGHT,
     TEXTURE_SCALE
 } from "./constants/constants";
+import {HealthBarController} from "./components/health_bar_controller";
 
 export const createProjectile = (scene: Colfio.Scene, player: Colfio.Container): Colfio.Sprite =>
 {
@@ -101,7 +102,7 @@ export const createPlayer = (scene: Colfio.Scene, xPos, playerNumber): Colfio.Sp
 
     let player = new Colfio.Sprite("Player", texture);
     player.scale.set(TEXTURE_SCALE);
-    player.position.set(xPos, scene.height - PLAYER_HEIGHT * TEXTURE_SCALE);
+    player.position.set(xPos, GAME_HEIGHT - STATUS_BAR_HEIGHT - PLAYER_HEIGHT * TEXTURE_SCALE);
     player.addTag(Tags.PLAYER);
     player.addComponent(new PlayerController());
     player.assignAttribute(Attributes.PLAYER_NUMBER, playerNumber);
@@ -117,7 +118,38 @@ export const createBackground = (scene: Colfio.Scene): Colfio.Sprite =>
 
     let background = new Colfio.Sprite("Background", texture);
     background.width = scene.width;
-    background.height = scene.height;
+    background.height = GAME_HEIGHT - STATUS_BAR_HEIGHT;
     background.addTag(Tags.BACKGROUND);
     return background;
+}
+
+export const createStatusBar = (scene: Colfio.Scene, levelNumber: number, players: number): Colfio.Container =>
+{
+    const statusBar = new Colfio.Container();
+    statusBar.addTag(Tags.STATUS_BAR);
+    scene.stage.addChild(statusBar);
+
+    const healthBarP1 = new Colfio.Container();
+    healthBarP1.addComponent(new HealthBarController(1));
+    statusBar.addChild(healthBarP1);
+
+    if (players === 2)
+    {
+        const healthBarP2 = new Colfio.Container();
+        healthBarP2.addComponent(new HealthBarController(2));
+        statusBar.addChild(healthBarP2);
+    }
+
+    const levelText = new Colfio.BitmapText(
+        "Level text",
+        "Level " + (levelNumber + 1).toString(),
+        "Early GameBoy",
+        20,
+        0xFFFFFF
+    );
+    levelText.anchor.set(0.5);
+    levelText.position.set(scene.width / 2, GAME_HEIGHT - STATUS_BAR_HEIGHT / 2);
+    statusBar.addChild(levelText);
+
+    return statusBar;
 }

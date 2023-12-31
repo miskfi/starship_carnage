@@ -5,7 +5,8 @@ export enum Tags
     PLAYER_PROJECTILE = "PLAYER_PROJECTILE",
     PLAYER = "PLAYER",
     PLAYER_1 = "PLAYER_1",
-    PLAYER_2 = "PLAYER_2"
+    PLAYER_2 = "PLAYER_2",
+    STATUS_BAR = "STATUS_BAR"
 }
 
 export enum Messages
@@ -47,6 +48,7 @@ export enum GlobalAttributes
 export enum GameAssets
 {
     BACKGROUND = "BACKGROUND",
+    HEART = "HEART",
     LEVELS = "LEVELS",
     SPRITESHEET_ENEMIES = "SPRITESHEET_ENEMIES",
     SPRITESHEET_PLAYER_1 = "SPRITESHEET_PLAYER_1",

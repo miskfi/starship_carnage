@@ -47,8 +47,9 @@ abstract class IntermediateScene extends Colfio.Component
         const players = this.scene.findObjectsByTag(Tags.PLAYER) as Colfio.Container[];
         const enemies = this.scene.findObjectsByTag(Tags.ENEMY_CIRCLE) as Colfio.Container[];
         const background = this.scene.findObjectByTag(Tags.BACKGROUND) as Colfio.Container;
+        const statusBar = this.scene.findObjectByTag(Tags.STATUS_BAR) as Colfio.Container;
 
-        const objects = [...players, ...projectiles, ...enemies, background];
+        const objects = [...players, ...projectiles, ...enemies, background, statusBar];
 
         for (let obj of objects)
             obj.destroy();

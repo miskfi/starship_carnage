@@ -2,7 +2,7 @@ import * as Colfio from 'colfio';
 import {createProjectile} from "../factory";
 import {Attributes, GlobalAttributes, Messages} from "../constants/enums";
 import {GameState} from "../game";
-import {PLAYER_SPEED} from "../constants/constants";
+import {GAME_HEIGHT, PLAYER_SPEED, STATUS_BAR_HEIGHT} from "../constants/constants";
 
 export class PlayerController extends Colfio.Component
 {
@@ -38,7 +38,7 @@ export class PlayerController extends Colfio.Component
         }
         else if (this.controls["down"].some(key => this.keyInput.isKeyPressed(key)))
         {
-            if (boundRect.bottom < screenHeight)
+            if (boundRect.bottom < GAME_HEIGHT - STATUS_BAR_HEIGHT)
                 pos.y += Math.min(movementDiff, screenHeight - boundRect.bottom);
         }
         else if (this.controls["up"].some(key => this.keyInput.isKeyPressed(key)))

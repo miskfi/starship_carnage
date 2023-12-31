@@ -5,6 +5,7 @@ import {
     EnemyCollisionType,
     ProjectileCollisionType
 } from "./collision_constants";
+import {GAME_HEIGHT, STATUS_BAR_HEIGHT} from "../constants/constants";
 
 export class CollisionTrigger extends Colfio.Component
 {
@@ -90,7 +91,7 @@ export class CollisionTrigger extends Colfio.Component
             if (enemyBounds.right >= screenWidth || enemyBounds.left <= 0)
                 this.sendMessage(Messages.ENEMY_COLLISION, {enemy, type: EnemyCollisionType.BORDER_HORIZONTAL})
 
-            if (enemyBounds.bottom >= screenHeight || enemyBounds.top <= 0)
+            if (enemyBounds.bottom >= GAME_HEIGHT - STATUS_BAR_HEIGHT || enemyBounds.top <= 0)
                 this.sendMessage(Messages.ENEMY_COLLISION, {enemy, type: EnemyCollisionType.BORDER_VERTICAL})
         }
     }
