@@ -20,7 +20,7 @@ export const SINGLEPLAYER_CONTROLS = {
     "right": [Colfio.Keys.KEY_RIGHT, Colfio.Keys.KEY_D],
     "up": [Colfio.Keys.KEY_UP, Colfio.Keys.KEY_W],
     "down": [Colfio.Keys.KEY_DOWN, Colfio.Keys.KEY_S],
-    "shoot": [Colfio.Keys.KEY_SPACE]
+    "shoot": [Colfio.Keys.KEY_SPACE, Colfio.Keys.KEY_CTRL]
 }
 
 export const P1_CONTROLS = {
