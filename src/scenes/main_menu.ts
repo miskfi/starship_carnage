@@ -1,5 +1,5 @@
 import * as Colfio from 'colfio';
-import {GlobalAttributes, Messages} from "../constants/enums";
+import {Messages} from "../constants/enums";
 import {COLOR_TEXT_ACTIVE, COLOR_TEXT_PASSIVE} from "../constants/constants";
 
 export class MainMenu extends Colfio.Component

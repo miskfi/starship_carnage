@@ -56,7 +56,7 @@ class Game
             .add(GameAssets.SPRITESHEET_PLAYER_2, "spritesheets/ship2.json")
             .add(GameAssets.SPRITESHEET_PROJECTILES, "spritesheets/laser-bolts.png")
             .add(GameAssets.BACKGROUND, "background.png")
-            .add(GameAssets.HEART, "heart.png")
+            .add(GameAssets.SPRITE_HEART, "heart.png")
             .add(GameAssets.LEVELS, "levels/levels.json")
             .load(() => this.initGame());
     }

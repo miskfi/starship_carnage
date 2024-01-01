@@ -1,5 +1,5 @@
 import * as Colfio from 'colfio';
-import {GlobalAttributes, Messages} from "../constants/enums";
+import {Messages} from "../constants/enums";
 import {COLOR_GAME_OVER, COLOR_GAME_WON} from "../constants/constants";
 
 /**

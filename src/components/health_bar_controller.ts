@@ -49,7 +49,7 @@ export class HealthBarController extends Colfio.Component
 
     createHeart()
     {
-        let texture = PIXI.Texture.from(GameAssets.HEART).clone();
+        let texture = PIXI.Texture.from(GameAssets.SPRITE_HEART).clone();
         texture.frame = new PIXI.Rectangle(0, 0, 13, 11);
 
         let heart = new Colfio.Sprite("Heart", texture);
