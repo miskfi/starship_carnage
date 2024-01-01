@@ -13,7 +13,7 @@ export class MainMenu extends Colfio.Component
 
     onInit()
     {
-        this.keyInput = this.scene.getGlobalAttribute(GlobalAttributes.KEY_INPUT);
+        this.keyInput = this.scene.findGlobalComponentByName("KeyInputComponent");
         this.menuContainer = new Colfio.Container();
         this.owner.addChild(this.menuContainer);
         this.createMenu();
@@ -26,9 +26,16 @@ export class MainMenu extends Colfio.Component
             this.keyInput.handleKey(Colfio.Keys.KEY_ENTER);
 
             if (this.buttonHighlight === this.buttonSingleplayer)
-                this.sendMessage(Messages.LEVEL_START, 1);
+            {
+                this.sendMessage(Messages.GAME_MODE_SELECTED, 1);
+                this.sendMessage(Messages.LEVEL_START);
+            }
             else if (this.buttonHighlight === this.buttonMultiplayer)
-                this.sendMessage(Messages.LEVEL_START, 2)
+            {
+                this.sendMessage(Messages.GAME_MODE_SELECTED, 2);
+                this.sendMessage(Messages.LEVEL_START);
+            }
+
 
             this.menuContainer.destroy();
         }

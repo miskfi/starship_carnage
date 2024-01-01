@@ -11,7 +11,7 @@ export class PlayerController extends Colfio.Component
 
     onInit()
     {
-        this.keyInput = this.scene.getGlobalAttribute(GlobalAttributes.KEY_INPUT);
+        this.keyInput = this.scene.findGlobalComponentByName("KeyInputComponent");
         this.controls = this.owner.getAttribute(Attributes.CONTROLS);
     }
 
@@ -58,6 +58,7 @@ export class PlayerController extends Colfio.Component
     {
         if (this.owner.getAttribute<number>(Attributes.PROJECTILES_AVAILABLE) > 0)
         {
+            // TODO tvorbu objektu přesunout do scene managera
             const newProjectile = createProjectile(this.scene, this.owner);
             this.scene.stage.addChild(newProjectile);
             this.sendMessage(Messages.PROJECTILE_SHOT, this.owner);

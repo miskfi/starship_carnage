@@ -3,7 +3,7 @@ import * as PIXI from 'pixi.js';
 
 import {ProjectileController} from "./components/projectile_controller";
 import {EnemyController} from "./components/enemy_controller";
-import {Attributes, GameAssets, GlobalAttributes, Tags} from "./constants/enums";
+import {Attributes, GameAssets, Tags} from "./constants/enums";
 import {PlayerController} from "./components/player_controller";
 import {getRandomInteger} from "./utils";
 import {EnemyType, EnemyTypeAttributes} from "./constants/enemy_attributes";
@@ -85,10 +85,6 @@ export const createEnemyCircle = (
     enemy.assignAttribute(Attributes.ENEMY_TYPE, enemyType);
     enemy.assignAttribute(Attributes.ENEMY_VELOCITY, initialVelocity);
     enemy.assignAttribute(Attributes.ENEMY_SPEED, speed);
-
-
-    const enemies = scene.getGlobalAttribute<number>(GlobalAttributes.ENEMIES_COUNT);
-    scene.assignGlobalAttribute(GlobalAttributes.ENEMIES_COUNT, enemies + 1);
     return enemy;
 }
 

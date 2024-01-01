@@ -16,7 +16,7 @@ abstract class IntermediateScene extends Colfio.Component
 
     onInit()
     {
-        this.keyInput = this.scene.getGlobalAttribute(GlobalAttributes.KEY_INPUT);
+        this.keyInput = this.scene.findGlobalComponentByName("KeyInputComponent");
         this.sceneContainer = new Colfio.Container();
         this.owner.addChild(this.sceneContainer);
 
@@ -33,7 +33,7 @@ abstract class IntermediateScene extends Colfio.Component
         if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_ENTER))
         {
             this.keyInput.handleKey(Colfio.Keys.KEY_ENTER);
-            this.sendMessage(Messages.LEVEL_START, this.scene.getGlobalAttribute(GlobalAttributes.GAME_MODE));
+            this.sendMessage(Messages.LEVEL_START);
         }
         if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_SHIFT))
         {

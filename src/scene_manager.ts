@@ -10,26 +10,20 @@ import {
     GAME_WIDTH,
     P1_CONTROLS,
     P2_CONTROLS,
-    PROJECTILES_MAX,
     SINGLEPLAYER_CONTROLS
 } from "./constants/constants"
-import {Level, LevelParser} from "./level";
+import {GameModel} from "./game_model";
+import {EnemyType, EnemyTypeOrder} from "./constants/enemy_attributes";
 
 export class SceneManager extends Colfio.Component
 {
     currentSceneComponent?: Colfio.Component;
 
-    levelsSingleplayer: Level[];
-    levelsMultiplayer: Level[];
-    currentLevelSingleplayer: number;
-    currentLevelMultiplayer: number;
-
     spritesheet1;
     spritesheet2;
 
-    constructor(levelData, spritesheet1, spritesheet2) {
+    constructor(spritesheet1, spritesheet2) {
         super();
-        this.loadLevels(levelData);
         this.spritesheet1 = spritesheet1;
         this.spritesheet2 = spritesheet2;
     }
@@ -55,30 +49,10 @@ export class SceneManager extends Colfio.Component
     onMessage(msg: Colfio.Message): any
     {
         if (msg.action === Messages.LEVEL_START)
-        {
-            const players = msg.data as number;
-            this.scene.assignGlobalAttribute(GlobalAttributes.PLAYERS_COUNT, players);
-            this.scene.assignGlobalAttribute(GlobalAttributes.GAME_MODE, players);
-            this.loadLevel(players);
-        }
+            this.loadLevel();
         if (msg.action === Messages.LEVEL_FINISHED)
         {
-            const players = this.scene.getGlobalAttribute(GlobalAttributes.GAME_MODE);
-            let gameWon = false;
-
-            if (players === 1)
-            {
-                this.currentLevelSingleplayer++;
-                if (this.currentLevelSingleplayer === this.levelsSingleplayer.length)
-                    gameWon = true;
-            }
-            else
-            {
-                this.currentLevelMultiplayer++;
-                if (this.currentLevelMultiplayer === this.levelsMultiplayer.length)
-                    gameWon = true;
-            }
-
+            const gameWon = msg.data as boolean;
             this.scene.callWithDelay(200, () => this.loadSceneComponent(gameWon ? GameWon : LevelFinished));
         }
         else if (msg.action === Messages.MAIN_MENU)
@@ -100,30 +74,48 @@ export class SceneManager extends Colfio.Component
         else if (msg.action === Messages.ENEMY_DESTROYED)
         {
             const enemyToDestroy = msg.data as Colfio.Container;
+            const enemyType = enemyToDestroy.getAttribute<EnemyType>(Attributes.ENEMY_TYPE);
+            const enemyPosition: [number, number] = [enemyToDestroy.position.x, enemyToDestroy.position.y];
+
+            if (enemyType !== EnemyType.SMALLEST)
+            {
+                let flipXMovement: number;
+
+                const velocity = enemyToDestroy.getAttribute<Colfio.Vector>(Attributes.ENEMY_VELOCITY);
+                if (velocity.x < 0)
+                    flipXMovement = -1;
+                else
+                    flipXMovement = 1;
+
+                const enemyLeft = createEnemyCircle(
+                    this.scene,
+                    EnemyTypeOrder[EnemyTypeOrder.indexOf(enemyType) + 1],
+                    [enemyPosition[0] - 10, enemyPosition[1]],
+                    new Colfio.Vector(-velocity.x * flipXMovement, velocity.y).normalize()
+                );
+                const enemyRight = createEnemyCircle(
+                    this.scene,
+                    EnemyTypeOrder[EnemyTypeOrder.indexOf(enemyType) + 1],
+                    [enemyPosition[0] + 10, enemyPosition[1]],
+                    new Colfio.Vector(velocity.x * flipXMovement, velocity.y).normalize()
+                );
+
+                this.scene.stage.addChild(enemyLeft);
+                this.scene.stage.addChild(enemyRight);
+            }
+
             enemyToDestroy.destroy();
         }
     }
 
-    loadLevel(players: number)
+    loadLevel()
     {
         this.removePreviousComponent();
 
-        // TODO přesunout nastavování atributů spíš do game modelu
-        this.scene.assignGlobalAttribute(GlobalAttributes.ENEMIES_COUNT, 0);
-        this.scene.assignGlobalAttribute(GlobalAttributes.PROJECTILES_MAX, PROJECTILES_MAX);
-
-        let level: Level;
-        let levelNumber: number;
-        if (this.scene.getGlobalAttribute(GlobalAttributes.GAME_MODE) === 1)
-        {
-            level = this.levelsSingleplayer[this.currentLevelSingleplayer];
-            levelNumber = this.currentLevelSingleplayer;
-        }
-        else
-        {
-            level = this.levelsMultiplayer[this.currentLevelMultiplayer];
-            levelNumber = this.currentLevelMultiplayer;
-        }
+        const gameModel = this.scene.findGlobalComponentByName<GameModel>("GameModel");
+        const level = gameModel.getCurrentLevel();
+        const levelNumber = gameModel.getCurrentLevelNumber();
+        const players = gameModel.gameMode;
 
         createStatusBar(this.scene, levelNumber, players);
         this.owner.scene.stage.addChild(createBackground(this.scene));
@@ -175,15 +167,6 @@ export class SceneManager extends Colfio.Component
         this.currentSceneComponent = null;
     }
 
-    loadLevels(levelData)
-    {
-        const parser = new LevelParser();
-        this.levelsSingleplayer = parser.parseSingleplayer(levelData);
-        this.levelsMultiplayer = parser.parseMultiplayer(levelData);
-        this.currentLevelSingleplayer = 0;
-        this.currentLevelMultiplayer = 0;
-    }
-
     overlayFlash()
     {
         let overlay = new Colfio.Graphics();
@@ -196,6 +179,7 @@ export class SceneManager extends Colfio.Component
 
     clearGameElements()
     {
+        // TODO tady by stačilo jenom destroynout celý nadřazený Container
         const projectiles = this.owner.scene.findObjectsByTag(Tags.PLAYER_PROJECTILE) as Colfio.Container[];
         const players = this.owner.scene.findObjectsByTag(Tags.PLAYER) as Colfio.Container[];
         const enemies = this.owner.scene.findObjectsByTag(Tags.ENEMY_CIRCLE) as Colfio.Container[];

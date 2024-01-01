@@ -12,6 +12,7 @@ export enum Tags
 export enum Messages
 {
     ENEMY_DESTROYED = "ENEMY_DESTROYED",
+    GAME_MODE_SELECTED = "GAME_MODE_SELECTED",
     PLAYER_DEAD = "PLAYER_DEAD",
     PLAYER_HIT = "PLAYER_HIT",
     PROJECTILE_SHOT = "PROJECTILE_SHOT",
@@ -40,12 +41,7 @@ export enum Attributes
 
 export enum GlobalAttributes
 {
-    GAME_MODE = "GAME_MODE",  // singleplayer (1) or multiplayer (2)
     GAME_STATE = "GAME_STATE",
-    ENEMIES_COUNT = "ENEMIES_COUNT",
-    KEY_INPUT = "KEY_INPUT",
-    PLAYERS_COUNT = "PLAYERS_COUNT",  // number of players currently alive
-    PROJECTILES_MAX = "PROJECTILES_MAX",
 }
 
 export enum GameAssets
