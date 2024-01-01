@@ -15,8 +15,7 @@ export class EnemyController extends Colfio.Component
             return;
 
         const pos = this.owner.position;
-
-        let velocity = this.owner.getAttribute<Colfio.Vector>(Attributes.ENEMY_VELOCITY);
+        const velocity = this.owner.getAttribute<Colfio.Vector>(Attributes.ENEMY_VELOCITY);
         const speed = this.owner.getAttribute<number>(Attributes.ENEMY_SPEED);
 
         pos.x += delta * velocity.x * speed;

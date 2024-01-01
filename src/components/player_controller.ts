@@ -6,8 +6,8 @@ import {GAME_HEIGHT, PLAYER_SPEED, STATUS_BAR_HEIGHT} from "../constants/constan
 
 export class PlayerController extends Colfio.Component
 {
-    keyInput: Colfio.KeyInputComponent;
-    controls: Record<any, any>;
+    private keyInput: Colfio.KeyInputComponent;
+    private controls: Record<any, any>;
 
     onInit()
     {

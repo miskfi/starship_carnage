@@ -152,3 +152,15 @@ export const createStatusBar = (scene: Colfio.Scene, levelNumber: number, player
 
     return statusBar;
 }
+
+export const createHeart = (scene: Colfio.Scene, x: number, y: number): Colfio.Sprite =>
+{
+    let texture = PIXI.Texture.from(GameAssets.SPRITE_HEART).clone();
+    texture.frame = new PIXI.Rectangle(0, 0, 13, 11);
+
+    let heart = new Colfio.Sprite("Heart", texture);
+    heart.scale.set(TEXTURE_SCALE);
+    heart.anchor.set(0.5);
+    heart.position.set(x, y);
+    return heart;
+}

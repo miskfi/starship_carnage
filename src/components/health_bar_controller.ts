@@ -1,15 +1,15 @@
 import * as Colfio from "colfio";
-import {Attributes, GameAssets, Messages} from "../constants/enums";
-import * as PIXI from "pixi.js";
-import {GAME_HEIGHT, GAME_WIDTH, PLAYER_LIVES, STATUS_BAR_HEIGHT, TEXTURE_SCALE} from "../constants/constants";
+import {Attributes, Messages} from "../constants/enums";
+import {GAME_HEIGHT, GAME_WIDTH, PLAYER_LIVES, STATUS_BAR_HEIGHT} from "../constants/constants";
+import {createHeart} from "../factory";
 
 export class HealthBarController extends Colfio.Component
 {
-    playerNumber: number;
-    hearts: Colfio.Sprite[];
+    private readonly playerNumber: number;
+    private readonly direction: number;
+    private readonly initialPosition: number;
 
-    direction: number;
-    initialPosition: number;
+    private hearts: Colfio.Sprite[];
 
     constructor(playerNumber: number)
     {
@@ -49,21 +49,18 @@ export class HealthBarController extends Colfio.Component
 
     createHeart()
     {
-        let texture = PIXI.Texture.from(GameAssets.SPRITE_HEART).clone();
-        texture.frame = new PIXI.Rectangle(0, 0, 13, 11);
-
-        let heart = new Colfio.Sprite("Heart", texture);
-        heart.scale.set(TEXTURE_SCALE);
-        heart.anchor.set(0.5);
-        heart.position.set(this.initialPosition + this.hearts.length * 30 * this.direction, GAME_HEIGHT - STATUS_BAR_HEIGHT / 2);
-
+        const heart = createHeart(
+            this.scene,
+            this.initialPosition + this.hearts.length * 30 * this.direction,
+            GAME_HEIGHT - STATUS_BAR_HEIGHT / 2
+        );
         this.owner.addChild(heart);
         this.hearts.push(heart);
     }
 
     removeHeart()
     {
-        let heart = this.hearts.pop();
+        const heart = this.hearts.pop();
         heart.destroy();
     }
 }
