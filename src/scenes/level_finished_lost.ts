@@ -1,18 +1,19 @@
 import * as Colfio from 'colfio';
 import {Messages} from "../constants/enums";
 import {COLOR_GAME_OVER, COLOR_GAME_WON} from "../constants/constants";
+import {createText} from "../factory";
 
 /**
  * Parent class for Game Over, Game Won and Level Finished scenes.
  */
 abstract class IntermediateScene extends Colfio.Component
 {
-    keyInput: Colfio.KeyInputComponent;
-    sceneContainer: Colfio.Container;
+    private keyInput: Colfio.KeyInputComponent;
+    private sceneContainer: Colfio.Container;
 
-    title: string;
-    instructions: string;
-    titleColor: number;
+    protected readonly title: string;
+    protected readonly instructions: string;
+    protected readonly titleColor: number;
 
     onInit()
     {
@@ -44,36 +45,20 @@ abstract class IntermediateScene extends Colfio.Component
 
     createScreen()
     {
-        let game_over = new Colfio.BitmapText(
-            this.title,
-            this.title,
-            "Early GameBoy",
-            50,
-            this.titleColor
-        );
-        game_over.anchor.set(0.5);
-        game_over.position.set(this.scene.width / 2, this.scene.height / 4);
-        this.sceneContainer.addChild(game_over);
-
-        let instructions = new Colfio.BitmapText(
-            "Instructions",
-            this.instructions,
-            "Early GameBoy",
-            20,
-            0xFFFFFF
+        createText(this.scene, this.title, this.scene.width / 2, this.scene.height / 4, 50, this.titleColor, this.sceneContainer);
+        let instructions = createText(
+            this.scene, this.instructions, this.scene.width / 2, this.scene.height / 2, 20, 0xFFFFFF, this.sceneContainer
         );
         instructions.align = "center";
-        instructions.anchor.set(0.5);
-        instructions.position.set(this.scene.width / 2, this.scene.height / 2);
-        this.sceneContainer.addChild(instructions);
     }
 }
 
 export class GameWon extends IntermediateScene
 {
-    title = "Game Won";
-    titleColor = COLOR_GAME_WON;
-    instructions = "Congratulations!\n" +
+    protected readonly title = "Game Won";
+    protected readonly titleColor = COLOR_GAME_WON;
+    protected readonly instructions =
+        "Congratulations!\n" +
         "You finished all the available levels!\n\n" +
         "Press ENTER to play again,\n" +
         "press SHIFT to go to the main menu\n";
@@ -81,14 +66,14 @@ export class GameWon extends IntermediateScene
 
 export class GameOver extends IntermediateScene
 {
-    title = "Game Over";
-    titleColor = COLOR_GAME_OVER;
-    instructions = "Press ENTER to play again, \npress SHIFT to go to the main menu";
+    protected readonly title = "Game Over";
+    protected readonly titleColor = COLOR_GAME_OVER;
+    protected readonly instructions = "Press ENTER to play again, \npress SHIFT to go to the main menu";
 }
 
 export class LevelFinished extends IntermediateScene
 {
-    title = "Level Finished";
-    titleColor = COLOR_GAME_WON;
-    instructions = "Press ENTER to play the next level, \npress SHIFT to go to the main menu";
+    protected readonly title = "Level Finished";
+    protected readonly titleColor = COLOR_GAME_WON;
+    protected readonly instructions = "Press ENTER to play the next level, \npress SHIFT to go to the main menu";
 }

@@ -15,7 +15,7 @@ export const PLAYER_SPEED = 0.15;
 export const PLAYER_LIVES = 3;
 export const PLAYER_INVULNERABLE_TIME = 1000;  // in ms
 
-export const SINGLEPLAYER_CONTROLS = {
+export const SINGLEPLAYER_CONTROLS: Record<any, any> = {
     "left": [Colfio.Keys.KEY_LEFT, Colfio.Keys.KEY_A],
     "right": [Colfio.Keys.KEY_RIGHT, Colfio.Keys.KEY_D],
     "up": [Colfio.Keys.KEY_UP, Colfio.Keys.KEY_W],
@@ -23,7 +23,7 @@ export const SINGLEPLAYER_CONTROLS = {
     "shoot": [Colfio.Keys.KEY_SPACE, Colfio.Keys.KEY_CTRL]
 }
 
-export const P1_CONTROLS = {
+export const P1_CONTROLS: Record<any, any> = {
     "left": [Colfio.Keys.KEY_A],
     "right": [Colfio.Keys.KEY_D],
     "up": [Colfio.Keys.KEY_W],
@@ -31,7 +31,7 @@ export const P1_CONTROLS = {
     "shoot": [Colfio.Keys.KEY_SPACE]
 }
 
-export const P2_CONTROLS = {
+export const P2_CONTROLS: Record<any, any> = {
     "left": [Colfio.Keys.KEY_LEFT],
     "right": [Colfio.Keys.KEY_RIGHT],
     "up": [Colfio.Keys.KEY_UP],

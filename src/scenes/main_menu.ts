@@ -1,15 +1,16 @@
 import * as Colfio from 'colfio';
 import {Messages} from "../constants/enums";
 import {COLOR_TEXT_ACTIVE, COLOR_TEXT_PASSIVE} from "../constants/constants";
+import {createText} from "../factory";
 
 export class MainMenu extends Colfio.Component
 {
-    keyInput: Colfio.KeyInputComponent;
-    menuContainer: Colfio.Container;
+    private keyInput: Colfio.KeyInputComponent;
+    private menuContainer: Colfio.Container;
 
-    buttonSingleplayer: Colfio.BitmapText;
-    buttonMultiplayer: Colfio.BitmapText;
-    buttonHighlight: Colfio.BitmapText;
+    private buttonSingleplayer: Colfio.BitmapText;
+    private buttonMultiplayer: Colfio.BitmapText;
+    private highlightedButton: Colfio.BitmapText;
 
     onInit()
     {
@@ -19,43 +20,45 @@ export class MainMenu extends Colfio.Component
         this.createMenu();
     }
 
+    onDetach()
+    {
+        this.menuContainer.destroy();
+    }
+
     onUpdate(delta: number, absolute: number)
     {
         if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_ENTER))
         {
             this.keyInput.handleKey(Colfio.Keys.KEY_ENTER);
 
-            if (this.buttonHighlight === this.buttonSingleplayer)
+            if (this.highlightedButton === this.buttonSingleplayer)
             {
                 this.sendMessage(Messages.GAME_MODE_SELECTED, 1);
                 this.sendMessage(Messages.LEVEL_START);
             }
-            else if (this.buttonHighlight === this.buttonMultiplayer)
+            else if (this.highlightedButton === this.buttonMultiplayer)
             {
                 this.sendMessage(Messages.GAME_MODE_SELECTED, 2);
                 this.sendMessage(Messages.LEVEL_START);
             }
-
-
-            this.menuContainer.destroy();
         }
         else if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_DOWN))
         {
-            if (this.buttonHighlight === this.buttonSingleplayer)
+            if (this.highlightedButton === this.buttonSingleplayer)
             {
                 this.buttonSingleplayer.tint = COLOR_TEXT_PASSIVE;
                 this.buttonMultiplayer.tint = COLOR_TEXT_ACTIVE;
-                this.buttonHighlight = this.buttonMultiplayer;
+                this.highlightedButton = this.buttonMultiplayer;
                 this.sendMessage(Messages.BUTTON_CHANGE);
             }
         }
         else if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_UP))
         {
-            if (this.buttonHighlight === this.buttonMultiplayer)
+            if (this.highlightedButton === this.buttonMultiplayer)
             {
                 this.buttonSingleplayer.tint = COLOR_TEXT_ACTIVE;
                 this.buttonMultiplayer.tint = COLOR_TEXT_PASSIVE;
-                this.buttonHighlight = this.buttonSingleplayer;
+                this.highlightedButton = this.buttonSingleplayer;
                 this.sendMessage(Messages.BUTTON_CHANGE);
             }
         }
@@ -71,21 +74,11 @@ export class MainMenu extends Colfio.Component
         graphics.drawRect(0, 0, sceneWidth, sceneHeight);
         this.menuContainer.addChild(graphics);
 
-        this.createText("Starship Carnage", this.scene.width / 2, this.scene.height / 4, 60, 0xFFFFFF);
-        this.buttonSingleplayer = this.createText("1 player", this.scene.width / 2, this.scene.height / 2, 30, COLOR_TEXT_PASSIVE);
-        this.buttonMultiplayer = this.createText("2 players", this.scene.width / 2, this.scene.height / 2 + 50, 30, COLOR_TEXT_PASSIVE);
-        this.createText("Press ENTER to select", this.scene.width / 2, this.scene.height - 50, 15, 0xFFFFFF);
+        createText(this.scene, "Starship Carnage", this.scene.width / 2, this.scene.height / 4, 60, 0xFFFFFF, this.menuContainer);
+        this.buttonSingleplayer = createText(this.scene, "1 player", this.scene.width / 2, this.scene.height / 2, 30, COLOR_TEXT_ACTIVE, this.menuContainer);
+        this.buttonMultiplayer = createText(this.scene, "2 players", this.scene.width / 2, this.scene.height / 2 + 50, 30, COLOR_TEXT_PASSIVE, this.menuContainer);
+        createText(this.scene, "Press ENTER to select", this.scene.width / 2, this.scene.height - 50, 15, 0xFFFFFF, this.menuContainer);
 
-        this.buttonSingleplayer.tint = COLOR_TEXT_ACTIVE;
-        this.buttonHighlight = this.buttonSingleplayer;
-    }
-
-    createText(text: string, x, y, fontSize, fontColor)
-    {
-        const textObj = new Colfio.BitmapText(text, text, "Early GameBoy", fontSize, fontColor);
-        textObj.anchor.set(0.5);
-        textObj.position.set(x, y);
-        this.menuContainer.addChild(textObj);
-        return textObj;
+        this.highlightedButton = this.buttonSingleplayer;
     }
 }

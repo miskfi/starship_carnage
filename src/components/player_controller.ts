@@ -1,5 +1,4 @@
 import * as Colfio from 'colfio';
-import {createProjectile} from "../factory";
 import {Attributes, GlobalAttributes, Messages} from "../constants/enums";
 import {GameState} from "../game";
 import {GAME_HEIGHT, PLAYER_SPEED, STATUS_BAR_HEIGHT} from "../constants/constants";
@@ -57,11 +56,6 @@ export class PlayerController extends Colfio.Component
     shootProjectile()
     {
         if (this.owner.getAttribute<number>(Attributes.PROJECTILES_AVAILABLE) > 0)
-        {
-            // TODO tvorbu objektu přesunout do scene managera
-            const newProjectile = createProjectile(this.scene, this.owner);
-            this.scene.stage.addChild(newProjectile);
             this.sendMessage(Messages.PROJECTILE_SHOT, this.owner);
-        }
     }
 }

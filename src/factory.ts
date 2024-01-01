@@ -16,7 +16,7 @@ import {
 } from "./constants/constants";
 import {HealthBarController} from "./components/health_bar_controller";
 
-export const createProjectile = (scene: Colfio.Scene, player: Colfio.Container): Colfio.Sprite =>
+export const createProjectile = (scene: Colfio.Scene, player: Colfio.Container, parent: Colfio.Container): Colfio.Sprite =>
 {
     const playerNumber = player.getAttribute<number>(Attributes.PLAYER_NUMBER);
     let texture = PIXI.Texture.from(GameAssets.SPRITESHEET_PROJECTILES).clone();
@@ -28,6 +28,7 @@ export const createProjectile = (scene: Colfio.Scene, player: Colfio.Container):
         .withTag(Tags.PLAYER_PROJECTILE)
         .withComponent(new ProjectileController())
         .withAttribute(Attributes.PROJECTILE_SHOOTER, player)
+        .withParent(parent)
         .asSprite(texture)
         .build();
 }
@@ -36,6 +37,7 @@ export const createProjectile = (scene: Colfio.Scene, player: Colfio.Container):
  * Create enemy circle at a random position in the top half of the screen.
  * @param scene game scene
  * @param enemyType type (size) of the enemy to create
+ * @param parent parent container
  * @param initialPos position at which the enemy will be created
  *  (optional, if not defined, the position will be selected randomly)
  * @param initialVelocity initial velocity of the enemy
@@ -45,6 +47,7 @@ export const createProjectile = (scene: Colfio.Scene, player: Colfio.Container):
 export const createEnemyCircle = (
     scene: Colfio.Scene,
     enemyType: EnemyType,
+    parent: Colfio.Container,
     initialPos: [number, number] | null = null,
     initialVelocity: Colfio.Vector | null = null
 ): Colfio.Sprite =>
@@ -84,11 +87,19 @@ export const createEnemyCircle = (
         .withAttribute(Attributes.ENEMY_TYPE, enemyType)
         .withAttribute(Attributes.ENEMY_VELOCITY, initialVelocity)
         .withAttribute(Attributes.ENEMY_SPEED, speed)
+        .withParent(parent)
         .asSprite(texture)
         .build();
 }
 
-export const createPlayer = (scene: Colfio.Scene, xPos: number, playerNumber: number, spritesheetData): Colfio.Container =>
+export const createPlayer = (
+    scene: Colfio.Scene,
+    xPos: number,
+    playerNumber: number,
+    spritesheetData,
+    parent: Colfio.Container,
+    controls: Record<string, typeof Colfio.Keys[]>
+): Colfio.Container =>
 {
     // Use the "_" object for extracting the textures from the spritesheet. Then crate the actual animated sprite
     // by cloning the extracted textures.
@@ -104,6 +115,8 @@ export const createPlayer = (scene: Colfio.Scene, xPos: number, playerNumber: nu
         .withAttribute(Attributes.PLAYER_LIVES, PLAYER_LIVES)
         .withAttribute(Attributes.PLAYER_LAST_COLLISION, 0)
         .withAttribute(Attributes.PROJECTILES_AVAILABLE, PROJECTILES_MAX)
+        .withAttribute(Attributes.CONTROLS, controls)
+        .withParent(parent)
         .asAnimatedSprite(_.textures.map(t => t.clone()))
         .build() as Colfio.AnimatedSprite;
 
@@ -113,13 +126,13 @@ export const createPlayer = (scene: Colfio.Scene, xPos: number, playerNumber: nu
     return anim;
 }
 
-export const createBackground = (scene: Colfio.Scene): Colfio.Container =>
+export const createBackground = (scene: Colfio.Scene, parent: Colfio.Container): Colfio.Container =>
 {
     let texture = PIXI.Texture.from(GameAssets.BACKGROUND).clone();
     texture.frame = new PIXI.Rectangle(0, 0, 1000, 750);
 
     let background = new Colfio.Builder(scene)
-        .withTag(Tags.BACKGROUND)
+        .withParent(parent)
         .asSprite(texture)
         .build();
 
@@ -128,35 +141,28 @@ export const createBackground = (scene: Colfio.Scene): Colfio.Container =>
     return background;
 }
 
-export const createStatusBar = (scene: Colfio.Scene, levelNumber: number, players: number): Colfio.Container =>
+export const createStatusBar = (scene: Colfio.Scene, levelNumber: number, players: number, parent: Colfio.Container): Colfio.Container =>
 {
-    const statusBar = new Colfio.Container();
-    statusBar.addTag(Tags.STATUS_BAR);
-    scene.stage.addChild(statusBar);
+    const statusBar = new Colfio.Builder(scene)
+        .withParent(parent)
+        .asContainer()
+        .build();
 
-    const healthBarP1 = new Colfio.Container();
-    healthBarP1.addComponent(new HealthBarController(1));
-    statusBar.addChild(healthBarP1);
-
+    createHealthBar(scene, statusBar, 1);
     if (players === 2)
-    {
-        const healthBarP2 = new Colfio.Container();
-        healthBarP2.addComponent(new HealthBarController(2));
-        statusBar.addChild(healthBarP2);
-    }
+        createHealthBar(scene, statusBar, 2);
 
-    const levelText = new Colfio.BitmapText(
-        "Level text",
-        "Level " + (levelNumber + 1).toString(),
-        "Early GameBoy",
-        20,
-        0xFFFFFF
-    );
-    levelText.anchor.set(0.5);
-    levelText.position.set(scene.width / 2, GAME_HEIGHT - STATUS_BAR_HEIGHT / 2);
-    statusBar.addChild(levelText);
-
+    createText(scene, "Level " + (levelNumber + 1).toString(), scene.width / 2, GAME_HEIGHT - STATUS_BAR_HEIGHT / 2, 20, 0xFFFFFF, statusBar);
     return statusBar;
+}
+
+export const createHealthBar = (scene: Colfio.Scene, parent: Colfio.Container, playerNumber: number) =>
+{
+    return new Colfio.Builder(scene)
+        .withComponent(new HealthBarController(playerNumber))
+        .withParent(parent)
+        .asContainer()
+        .build();
 }
 
 export const createHeart = (scene: Colfio.Scene, x: number, y: number): Colfio.Sprite =>
@@ -169,5 +175,23 @@ export const createHeart = (scene: Colfio.Scene, x: number, y: number): Colfio.S
         .anchor(0.5)
         .globalPos(x, y)
         .asSprite(texture)
+        .build();
+}
+
+export const createText = (
+    scene: Colfio.Scene,
+    text: string,
+    x: number,
+    y: number,
+    fontSize: number,
+    fontColor: number,
+    parent: Colfio.Container
+): Colfio.BitmapText =>
+{
+    return new Colfio.Builder(scene)
+        .anchor(0.5)
+        .globalPos(x, y)
+        .withParent(parent)
+        .asBitmapText(text, "Early GameBoy", fontSize, fontColor)
         .build();
 }
