@@ -64,7 +64,7 @@ export class MainMenu extends Colfio.Component
         graphics.drawRect(0, 0, sceneWidth, sceneHeight);
         this.menuContainer.addChild(graphics);
 
-        this.createText("Space Destructor", this.scene.width / 2, this.scene.height / 4, 60, 0xFFFFFF);
+        this.createText("Starship Carnage", this.scene.width / 2, this.scene.height / 4, 60, 0xFFFFFF);
         this.buttonSingleplayer = this.createText("1 player", this.scene.width / 2, this.scene.height / 2, 30, COLOR_TEXT_PASSIVE);
         this.buttonMultiplayer = this.createText("2 players", this.scene.width / 2, this.scene.height / 2 + 50, 30, COLOR_TEXT_PASSIVE);
         this.createText("Press ENTER to select", this.scene.width / 2, this.scene.height - 50, 15, 0xFFFFFF);
