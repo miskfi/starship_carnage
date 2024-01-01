@@ -22,14 +22,14 @@ export const createProjectile = (scene: Colfio.Scene, player: Colfio.Container):
     let texture = PIXI.Texture.from(GameAssets.SPRITESHEET_PROJECTILES).clone();
     texture.frame = new PIXI.Rectangle(playerNumber == 1 ? 6: 20, 7, PROJECTILE_SIZE, PROJECTILE_SIZE);
 
-    let projectile = new Colfio.Sprite("Projectile", texture);
-    projectile.scale.set(TEXTURE_SCALE);
-    projectile.position.set(player.position.x - 5, player.position.y - player.height/2);
-    projectile.addTag(Tags.PLAYER_PROJECTILE);
-    projectile.addComponent(new ProjectileController());
-    projectile.assignAttribute(Attributes.PROJECTILE_SHOOTER, player);
-
-    return projectile;
+    return new Colfio.Builder(scene)
+        .scale(TEXTURE_SCALE)
+        .globalPos(player.position.x - player.width + 5, player.position.y - player.height)
+        .withTag(Tags.PLAYER_PROJECTILE)
+        .withComponent(new ProjectileController())
+        .withAttribute(Attributes.PROJECTILE_SHOOTER, player)
+        .asSprite(texture)
+        .build();
 }
 
 /**
@@ -64,10 +64,9 @@ export const createEnemyCircle = (
         const angleIntervalRight = [110, 160];
         let randomAngle;
 
-        if (Math.random() > 0.5)
-            randomAngle = getRandomInteger(angleIntervalLeft[0], angleIntervalLeft[1]);
-        else
-            randomAngle = getRandomInteger(angleIntervalRight[0], angleIntervalRight[1]);
+        Math.random() > 0.5
+            ? randomAngle = getRandomInteger(angleIntervalLeft[0], angleIntervalLeft[1])
+            : randomAngle = getRandomInteger(angleIntervalRight[0], angleIntervalRight[1]);
 
         const angleRad = randomAngle * (Math.PI / 180);
         initialVelocity = new Colfio.Vector(Math.cos(angleRad), Math.sin(angleRad)).normalize();
@@ -77,48 +76,55 @@ export const createEnemyCircle = (
     // randomly choose one of the four textures
     texture.frame = new PIXI.Rectangle(Math.random() > 0.5 ? 0 : 16, Math.random() > 0.5 ? 0 : 16, ENEMY_SIZE, ENEMY_SIZE);
 
-    let enemy = new Colfio.Sprite("Enemy", texture);
-    enemy.scale.set(size);
-    enemy.position.set(initialPos[0], initialPos[1]);
-    enemy.addTag(Tags.ENEMY_CIRCLE);
-    enemy.addComponent(new EnemyController());
-    enemy.assignAttribute(Attributes.ENEMY_TYPE, enemyType);
-    enemy.assignAttribute(Attributes.ENEMY_VELOCITY, initialVelocity);
-    enemy.assignAttribute(Attributes.ENEMY_SPEED, speed);
-    return enemy;
+    return new Colfio.Builder(scene)
+        .scale(size)
+        .globalPos(initialPos[0], initialPos[1])
+        .withTag(Tags.ENEMY_CIRCLE)
+        .withComponent(new EnemyController())
+        .withAttribute(Attributes.ENEMY_TYPE, enemyType)
+        .withAttribute(Attributes.ENEMY_VELOCITY, initialVelocity)
+        .withAttribute(Attributes.ENEMY_SPEED, speed)
+        .asSprite(texture)
+        .build();
 }
 
-export const createPlayer = (scene: Colfio.Scene, xPos, playerNumber, spritesheetData): Colfio.Container =>
+export const createPlayer = (scene: Colfio.Scene, xPos: number, playerNumber: number, spritesheetData): Colfio.Container =>
 {
     // Use the "_" object for extracting the textures from the spritesheet. Then crate the actual animated sprite
     // by cloning the extracted textures.
     let _ = new Colfio.AnimatedSprite("Animation", spritesheetData.animations["ship"]);
 
-    let anim = new Colfio.AnimatedSprite("Animation", _.textures.map(t => t.clone()));
+    let anim = new Colfio.Builder(scene)
+        .anchor(0.5)
+        .scale(TEXTURE_SCALE)
+        .globalPos(xPos, GAME_HEIGHT - STATUS_BAR_HEIGHT - PLAYER_HEIGHT * TEXTURE_SCALE)
+        .withTag(Tags.PLAYER)
+        .withComponent(new PlayerController())
+        .withAttribute(Attributes.PLAYER_NUMBER, playerNumber)
+        .withAttribute(Attributes.PLAYER_LIVES, PLAYER_LIVES)
+        .withAttribute(Attributes.PLAYER_LAST_COLLISION, 0)
+        .withAttribute(Attributes.PROJECTILES_AVAILABLE, PROJECTILES_MAX)
+        .asAnimatedSprite(_.textures.map(t => t.clone()))
+        .build() as Colfio.AnimatedSprite;
+
     anim.loop = true;
     anim.animationSpeed = 0.1;
     anim.play();
-    anim.anchor.set(0.5);
-    anim.scale.set(TEXTURE_SCALE);
-    anim.position.set(xPos, GAME_HEIGHT - STATUS_BAR_HEIGHT - PLAYER_HEIGHT * TEXTURE_SCALE);
-    anim.addTag(Tags.PLAYER);
-    anim.addComponent(new PlayerController());
-    anim.assignAttribute(Attributes.PLAYER_NUMBER, playerNumber);
-    anim.assignAttribute(Attributes.PLAYER_LIVES, PLAYER_LIVES);
-    anim.assignAttribute(Attributes.PLAYER_LAST_COLLISION, 0);
-    anim.assignAttribute(Attributes.PROJECTILES_AVAILABLE, PROJECTILES_MAX);
     return anim;
 }
 
-export const createBackground = (scene: Colfio.Scene): Colfio.Sprite =>
+export const createBackground = (scene: Colfio.Scene): Colfio.Container =>
 {
     let texture = PIXI.Texture.from(GameAssets.BACKGROUND).clone();
     texture.frame = new PIXI.Rectangle(0, 0, 1000, 750);
 
-    let background = new Colfio.Sprite("Background", texture);
+    let background = new Colfio.Builder(scene)
+        .withTag(Tags.BACKGROUND)
+        .asSprite(texture)
+        .build();
+
     background.width = scene.width;
     background.height = GAME_HEIGHT - STATUS_BAR_HEIGHT;
-    background.addTag(Tags.BACKGROUND);
     return background;
 }
 
@@ -158,9 +164,10 @@ export const createHeart = (scene: Colfio.Scene, x: number, y: number): Colfio.S
     let texture = PIXI.Texture.from(GameAssets.SPRITE_HEART).clone();
     texture.frame = new PIXI.Rectangle(0, 0, 13, 11);
 
-    let heart = new Colfio.Sprite("Heart", texture);
-    heart.scale.set(TEXTURE_SCALE);
-    heart.anchor.set(0.5);
-    heart.position.set(x, y);
-    return heart;
+    return new Colfio.Builder(scene)
+        .scale(TEXTURE_SCALE)
+        .anchor(0.5)
+        .globalPos(x, y)
+        .asSprite(texture)
+        .build();
 }
