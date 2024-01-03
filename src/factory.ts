@@ -80,6 +80,7 @@ export const createEnemyCircle = (
     texture.frame = new PIXI.Rectangle(Math.random() > 0.5 ? 0 : 16, Math.random() > 0.5 ? 0 : 16, ENEMY_SIZE, ENEMY_SIZE);
 
     return new Colfio.Builder(scene)
+        .anchor(0.5)
         .scale(size)
         .globalPos(initialPos[0], initialPos[1])
         .withTag(Tags.ENEMY_CIRCLE)
@@ -106,9 +107,9 @@ export const createPlayer = (
     let _ = new Colfio.AnimatedSprite("Animation", spritesheetData.animations["ship"]);
 
     let anim = new Colfio.Builder(scene)
-        .anchor(0.5)
+        .anchor(0.5, 0.5)
         .scale(TEXTURE_SCALE)
-        .globalPos(xPos, GAME_HEIGHT - STATUS_BAR_HEIGHT - PLAYER_HEIGHT * TEXTURE_SCALE)
+        .globalPos(xPos, GAME_HEIGHT - STATUS_BAR_HEIGHT + PLAYER_HEIGHT / 2)
         .withTag(Tags.PLAYER)
         .withComponent(new PlayerController())
         .withAttribute(Attributes.PLAYER_NUMBER, playerNumber)

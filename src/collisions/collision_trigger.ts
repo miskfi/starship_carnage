@@ -6,14 +6,13 @@ import {
     ProjectileCollisionType
 } from "./collision_constants";
 import {GAME_HEIGHT, PLAYER_INVULNERABLE_TIME, STATUS_BAR_HEIGHT} from "../constants/constants";
+import {EnemyTypeAttributes} from "../constants/enemy_attributes";
 
 export class CollisionTrigger extends Colfio.Component
 {
     onUpdate(delta: number, absolute: number)
     {
         const projectiles = this.scene.findObjectsByTag(Tags.PLAYER_PROJECTILE);
-
-        const screenWidth = this.scene.app.screen.width;
 
         // TODO hrozná ifovačka
         for (let projectile of projectiles)
@@ -25,7 +24,7 @@ export class CollisionTrigger extends Colfio.Component
             for (let enemy of enemies)
             {
                 // collision of enemy and projectile
-                if (this.collide(projectileBounds, enemy.getBounds()))
+                if (this.collideSAT(projectileBounds, enemy.getBounds()))
                 {
                     this.sendMessage(Messages.PROJECTILE_COLLISION, {
                         projectile, collider: enemy, type: ProjectileCollisionType.ENEMY
@@ -39,7 +38,7 @@ export class CollisionTrigger extends Colfio.Component
                 {
                     // collision of projectile with other player
                     if (player !== projectile.getAttribute(Attributes.PROJECTILE_SHOOTER)
-                        && this.collide(projectileBounds, player.getBounds()))
+                        && this.collideSAT(projectileBounds, player.getBounds()))
                     {
                         this.sendMessage(Messages.PROJECTILE_COLLISION, {
                             projectile, collider: player, type: ProjectileCollisionType.PLAYER
@@ -49,7 +48,6 @@ export class CollisionTrigger extends Colfio.Component
                 }
             }
 
-            // collision of enemy and border
             if (projectileBounds.bottom <= 0)
             {
                 this.sendMessage(Messages.PROJECTILE_COLLISION, {
@@ -58,17 +56,25 @@ export class CollisionTrigger extends Colfio.Component
             }
         }
 
+        this.checkEnemyCollisions(delta, absolute);
+    }
+
+    checkEnemyCollisions(delta: number, absolute: number)
+    {
         const players = this.scene.findObjectsByTag(Tags.PLAYER);
         const enemies = this.scene.findObjectsByTag(Tags.ENEMY_CIRCLE);
 
         for (let enemy of enemies)
         {
             const enemyBounds = enemy.getBounds();
+            const enemySize = EnemyTypeAttributes[enemy.getAttribute<string>(Attributes.ENEMY_TYPE)]["size"];
+            const enemyVelocity = enemy.getAttribute<Colfio.Vector>(Attributes.ENEMY_VELOCITY);
+            const enemySpeed = enemy.getAttribute<number>(Attributes.ENEMY_SPEED);
 
             // collision of two enemies
             for (let enemy2 of enemies)
             {
-                if (enemy !== enemy2 && this.collide(enemy2.getBounds(), enemyBounds))
+                if (enemy !== enemy2 && this.collideRaycasting(delta, enemy, enemySize, enemy2.getBounds(), enemyVelocity, enemySpeed))
                 {
                     this.sendMessage(Messages.ENEMY_COLLISION, {
                         enemy, collider: enemy2, type: EnemyCollisionType.ENEMY
@@ -81,7 +87,7 @@ export class CollisionTrigger extends Colfio.Component
             {
                 if (player !== null && absolute - player.getAttribute<number>(Attributes.PLAYER_LAST_COLLISION) > PLAYER_INVULNERABLE_TIME)
                 {
-                    if (this.collide(player?.getBounds(), enemyBounds))
+                    if (this.collideSAT(player?.getBounds(), enemyBounds))
                     {
                         this.sendMessage(Messages.ENEMY_COLLISION, {
                             enemy, collider: player, type: EnemyCollisionType.PLAYER
@@ -93,7 +99,7 @@ export class CollisionTrigger extends Colfio.Component
             }
 
             // collision of enemy and walls
-            if (enemyBounds.right >= screenWidth || enemyBounds.left <= 0)
+            if (enemyBounds.right >= this.scene.app.screen.width || enemyBounds.left <= 0)
                 this.sendMessage(Messages.ENEMY_COLLISION, {enemy, type: EnemyCollisionType.BORDER_HORIZONTAL});
 
             if (enemyBounds.bottom >= GAME_HEIGHT - STATUS_BAR_HEIGHT || enemyBounds.top <= 0)
@@ -101,12 +107,37 @@ export class CollisionTrigger extends Colfio.Component
         }
     }
 
-    /**
-     * Find if two objects (their bounding boxes) collide.
-     * @param boundRectA bounding box of first object
-     * @param boundRectB bounding box of second object
-     */
-    private collide = (boundRectA: PIXI.Rectangle, boundRectB: PIXI.Rectangle) =>
+    private collideRaycasting(
+        delta: number,
+        ball: Colfio.Container,
+        ballSize: number,
+        bounds: PIXI.Rectangle,
+        ballVelocity: Colfio.Vector = new Colfio.Vector(0, 1),
+        ballSpeed: number = 1
+): boolean
+    {
+        const posX = ball.position.x;
+        const posY = ball.position.y;
+
+        const cornerX = posX + ballSize + Math.sign(ballVelocity.x) * ballSize;
+        const cornerY = posY + ballSize + Math.sign(ballVelocity.y) * ballSize;
+
+        const incrementX = ballVelocity.x * delta * ballSpeed;
+        const incrementY = ballVelocity.y * delta * ballSpeed;
+
+        const at = Math.max(0, Math.min(1, (bounds.y - cornerY) / incrementY));
+        const bt = Math.max(0, Math.min(1, ((bounds.y + bounds.height) - cornerY) / incrementY));
+        const ct = Math.max(0, Math.min(1, (bounds.x - cornerX) / incrementX));
+        const dt = Math.max(0, Math.min(1, ((bounds.x + bounds.width) - cornerX) / incrementX));
+
+        const s1 = Math.min(at, bt);
+        const s2 = Math.max(at, bt);
+        const t1 = Math.min(ct, dt);
+        const t2 = Math.max(ct, dt);
+        return (Math.min(s2, t2) - Math.max(s1, t1)) > 0;
+    }
+
+    private collideSAT = (boundRectA: PIXI.Rectangle, boundRectB: PIXI.Rectangle) =>
         this.hIntersection(boundRectA, boundRectB) > 0 && this.vIntersection(boundRectA, boundRectB) > 0
 
     private hIntersection = (boundRectA: PIXI.Rectangle, boundRectB: PIXI.Rectangle) =>
