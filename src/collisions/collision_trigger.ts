@@ -74,10 +74,11 @@ export class CollisionTrigger extends Colfio.Component
             // collision of two enemies
             for (let enemy2 of enemies)
             {
-                if (enemy !== enemy2 && this.collideRaycasting(delta, enemy, enemySize, enemy2.getBounds(), enemyVelocity, enemySpeed))
+                const [collision, at, bt, ct, dt] = this.collideRaycasting(delta, enemy, enemySize, enemy2, enemyVelocity, enemySpeed);
+                if (enemy !== enemy2 && collision)
                 {
                     this.sendMessage(Messages.ENEMY_COLLISION, {
-                        enemy, collider: enemy2, type: EnemyCollisionType.ENEMY
+                        enemy, collider: enemy2, type: EnemyCollisionType.ENEMY, collisionData: [at, bt, ct, dt]
                     });
                 }
             }
@@ -111,11 +112,13 @@ export class CollisionTrigger extends Colfio.Component
         delta: number,
         ball: Colfio.Container,
         ballSize: number,
-        bounds: PIXI.Rectangle,
+        ball2: Colfio.Container,
         ballVelocity: Colfio.Vector = new Colfio.Vector(0, 1),
         ballSpeed: number = 1
-): boolean
+): [boolean, number, number, number, number]
     {
+        const bounds = ball2.getBounds();
+
         const posX = ball.position.x;
         const posY = ball.position.y;
 
@@ -134,7 +137,8 @@ export class CollisionTrigger extends Colfio.Component
         const s2 = Math.max(at, bt);
         const t1 = Math.min(ct, dt);
         const t2 = Math.max(ct, dt);
-        return (Math.min(s2, t2) - Math.max(s1, t1)) > 0;
+
+        return [(Math.min(s2, t2) - Math.max(s1, t1)) > 0, at, bt, ct, dt];
     }
 
     private collideSAT = (boundRectA: PIXI.Rectangle, boundRectB: PIXI.Rectangle) =>
