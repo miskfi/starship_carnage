@@ -27,6 +27,11 @@ Player controls
 
 In 1-player mode, the player can use controls for either P1 or P2.
 
+## Architecture
+
+![diagram](docs/architecture_diagram.png)
+
+
 ## Assets used & credits
 
 The game uses many public domain assets. Here is the complete list of with links.
