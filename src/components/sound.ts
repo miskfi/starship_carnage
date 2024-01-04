@@ -2,7 +2,7 @@ import { sound } from '@pixi/sound';
 import * as Colfio from 'colfio';
 import {GameAssets, Messages} from "../constants/enums";
 
-export class SoundSystem extends Colfio.Component
+export class SoundComponent extends Colfio.Component
 {
     onInit()
     {

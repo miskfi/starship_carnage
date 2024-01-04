@@ -36,12 +36,12 @@ export class CollisionTrigger extends Colfio.Component
                 // collisions with the same object in subsequent frames).
                 // Also don't check for collisions between a player and his projectiles (might happen in the first
                 // few frames after firing).
-                if (absolute - player.getAttribute<number>(Attributes.PLAYER_LAST_COLLISION) > PLAYER_INVULNERABLE_TIME  &&
-                    player !== projectile.getAttribute(Attributes.PROJECTILE_SHOOTER) &&
+                if (absolute - player.getAttribute<number>(Attributes.PLAYER_LAST_COLLISION_TIME) > PLAYER_INVULNERABLE_TIME  &&
+                    player !== projectile.getAttribute(Attributes.PROJECTILE_SOURCE) &&
                     this.collideSAT(projectileBounds, player.getBounds()))
                 {
                     this.sendMessage(Messages.PROJECTILE_COLLISION, {projectile, collider: player, type: ProjectileCollisionType.PLAYER});
-                    player.assignAttribute(Attributes.PLAYER_LAST_COLLISION, absolute);
+                    player.assignAttribute(Attributes.PLAYER_LAST_COLLISION_TIME, absolute);
                 }
             }
 
@@ -79,11 +79,11 @@ export class CollisionTrigger extends Colfio.Component
             // collision of enemy and player
             for (let player of players)
             {
-                if (absolute - player.getAttribute<number>(Attributes.PLAYER_LAST_COLLISION) > PLAYER_INVULNERABLE_TIME &&
+                if (absolute - player.getAttribute<number>(Attributes.PLAYER_LAST_COLLISION_TIME) > PLAYER_INVULNERABLE_TIME &&
                     this.collideSAT(player?.getBounds(), enemyBounds))
                 {
                     this.sendMessage(Messages.ENEMY_COLLISION, {enemy, collider: player, type: EnemyCollisionType.PLAYER});
-                    player.assignAttribute(Attributes.PLAYER_LAST_COLLISION, absolute);
+                    player.assignAttribute(Attributes.PLAYER_LAST_COLLISION_TIME, absolute);
                 }
             }
 

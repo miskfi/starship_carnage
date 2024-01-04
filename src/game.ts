@@ -5,12 +5,13 @@ import {sound} from "@pixi/sound";
 import {Loader} from '@pixi/loaders';
 
 import {CollisionTrigger} from "./collisions/collision_trigger";
-import {GameAssets} from "./constants/enums";
+import {GameAssets, GlobalAttributes} from "./constants/enums";
 import {GameModel} from "./game_model";
 import {CollisionResolver} from "./collisions/collision_resolver";
-import {SceneManager} from "./scene_manager";
-import {SoundSystem} from "./components/sound";
+import {SceneManager} from "./components/scene_manager";
+import {SoundComponent} from "./components/sound";
 import {GAME_HEIGHT, GAME_WIDTH} from "./constants/constants";
+import {GameManager} from "./components/game_manager";
 
 export class GameState
 {
@@ -67,11 +68,12 @@ class Game
         const sheet2 = this.loader.resources[GameAssets.SPRITESHEET_PLAYER_2].spritesheet;
         const levels = this.loader.resources[GameAssets.LEVELS].data;
 
+        this.engine.scene.assignGlobalAttribute(GlobalAttributes.GAME_MODEL, new GameModel(levels));
         this.engine.scene.addGlobalComponent(new KeyInputComponent());
         this.engine.scene.addGlobalComponent(new CollisionTrigger());
         this.engine.scene.addGlobalComponent(new CollisionResolver());
-        this.engine.scene.addGlobalComponent(new SoundSystem());
-        this.engine.scene.addGlobalComponent(new GameModel(levels));
+        this.engine.scene.addGlobalComponent(new SoundComponent());
+        this.engine.scene.addGlobalComponent(new GameManager());
         this.engine.scene.addGlobalComponent(new SceneManager(sheet1, sheet2));
     }
 }

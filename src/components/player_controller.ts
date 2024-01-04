@@ -11,7 +11,7 @@ export class PlayerController extends Colfio.Component
     onInit()
     {
         this.keyInput = this.scene.findGlobalComponentByName("KeyInputComponent");
-        this.controls = this.owner.getAttribute(Attributes.CONTROLS);
+        this.controls = this.owner.getAttribute(Attributes.PLAYER_CONTROLS);
     }
 
     onUpdate(delta: number, absolute: number)
@@ -55,7 +55,7 @@ export class PlayerController extends Colfio.Component
 
     shootProjectile()
     {
-        if (this.owner.getAttribute<number>(Attributes.PROJECTILES_AVAILABLE) > 0)
+        if (this.owner.getAttribute<number>(Attributes.PLAYER_PROJECTILES_AVAILABLE) > 0)
             this.sendMessage(Messages.PROJECTILE_SHOT, this.owner);
     }
 }

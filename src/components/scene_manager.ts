@@ -1,10 +1,10 @@
 import * as Colfio from 'colfio';
 
-import {Attributes, GlobalAttributes, Messages, Tags} from "./constants/enums";
-import {MainMenu} from "./scenes/main_menu";
-import {GameWon, GameOver, LevelFinished} from "./scenes/level_finished_lost";
-import {createBackground, createEnemyCircle, createPlayer, createProjectile, createStatusBar} from "./factory";
-import {GameState} from "./game";
+import {Attributes, GlobalAttributes, Messages, Tags} from "../constants/enums";
+import {MainMenu} from "../scenes/main_menu";
+import {GameWon, GameOver, LevelFinished} from "../scenes/level_finished_lost";
+import {createBackground, createEnemyCircle, createPlayer, createProjectile, createStatusBar} from "../factory";
+import {GameState} from "../game";
 import {
     ENEMY_SIZE,
     GAME_HEIGHT,
@@ -12,9 +12,9 @@ import {
     P1_CONTROLS,
     P2_CONTROLS,
     SINGLEPLAYER_CONTROLS
-} from "./constants/constants"
-import {GameModel} from "./game_model";
-import {EnemyType, EnemyTypeAttributes, EnemyTypeOrder} from "./constants/enemy_attributes";
+} from "../constants/constants"
+import {EnemyType, EnemyTypeAttributes, EnemyTypeOrder} from "../constants/enemy_attributes";
+import {GameModel} from "../game_model";
 
 export class SceneManager extends Colfio.Component
 {
@@ -137,7 +137,7 @@ export class SceneManager extends Colfio.Component
     {
         this.removePreviousComponent();
 
-        const gameModel = this.scene.findGlobalComponentByName<GameModel>("GameModel");
+        const gameModel = this.scene.getGlobalAttribute<GameModel>(GlobalAttributes.GAME_MODEL);
         const level = gameModel.getCurrentLevel();
         const levelNumber = gameModel.getCurrentLevelNumber();
         const players = gameModel.gameMode;

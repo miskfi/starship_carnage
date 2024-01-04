@@ -27,19 +27,20 @@ export enum Messages
 
 export enum Attributes
 {
-    CONTROLS = "CONTROLS",
     ENEMY_SPEED = "ENEMY_SPEED",
     ENEMY_TYPE = "ENEMY_TYPE",
     ENEMY_VELOCITY = "ENEMY_VELOCITY",
-    PLAYER_LAST_COLLISION = "PLAYER_LAST_COLLISION",  // absolute time of last collision of player with enemy/projectile
+    PLAYER_CONTROLS = "PLAYER_CONTROLS",
+    PLAYER_LAST_COLLISION_TIME = "PLAYER_LAST_COLLISION_TIME",  // absolute time of last collision of player with enemy/projectile
     PLAYER_LIVES = "PLAYER_LIVES",
     PLAYER_NUMBER = "PLAYER_NUMBER",
-    PROJECTILES_AVAILABLE = "PROJECTILES_AVAILABLE",
-    PROJECTILE_SHOOTER = "PROJECTILE_SHOOTER"  // the person that shot the projectile
+    PLAYER_PROJECTILES_AVAILABLE = "PLAYER_PROJECTILES_AVAILABLE",
+    PROJECTILE_SOURCE = "PROJECTILE_SOURCE"  // the person that shot the projectile
 }
 
 export enum GlobalAttributes
 {
+    GAME_MODEL = "GAME_MODEL",
     GAME_STATE = "GAME_STATE",
 }
 

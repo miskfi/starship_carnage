@@ -27,7 +27,7 @@ export const createProjectile = (scene: Colfio.Scene, player: Colfio.Container, 
         .globalPos(player.position.x - player.width + 5, player.position.y - player.height)
         .withTag(Tags.PLAYER_PROJECTILE)
         .withComponent(new ProjectileController())
-        .withAttribute(Attributes.PROJECTILE_SHOOTER, player)
+        .withAttribute(Attributes.PROJECTILE_SOURCE, player)
         .withParent(parent)
         .asSprite(texture)
         .build();
@@ -114,9 +114,9 @@ export const createPlayer = (
         .withComponent(new PlayerController())
         .withAttribute(Attributes.PLAYER_NUMBER, playerNumber)
         .withAttribute(Attributes.PLAYER_LIVES, PLAYER_LIVES)
-        .withAttribute(Attributes.PLAYER_LAST_COLLISION, 0)
-        .withAttribute(Attributes.PROJECTILES_AVAILABLE, PROJECTILES_MAX)
-        .withAttribute(Attributes.CONTROLS, controls)
+        .withAttribute(Attributes.PLAYER_LAST_COLLISION_TIME, 0)
+        .withAttribute(Attributes.PLAYER_PROJECTILES_AVAILABLE, PROJECTILES_MAX)
+        .withAttribute(Attributes.PLAYER_CONTROLS, controls)
         .withParent(parent)
         .asAnimatedSprite(_.textures.map(t => t.clone()))
         .build() as Colfio.AnimatedSprite;
