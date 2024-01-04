@@ -9,11 +9,9 @@ export enum EnemyType
     SMALL = "SMALL",
     MEDIUM = "MEDIUM",
     BIG = "BIG",
-    BIGGEST = "BIGGEST"
 }
 
 export const EnemyTypeOrder = [
-    EnemyType.BIGGEST,
     EnemyType.BIG,
     EnemyType.MEDIUM,
     EnemyType.SMALL,
@@ -26,5 +24,4 @@ export const EnemyTypeAttributes: Record<keyof typeof EnemyType, EnemyAttributes
     "SMALL": {size: 2, speed: 0.175},
     "MEDIUM": {size: 2.5, speed: 0.15},
     "BIG": {size: 3, speed: 0.125},
-    "BIGGEST": {size: 3.5, speed: 0.1}
 }

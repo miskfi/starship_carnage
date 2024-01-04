@@ -6,6 +6,7 @@ import {GameWon, GameOver, LevelFinished} from "./scenes/level_finished_lost";
 import {createBackground, createEnemyCircle, createPlayer, createProjectile, createStatusBar} from "./factory";
 import {GameState} from "./game";
 import {
+    ENEMY_SIZE,
     GAME_HEIGHT,
     GAME_WIDTH,
     P1_CONTROLS,
@@ -13,7 +14,7 @@ import {
     SINGLEPLAYER_CONTROLS
 } from "./constants/constants"
 import {GameModel} from "./game_model";
-import {EnemyType, EnemyTypeOrder} from "./constants/enemy_attributes";
+import {EnemyType, EnemyTypeAttributes, EnemyTypeOrder} from "./constants/enemy_attributes";
 
 export class SceneManager extends Colfio.Component
 {
@@ -107,18 +108,24 @@ export class SceneManager extends Colfio.Component
             velocity.x < 0 ? flipXMovement = -1 : flipXMovement = 1;
 
             const parentContainer = this.owner.scene.findObjectByTag(Tags.GAME_OBJECT_CONTAINER);
+            const newType = EnemyTypeOrder[EnemyTypeOrder.indexOf(enemyType) + 1];
+
+            // create two new offsprings approximately a diameter apart (a small margin [5 in this case] is subtracted
+            // to make this split more natural as both offsprings immediately start drifting away from each other
+            const changeX = EnemyTypeAttributes[newType]["size"] * ENEMY_SIZE / 2 - 5;
+
             createEnemyCircle(
                 this.scene,
-                EnemyTypeOrder[EnemyTypeOrder.indexOf(enemyType) + 1],
+                newType,
                 parentContainer,
-                [enemyPosition[0] - 10, enemyPosition[1]],
+                [enemyPosition[0] - changeX, enemyPosition[1]],
                 new Colfio.Vector(-velocity.x * flipXMovement, velocity.y).normalize()
             );
             createEnemyCircle(
                 this.scene,
-                EnemyTypeOrder[EnemyTypeOrder.indexOf(enemyType) + 1],
+                newType,
                 parentContainer,
-                [enemyPosition[0] + 10, enemyPosition[1]],
+                [enemyPosition[0] + changeX, enemyPosition[1]],
                 new Colfio.Vector(velocity.x * flipXMovement, velocity.y).normalize()
             );
         }
