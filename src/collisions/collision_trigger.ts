@@ -5,7 +5,7 @@ import {
     EnemyCollisionType,
     ProjectileCollisionType
 } from "./collision_constants";
-import {GAME_HEIGHT, PLAYER_INVULNERABLE_TIME, STATUS_BAR_HEIGHT} from "../constants/constants";
+import {ENEMY_SIZE, GAME_HEIGHT, PLAYER_INVULNERABLE_TIME, STATUS_BAR_HEIGHT} from "../constants/constants";
 import {EnemyTypeAttributes} from "../constants/enemy_attributes";
 
 export class CollisionTrigger extends Colfio.Component
@@ -67,7 +67,7 @@ export class CollisionTrigger extends Colfio.Component
         for (let enemy of enemies)
         {
             const enemyBounds = enemy.getBounds();
-            const enemySize = EnemyTypeAttributes[enemy.getAttribute<string>(Attributes.ENEMY_TYPE)]["size"];
+            const enemySize = EnemyTypeAttributes[enemy.getAttribute<string>(Attributes.ENEMY_TYPE)]["size"] * ENEMY_SIZE;
             const enemyVelocity = enemy.getAttribute<Colfio.Vector>(Attributes.ENEMY_VELOCITY);
             const enemySpeed = enemy.getAttribute<number>(Attributes.ENEMY_SPEED);
 

@@ -29,46 +29,40 @@ export class CollisionResolver extends Colfio.Component
         }
         else if (msg.action === Messages.ENEMY_COLLISION)
         {
-            const {enemy, collider, type, collisionData} = msg.data as EnemyCollisionMessage;
+            const {enemy, collider, type} = msg.data as EnemyCollisionMessage;
 
             if (type === EnemyCollisionType.ENEMY)
             {
-                const [at, bt, ct, dt] = collisionData;
                 const velocity1 = enemy.getAttribute<Colfio.Vector>(Attributes.ENEMY_VELOCITY);
                 const velocity2 = collider.getAttribute<Colfio.Vector>(Attributes.ENEMY_VELOCITY);
 
-                const enemy1Size = EnemyTypeAttributes[enemy.getAttribute<string>(Attributes.ENEMY_TYPE)]["size"];
-                const enemy2Size = EnemyTypeAttributes[collider.getAttribute<string>(Attributes.ENEMY_TYPE)]["size"];
+                const mass1 = EnemyTypeAttributes[enemy.getAttribute<string>(Attributes.ENEMY_TYPE)]["size"];
+                const mass2 = EnemyTypeAttributes[collider.getAttribute<string>(Attributes.ENEMY_TYPE)]["size"];
 
-                const closest = Math.min(at > 0 ? at : 10000, bt > 0 ? bt : 10000, ct > 0 ? ct : 10000, dt > 0 ? dt : 10000);
-                if (closest === at || closest === bt) {
-                    enemy.assignAttribute(
-                        Attributes.ENEMY_VELOCITY,
-                        new Colfio.Vector(velocity1.x - closest * 0.1, -velocity1.y + closest * 0.1).normalize()
-                    )
+                const center1 = new Colfio.Vector(enemy.position.x, enemy.position.y);
+                const center2 = new Colfio.Vector(collider.position.x, collider.position.y);
 
-                    collider.assignAttribute(
-                        Attributes.ENEMY_VELOCITY,
-                        new Colfio.Vector(velocity2.x - closest * 0.1, -velocity2.y + closest * 0.1).normalize()
-                    )
-                }
-                if(closest === ct || closest === dt) {
-                    enemy.assignAttribute(
-                        Attributes.ENEMY_VELOCITY,
-                        new Colfio.Vector(-velocity1.x + closest * 0.1, velocity1.y - closest * 0.1).normalize()
-                    )
+                // calculate coefficients for change of velocity based on these equations
+                // https://en.wikipedia.org/wiki/Elastic_collision#Two-dimensional_collision_with_two_moving_objects
+                const massCoeff1 = (2 * mass2 / (mass1 + mass2));
+                const massCoeff2 = (2 * mass1 / (mass1 + mass2));
 
-                    collider.assignAttribute(
-                        Attributes.ENEMY_VELOCITY,
-                        new Colfio.Vector(-velocity2.x + closest * 0.1, velocity2.y - closest * 0.1).normalize()
-                    )
-                }
+                const dot1 = velocity1.subtract(velocity2).dot(center1.subtract(center2));
+                const dot2 = velocity2.subtract(velocity1).dot(center2.subtract(center1));
 
+                const dist = center1.squareDistance(center2)
 
+                const coeff1 = massCoeff1 * (dot1 / dist);
+                const coeff2 = massCoeff2 * (dot2 / dist);
+
+                enemy.assignAttribute(
+                    Attributes.ENEMY_VELOCITY,
+                    velocity1.subtract(center1.subtract(center2).multiply(coeff1)).normalize()
+                )
 
                 collider.assignAttribute(
                     Attributes.ENEMY_VELOCITY,
-                    new Colfio.Vector(-velocity2.x, -velocity2.y).normalize()
+                    velocity2.subtract(center2.subtract(center1).multiply(coeff2)).normalize()
                 )
             }
             else if (type === EnemyCollisionType.PLAYER)

@@ -25,5 +25,4 @@ export type EnemyCollisionMessage = {
     enemy: Colfio.Container;
     collider: Colfio.Container;
     type: EnemyCollisionType;
-    collisionData: number[];
 }
