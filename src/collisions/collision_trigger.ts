@@ -10,14 +10,6 @@ import {EnemyTypeAttributes} from "../constants/enemy_attributes";
 
 export class CollisionTrigger extends Colfio.Component
 {
-    // invisible rectangles representing the walls of the game space
-    private readonly walls = [
-        new PIXI.Rectangle(0, -10, GAME_WIDTH, 10),  // top
-        new PIXI.Rectangle(-10, -10, 10, GAME_HEIGHT - STATUS_BAR_HEIGHT + 10),  // left
-        new PIXI.Rectangle(GAME_WIDTH, 0, 10, GAME_HEIGHT - STATUS_BAR_HEIGHT),  // right
-        new PIXI.Rectangle(-10, GAME_HEIGHT - STATUS_BAR_HEIGHT, GAME_WIDTH + 10, 10)  // bottom
-    ]
-
     onUpdate(delta: number, absolute: number)
     {
         this.checkProjectileCollisions(delta, absolute);
@@ -68,7 +60,7 @@ export class CollisionTrigger extends Colfio.Component
         {
             const enemy = enemies[i];
             const enemyBounds = enemy.getBounds();
-            const enemySize = EnemyTypeAttributes[enemy.getAttribute<string>(Attributes.ENEMY_TYPE)]["size"] * ENEMY_SIZE;
+            const enemySize = EnemyTypeAttributes[enemy.getAttribute<string>(Attributes.ENEMY_TYPE)]["size"];
             const enemyVelocity = enemy.getAttribute<Colfio.Vector>(Attributes.ENEMY_VELOCITY);
             const enemySpeed = enemy.getAttribute<number>(Attributes.ENEMY_SPEED);
 
@@ -76,24 +68,12 @@ export class CollisionTrigger extends Colfio.Component
             for (let j = i+1; j < enemies.length; j++)
             {
                 const enemy2 = enemies[j];
-                if (this.collideRaycasting(delta, enemy, enemySize, enemyVelocity, enemySpeed, enemy2.getBounds())[0])
-                    this.sendMessage(Messages.ENEMY_COLLISION, {enemy, collider: enemy2, type: EnemyCollisionType.ENEMY});
-            }
-
-            // collision of enemy and wall
-            for (let wall of this.walls)
-            {
-                const [collision, at, bt, ct, dt] =
-                    this.collideRaycasting(delta, enemy, enemySize, enemyVelocity, enemySpeed, wall);
-
+                const [collision, at, bt, ct, dt, closest] =
+                    this.collideRaycasting(delta, enemy, enemySize, enemyVelocity, enemySpeed, enemy2.getBounds())
                 if (collision)
-                {
-                    const closest = Math.min(at > 0 ? at : 10000, bt > 0 ? bt : 10000, ct > 0 ? ct : 10000, dt > 0 ? dt : 10000);
-                    if (closest === at || closest === bt)
-                        this.sendMessage(Messages.ENEMY_COLLISION, {enemy, type: EnemyCollisionType.BORDER_VERTICAL});
-                    else if (closest === ct || closest === dt)
-                        this.sendMessage(Messages.ENEMY_COLLISION, {enemy, type: EnemyCollisionType.BORDER_HORIZONTAL});
-                }
+                    this.sendMessage(Messages.ENEMY_COLLISION, {
+                        enemy, collider: enemy2, type: EnemyCollisionType.ENEMY, collisionData: closest
+                    });
             }
 
             // collision of enemy and player
@@ -105,6 +85,24 @@ export class CollisionTrigger extends Colfio.Component
                     this.sendMessage(Messages.ENEMY_COLLISION, {enemy, collider: player, type: EnemyCollisionType.PLAYER});
                     player.assignAttribute(Attributes.PLAYER_LAST_COLLISION, absolute);
                 }
+            }
+
+            const width = this.scene.app.screen.width;
+            const height = GAME_HEIGHT - STATUS_BAR_HEIGHT;
+            // collision of enemy and wall
+            if (enemyBounds.right >= width || enemyBounds.left <= 0)
+            {
+                const overlap = Math.min(Math.abs(enemyBounds.right - width), Math.abs(enemyBounds.left));
+                this.sendMessage(Messages.ENEMY_COLLISION, {
+                    enemy, type: EnemyCollisionType.BORDER_HORIZONTAL, collisionData: overlap
+                });
+            }
+            if (enemyBounds.bottom >= height || enemyBounds.top <= 0)
+            {
+                const overlap = Math.min(Math.abs(enemyBounds.bottom - height), Math.abs(enemyBounds.top));
+                this.sendMessage(Messages.ENEMY_COLLISION, {
+                    enemy, type: EnemyCollisionType.BORDER_VERTICAL, collisionData: overlap
+                });
             }
         }
     }
@@ -125,7 +123,7 @@ export class CollisionTrigger extends Colfio.Component
         ballVelocity: Colfio.Vector,
         ballSpeed: number,
         bounds: PIXI.Rectangle,
-): [boolean, number, number, number, number]
+    ): [boolean, number, number, number, number, number]
     {
         const posX = ball.position.x;
         const posY = ball.position.y;
@@ -146,7 +144,8 @@ export class CollisionTrigger extends Colfio.Component
         const t1 = Math.min(ct, dt);
         const t2 = Math.max(ct, dt);
 
-        return [(Math.min(s2, t2) - Math.max(s1, t1)) > 0, at, bt, ct, dt];
+        const closest = Math.min(at > 0 ? at : 10000, bt > 0 ? bt : 10000, ct > 0 ? ct : 10000, dt > 0 ? dt : 10000);
+        return [(Math.min(s2, t2) - Math.max(s1, t1)) > 0, at, bt, ct, dt, closest];
     }
 
     /**

@@ -37,12 +37,12 @@ export class CollisionResolver extends Colfio.Component
 
     handleEnemyCollision(msg: Colfio.Message)
     {
-        const {enemy, collider, type} = msg.data as EnemyCollisionMessage;
+        const {enemy, collider, type, collisionData} = msg.data as EnemyCollisionMessage;
 
         switch (type)
         {
             case EnemyCollisionType.ENEMY:
-                this.twoEnemiesCollision(enemy, collider);
+                this.twoEnemiesCollision(enemy, collider, collisionData);
                 break;
 
             case EnemyCollisionType.PLAYER:
@@ -51,12 +51,14 @@ export class CollisionResolver extends Colfio.Component
 
             case EnemyCollisionType.BORDER_HORIZONTAL:
                 const velocityH = enemy.getAttribute<Colfio.Vector>(Attributes.ENEMY_VELOCITY);
-                enemy.assignAttribute(Attributes.ENEMY_VELOCITY, new Colfio.Vector(-velocityH.x, velocityH.y).normalize())
+                enemy.assignAttribute(Attributes.ENEMY_VELOCITY, new Colfio.Vector(-velocityH.x, velocityH.y).normalize());
+                this.moveAway(enemy, collisionData);
                 break;
 
             case EnemyCollisionType.BORDER_VERTICAL:
                 const velocityV = enemy.getAttribute<Colfio.Vector>(Attributes.ENEMY_VELOCITY);
-                enemy.assignAttribute(Attributes.ENEMY_VELOCITY, new Colfio.Vector(velocityV.x, -velocityV.y).normalize())
+                enemy.assignAttribute(Attributes.ENEMY_VELOCITY, new Colfio.Vector(velocityV.x, -velocityV.y).normalize());
+                this.moveAway(enemy, collisionData);
                 break;
         }
     }
@@ -64,10 +66,8 @@ export class CollisionResolver extends Colfio.Component
     /**
      * Update velocities of two colliding enemies based on these equations
      * https://en.wikipedia.org/wiki/Elastic_collision#Two-dimensional_collision_with_two_moving_objects
-     * @param enemy1
-     * @param enemy2
      */
-    twoEnemiesCollision(enemy1: Colfio.Container, enemy2: Colfio.Container)
+    twoEnemiesCollision(enemy1: Colfio.Container, enemy2: Colfio.Container, overlap: number)
     {
         const velocity1 = enemy1.getAttribute<Colfio.Vector>(Attributes.ENEMY_VELOCITY);
         const velocity2 = enemy2.getAttribute<Colfio.Vector>(Attributes.ENEMY_VELOCITY);
@@ -89,13 +89,26 @@ export class CollisionResolver extends Colfio.Component
         const coeff1 = massCoeff1 * (dot1 / dist);
         const coeff2 = massCoeff2 * (dot2 / dist);
 
-        enemy1.assignAttribute(
-            Attributes.ENEMY_VELOCITY,
-            velocity1.subtract(center1.subtract(center2).multiply(coeff1)).normalize()
-        )
-        enemy2.assignAttribute(
-            Attributes.ENEMY_VELOCITY,
-            velocity2.subtract(center2.subtract(center1).multiply(coeff2)).normalize()
-        )
+        const newVelocity1 = velocity1.subtract(center1.subtract(center2).multiply(coeff1)).normalize();
+        const newVelocity2 = velocity2.subtract(center2.subtract(center1).multiply(coeff2)).normalize();
+
+        enemy1.assignAttribute(Attributes.ENEMY_VELOCITY, newVelocity1);
+        enemy2.assignAttribute(Attributes.ENEMY_VELOCITY, newVelocity2)
+
+        this.moveAway(enemy1, overlap);
+        this.moveAway(enemy2, overlap);
+    }
+
+    /**
+     * Move enemy away from the collision based on the overlap with the colliding object. This ensures that the enemy
+     * will not be in the same collision in the next frame, which might cause it to oscillate around the collider.
+     * @param enemy enemy that will be moved away
+     * @param overlap the amount by which the enemy will be moved
+     */
+    moveAway(enemy: Colfio.Container, overlap: number)
+    {
+        const velocity = enemy.getAttribute<Colfio.Vector>(Attributes.ENEMY_VELOCITY);
+        enemy.position.x += velocity.x * overlap;
+        enemy.position.y += velocity.y * overlap;
     }
 }
