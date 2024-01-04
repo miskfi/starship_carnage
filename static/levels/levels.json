@@ -2,13 +2,13 @@
   "1 player":
   [
     ["MEDIUM"],
-    ["MEDIUM", "BIG"],
-    ["MEDIUM", "BIGGEST"]
+    ["MEDIUM", "MEDIUM"],
+    ["MEDIUM", "MEDIUM", "BIG"]
   ],
   "2 players":
   [
     ["MEDIUM", "MEDIUM"],
-    ["BIG", "BIG", "MEDIUM"],
-    ["BIGGEST", "BIGGEST"]
+    ["BIG", "BIG"],
+    ["BIG", "BIG", "BIG", "SMALL"]
   ]
 }
