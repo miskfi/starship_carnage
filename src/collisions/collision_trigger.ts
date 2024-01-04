@@ -5,18 +5,18 @@ import {
     EnemyCollisionType,
     ProjectileCollisionType
 } from "./collision_constants";
-import {ENEMY_SIZE, GAME_HEIGHT, GAME_WIDTH, PLAYER_INVULNERABLE_TIME, STATUS_BAR_HEIGHT} from "../constants/constants";
+import {GAME_HEIGHT, PLAYER_INVULNERABLE_TIME, STATUS_BAR_HEIGHT} from "../constants/constants";
 import {EnemyTypeAttributes} from "../constants/enemy_attributes";
 
 export class CollisionTrigger extends Colfio.Component
 {
     onUpdate(delta: number, absolute: number)
     {
-        this.checkProjectileCollisions(delta, absolute);
+        this.checkProjectileCollisions(absolute);
         this.checkEnemyCollisions(delta, absolute);
     }
 
-    checkProjectileCollisions(delta: number, absolute: number)
+    private checkProjectileCollisions(absolute: number)
     {
         const projectiles = this.scene.findObjectsByTag(Tags.PLAYER_PROJECTILE);
 
@@ -51,7 +51,7 @@ export class CollisionTrigger extends Colfio.Component
         }
     }
 
-    checkEnemyCollisions(delta: number, absolute: number)
+    private checkEnemyCollisions(delta: number, absolute: number)
     {
         const players = this.scene.findObjectsByTag(Tags.PLAYER);
         const enemies = this.scene.findObjectsByTag(Tags.ENEMY_CIRCLE);
@@ -68,7 +68,7 @@ export class CollisionTrigger extends Colfio.Component
             for (let j = i+1; j < enemies.length; j++)
             {
                 const enemy2 = enemies[j];
-                const [collision, at, bt, ct, dt, closest] =
+                const [collision, , , , , closest] =
                     this.collideRaycasting(delta, enemy, enemySize, enemyVelocity, enemySpeed, enemy2.getBounds())
                 if (collision)
                     this.sendMessage(Messages.ENEMY_COLLISION, {
@@ -108,7 +108,9 @@ export class CollisionTrigger extends Colfio.Component
     }
 
     /**
-     * Check collision of a ball and a rectangle using raycasting.
+     * Check collision of a ball and a rectangle using raycasting. Taken from:
+     * https://github.com/APHGames/examples/blob/main/src/06-physics/collisions-raycasting.ts
+     *
      * @param delta time step
      * @param ball ball object
      * @param ballSize size of the ball
