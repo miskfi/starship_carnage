@@ -31,7 +31,7 @@ export enum Attributes
     ENEMY_SPEED = "ENEMY_SPEED",
     ENEMY_TYPE = "ENEMY_TYPE",
     ENEMY_VELOCITY = "ENEMY_VELOCITY",
-    PLAYER_LAST_COLLISION = "PLAYER_LAST_COLLISION",  // absolute time of last collision of player
+    PLAYER_LAST_COLLISION = "PLAYER_LAST_COLLISION",  // absolute time of last collision of player with enemy/projectile
     PLAYER_LIVES = "PLAYER_LIVES",
     PLAYER_NUMBER = "PLAYER_NUMBER",
     PROJECTILES_AVAILABLE = "PROJECTILES_AVAILABLE",
