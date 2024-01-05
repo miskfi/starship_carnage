@@ -75,12 +75,9 @@ export class GameManager extends Colfio.Component
             this.gameModel.addEnemies(2)
 
         this.gameModel.removeEnemy();
+
         if (this.gameModel.enemies === 0)
-        {
-            this.setGameNotRunning();
-            this.gameModel.nextLevel();
-            this.sendMessage(Messages.LEVEL_FINISHED, this.gameModel.gameWon);
-        }
+            this.onLevelFinished();
     }
 
     onPlayerHit(msg: Colfio.Message)
@@ -108,6 +105,13 @@ export class GameManager extends Colfio.Component
     {
         this.gameModel.resetPlayers();
         this.gameModel.setEnemiesLevelStart();
+    }
+
+    onLevelFinished()
+    {
+        this.setGameNotRunning();
+        this.gameModel.nextLevel();
+        this.sendMessage(Messages.LEVEL_FINISHED, this.gameModel.gameWon);
     }
 
     setGameNotRunning()

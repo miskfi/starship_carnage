@@ -1,112 +1,8 @@
 import * as Colfio from "colfio";
 import * as PIXI from "pixi.js"
-import {Tags, Messages, Attributes} from "../constants/enums";
-import {
-    EnemyCollisionType,
-    ProjectileCollisionType
-} from "./collision_constants";
-import {GAME_HEIGHT, PLAYER_INVULNERABLE_TIME, STATUS_BAR_HEIGHT} from "../constants/constants";
-import {EnemyTypeAttributes} from "../constants/enemy_attributes";
 
-export class CollisionTrigger extends Colfio.Component
+export abstract class CollisionTrigger extends Colfio.Component
 {
-    onUpdate(delta: number, absolute: number)
-    {
-        this.checkProjectileCollisions(absolute);
-        this.checkEnemyCollisions(delta, absolute);
-    }
-
-    private checkProjectileCollisions(absolute: number)
-    {
-        const projectiles = this.scene.findObjectsByTag(Tags.PLAYER_PROJECTILE);
-
-        for (let projectile of projectiles)
-        {
-            const projectileBounds = projectile.getBounds();
-            const enemies = this.scene.findObjectsByTag(Tags.ENEMY_CIRCLE);
-            const players = this.scene.findObjectsByTag(Tags.PLAYER);
-
-            for (let enemy of enemies)
-                if (this.collideSAT(projectileBounds, enemy.getBounds()))
-                    this.sendMessage(Messages.PROJECTILE_COLLISION, {projectile, collider: enemy, type: ProjectileCollisionType.ENEMY});
-
-            for (let player of players)
-            {
-                // Don't trigger collisions during player's collision invulnerability (this is done to avoid multiple
-                // collisions with the same object in subsequent frames).
-                // Also don't check for collisions between a player and his projectiles (might happen in the first
-                // few frames after firing).
-                if (absolute - player.getAttribute<number>(Attributes.PLAYER_LAST_COLLISION_TIME) > PLAYER_INVULNERABLE_TIME  &&
-                    player !== projectile.getAttribute(Attributes.PROJECTILE_SOURCE) &&
-                    this.collideSAT(projectileBounds, player.getBounds()))
-                {
-                    this.sendMessage(Messages.PROJECTILE_COLLISION, {projectile, collider: player, type: ProjectileCollisionType.PLAYER});
-                    player.assignAttribute(Attributes.PLAYER_LAST_COLLISION_TIME, absolute);
-                }
-            }
-
-            // projectile went off the screen
-            if (projectileBounds.bottom <= 0)
-                this.sendMessage(Messages.PROJECTILE_COLLISION, {projectile, type: ProjectileCollisionType.BORDER});
-        }
-    }
-
-    private checkEnemyCollisions(delta: number, absolute: number)
-    {
-        const players = this.scene.findObjectsByTag(Tags.PLAYER);
-        const enemies = this.scene.findObjectsByTag(Tags.ENEMY_CIRCLE);
-
-        for (let i = 0; i < enemies.length; i++)
-        {
-            const enemy = enemies[i];
-            const enemyBounds = enemy.getBounds();
-            const enemySize = EnemyTypeAttributes[enemy.getAttribute<string>(Attributes.ENEMY_TYPE)]["size"];
-            const enemyVelocity = enemy.getAttribute<Colfio.Vector>(Attributes.ENEMY_VELOCITY);
-            const enemySpeed = enemy.getAttribute<number>(Attributes.ENEMY_SPEED);
-
-            // collision of two enemies
-            for (let j = i+1; j < enemies.length; j++)
-            {
-                const enemy2 = enemies[j];
-                const [collision, , , , , closest] =
-                    this.collideRaycasting(delta, enemy, enemySize, enemyVelocity, enemySpeed, enemy2.getBounds())
-                if (collision)
-                    this.sendMessage(Messages.ENEMY_COLLISION, {
-                        enemy, collider: enemy2, type: EnemyCollisionType.ENEMY, collisionData: closest
-                    });
-            }
-
-            // collision of enemy and player
-            for (let player of players)
-            {
-                if (absolute - player.getAttribute<number>(Attributes.PLAYER_LAST_COLLISION_TIME) > PLAYER_INVULNERABLE_TIME &&
-                    this.collideSAT(player?.getBounds(), enemyBounds))
-                {
-                    this.sendMessage(Messages.ENEMY_COLLISION, {enemy, collider: player, type: EnemyCollisionType.PLAYER});
-                    player.assignAttribute(Attributes.PLAYER_LAST_COLLISION_TIME, absolute);
-                }
-            }
-
-            const width = this.scene.app.screen.width;
-            const height = GAME_HEIGHT - STATUS_BAR_HEIGHT;
-            // collision of enemy and wall
-            if (enemyBounds.right >= width || enemyBounds.left <= 0)
-            {
-                const overlap = Math.min(Math.abs(enemyBounds.right - width), Math.abs(enemyBounds.left));
-                this.sendMessage(Messages.ENEMY_COLLISION, {
-                    enemy, type: EnemyCollisionType.BORDER_HORIZONTAL, collisionData: overlap
-                });
-            }
-            if (enemyBounds.bottom >= height || enemyBounds.top <= 0)
-            {
-                const overlap = Math.min(Math.abs(enemyBounds.bottom - height), Math.abs(enemyBounds.top));
-                this.sendMessage(Messages.ENEMY_COLLISION, {
-                    enemy, type: EnemyCollisionType.BORDER_VERTICAL, collisionData: overlap
-                });
-            }
-        }
-    }
-
     /**
      * Check collision of a ball and a rectangle using raycasting. Taken from:
      * https://github.com/APHGames/examples/blob/main/src/06-physics/collisions-raycasting.ts
@@ -118,7 +14,7 @@ export class CollisionTrigger extends Colfio.Component
      * @param ballSpeed speed of the ball
      * @param bounds bounding rectangle to check the collision with
      */
-    private collideRaycasting(
+    protected collideRaycasting(
         delta: number,
         ball: Colfio.Container,
         ballSize: number,
@@ -155,18 +51,18 @@ export class CollisionTrigger extends Colfio.Component
      * @param boundRectA bounding box of the first object
      * @param boundRectB bounding box of the second object
      */
-    private collideSAT = (boundRectA: PIXI.Rectangle, boundRectB: PIXI.Rectangle) =>
+    protected collideSAT = (boundRectA: PIXI.Rectangle, boundRectB: PIXI.Rectangle) =>
         this.hIntersection(boundRectA, boundRectB) > 0 && this.vIntersection(boundRectA, boundRectB) > 0
 
     /**
      * Find horizontal intersection of two AABB.
      */
-    private hIntersection = (boundRectA: PIXI.Rectangle, boundRectB: PIXI.Rectangle) =>
+    protected hIntersection = (boundRectA: PIXI.Rectangle, boundRectB: PIXI.Rectangle) =>
         Math.min(boundRectA.right, boundRectB.right) - Math.max(boundRectA.left, boundRectB.left)
 
     /**
      * Find vertical intersection of two AABB.
      */
-    private vIntersection = (boundRectA: PIXI.Rectangle, boundRectB: PIXI.Rectangle) =>
+    protected vIntersection = (boundRectA: PIXI.Rectangle, boundRectB: PIXI.Rectangle) =>
         Math.min(boundRectA.bottom, boundRectB.bottom) - Math.max(boundRectA.top, boundRectB.top)
 }

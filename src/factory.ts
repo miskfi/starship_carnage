@@ -15,6 +15,8 @@ import {
     TEXTURE_SCALE
 } from "./constants/constants";
 import {HealthBarController} from "./components/health_bar_controller";
+import {EnemyCollisionTrigger} from "./collisions/enemy_collision_trigger";
+import {ProjectileCollisionTrigger} from "./collisions/projectile_collision_trigger";
 
 export const createProjectile = (scene: Colfio.Scene, player: Colfio.Container, parent: Colfio.Container): Colfio.Sprite =>
 {
@@ -27,6 +29,7 @@ export const createProjectile = (scene: Colfio.Scene, player: Colfio.Container, 
         .globalPos(player.position.x - player.width + 5, player.position.y - player.height)
         .withTag(Tags.PLAYER_PROJECTILE)
         .withComponent(new ProjectileController())
+        .withComponent(new ProjectileCollisionTrigger())
         .withAttribute(Attributes.PROJECTILE_SOURCE, player)
         .withParent(parent)
         .asSprite(texture)
@@ -85,6 +88,7 @@ export const createEnemyCircle = (
         .globalPos(initialPos[0], initialPos[1])
         .withTag(Tags.ENEMY_CIRCLE)
         .withComponent(new EnemyController())
+        .withComponent(new EnemyCollisionTrigger())
         .withAttribute(Attributes.ENEMY_TYPE, enemyType)
         .withAttribute(Attributes.ENEMY_VELOCITY, initialVelocity)
         .withAttribute(Attributes.ENEMY_SPEED, speed)

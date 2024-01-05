@@ -4,7 +4,6 @@ import {KeyInputComponent} from 'colfio';
 import {sound} from "@pixi/sound";
 import {Loader} from '@pixi/loaders';
 
-import {CollisionTrigger} from "./collisions/collision_trigger";
 import {GameAssets, GlobalAttributes} from "./constants/enums";
 import {GameModel} from "./game_model";
 import {CollisionResolver} from "./collisions/collision_resolver";
@@ -70,7 +69,6 @@ class Game
 
         this.engine.scene.assignGlobalAttribute(GlobalAttributes.GAME_MODEL, new GameModel(levels));
         this.engine.scene.addGlobalComponent(new KeyInputComponent());
-        this.engine.scene.addGlobalComponent(new CollisionTrigger());
         this.engine.scene.addGlobalComponent(new CollisionResolver());
         this.engine.scene.addGlobalComponent(new SoundComponent());
         this.engine.scene.addGlobalComponent(new GameManager());

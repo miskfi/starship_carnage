@@ -76,13 +76,19 @@ export class GameModel
         {
             this._currentLevel1P++;
             if (this._currentLevel1P === this._levels1P.length)
+            {
+                this._currentLevel1P = 0;
                 this._gameWon = true;
+            }
         }
         else
         {
             this._currentLevel2P++;
             if (this._currentLevel2P === this._levels2P.length)
+            {
+                this._currentLevel2P = 0;
                 this._gameWon = true;
+            }
         }
     }
 }
