@@ -1,6 +1,6 @@
 import * as Colfio from 'colfio';
 import {Messages} from "../constants/enums";
-import {COLOR_GAME_OVER, COLOR_GAME_WON} from "../constants/constants";
+import {COLOR_GAME_OVER, COLOR_GAME_WON, CONTROLS_ENTER, CONTROLS_SHIFT} from "../constants/constants";
 import {createText} from "../factory";
 
 /**
@@ -31,14 +31,14 @@ abstract class IntermediateScene extends Colfio.Component
 
     onUpdate(delta: number, absolute: number)
     {
-        if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_ENTER))
+        if (CONTROLS_ENTER.some(key => this.keyInput.isKeyPressed(key)))
         {
-            this.keyInput.handleKey(Colfio.Keys.KEY_ENTER);
+            CONTROLS_ENTER.forEach(key => this.keyInput.handleKey(key))
             this.sendMessage(Messages.LEVEL_START);
         }
-        if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_SHIFT))
+        if (CONTROLS_SHIFT.some(key => this.keyInput.isKeyPressed(key)))
         {
-            this.keyInput.handleKey(Colfio.Keys.KEY_SHIFT);
+            CONTROLS_SHIFT.forEach(key => this.keyInput.handleKey(key))
             this.sendMessage(Messages.MAIN_MENU);
         }
     }

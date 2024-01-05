@@ -27,6 +27,8 @@ Player controls
 
 In 1-player mode, the player can use controls for either P1 or P2.
 
+The game can also be controlled with the ggBlaster arcade machine using the joystick, start & select button and one action button for shooting.
+
 ## Architecture
 
 ![diagram](docs/architecture_diagram.png)

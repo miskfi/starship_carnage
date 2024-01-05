@@ -1,6 +1,6 @@
 import * as Colfio from 'colfio';
 import {Messages} from "../constants/enums";
-import {COLOR_TEXT_ACTIVE, COLOR_TEXT_PASSIVE} from "../constants/constants";
+import {COLOR_TEXT_ACTIVE, COLOR_TEXT_PASSIVE, CONTROLS_ENTER} from "../constants/constants";
 import {createText} from "../factory";
 
 export class MainMenu extends Colfio.Component
@@ -27,9 +27,9 @@ export class MainMenu extends Colfio.Component
 
     onUpdate(delta: number, absolute: number)
     {
-        if (this.keyInput.isKeyPressed(Colfio.Keys.KEY_ENTER))
+        if (CONTROLS_ENTER.some(key => this.keyInput.isKeyPressed(key)))
         {
-            this.keyInput.handleKey(Colfio.Keys.KEY_ENTER);
+            CONTROLS_ENTER.forEach(key => this.keyInput.handleKey(key));
 
             if (this.highlightedButton === this.buttonSingleplayer)
             {
