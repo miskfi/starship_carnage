@@ -43,7 +43,7 @@ abstract class IntermediateScene extends Colfio.Component
         }
     }
 
-    createScreen()
+    protected createScreen()
     {
         createText(this.scene, this.title, this.scene.width / 2, this.scene.height / 4, 50, this.titleColor, this.sceneContainer);
         let instructions = createText(

@@ -43,7 +43,7 @@ export class EnemyCollisionTrigger extends CollisionTrigger
         this.checkWallCollisions();
     }
 
-    checkWallCollisions()
+    private checkWallCollisions()
     {
         const enemy = this.owner;
         const enemyBounds = enemy.getBounds();

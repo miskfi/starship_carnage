@@ -18,7 +18,7 @@ export class GameModel
         this._gameWon = false;
     }
 
-    parseLevels(levelData)
+    private parseLevels(levelData)
     {
         const parser = new LevelParser();
         this._levels1P = parser.parseSingleplayer(levelData);

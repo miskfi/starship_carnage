@@ -51,14 +51,14 @@ export class GameManager extends Colfio.Component
         }
     }
 
-    onProjectileShot(msg: Colfio.Message)
+    private onProjectileShot(msg: Colfio.Message)
     {
         const player = msg.data as Colfio.Container;
         const projectiles = player.getAttribute<number>(Attributes.PLAYER_PROJECTILES_AVAILABLE);
         player.assignAttribute(Attributes.PLAYER_PROJECTILES_AVAILABLE, projectiles - 1);
     }
 
-    onProjectileDestroyed(msg: Colfio.Message)
+    private onProjectileDestroyed(msg: Colfio.Message)
     {
         const projectileToDestroy = msg.data as Colfio.Container;
         const player = projectileToDestroy.getAttribute<Colfio.Container>(Attributes.PROJECTILE_SOURCE);
@@ -66,7 +66,7 @@ export class GameManager extends Colfio.Component
         player.assignAttribute(Attributes.PLAYER_PROJECTILES_AVAILABLE, projectiles + 1);
     }
 
-    onEnemyDestroyed(msg: Colfio.Message)
+    private onEnemyDestroyed(msg: Colfio.Message)
     {
         const enemyToDestroy = msg.data as Colfio.Container;
         const enemyType = enemyToDestroy.getAttribute<EnemyType>(Attributes.ENEMY_TYPE);
@@ -80,7 +80,7 @@ export class GameManager extends Colfio.Component
             this.onLevelFinished();
     }
 
-    onPlayerHit(msg: Colfio.Message)
+    private onPlayerHit(msg: Colfio.Message)
     {
         const player = msg.data as Colfio.Container;
         const lives = player.getAttribute<number>(Attributes.PLAYER_LIVES);
@@ -93,7 +93,7 @@ export class GameManager extends Colfio.Component
 
             if (this.gameModel.players === 0)
             {
-                this.setGameNotRunning();
+                this.scene.assignGlobalAttribute(GlobalAttributes.GAME_STATE, {isRunning: false} as GameState);
                 this.sendMessage(Messages.GAME_OVER);
             }
         }
@@ -101,21 +101,16 @@ export class GameManager extends Colfio.Component
         player.assignAttribute(Attributes.PLAYER_LIVES, lives - 1);
     }
 
-    onLevelStart()
+    private onLevelStart()
     {
         this.gameModel.resetPlayers();
         this.gameModel.setEnemiesLevelStart();
     }
 
-    onLevelFinished()
-    {
-        this.setGameNotRunning();
-        this.gameModel.nextLevel();
-        this.sendMessage(Messages.LEVEL_FINISHED, this.gameModel.gameWon);
-    }
-
-    setGameNotRunning()
+    private onLevelFinished()
     {
         this.scene.assignGlobalAttribute(GlobalAttributes.GAME_STATE, {isRunning: false} as GameState);
+        this.gameModel.nextLevel();
+        this.sendMessage(Messages.LEVEL_FINISHED, this.gameModel.gameWon);
     }
 }

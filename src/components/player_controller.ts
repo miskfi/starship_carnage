@@ -53,7 +53,7 @@ export class PlayerController extends Colfio.Component
         }
     }
 
-    shootProjectile()
+    private shootProjectile()
     {
         if (this.owner.getAttribute<number>(Attributes.PLAYER_PROJECTILES_AVAILABLE) > 0)
             this.sendMessage(Messages.PROJECTILE_SHOT, this.owner);

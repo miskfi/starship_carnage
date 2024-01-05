@@ -64,7 +64,7 @@ export class MainMenu extends Colfio.Component
         }
     }
 
-    createMenu()
+    private createMenu()
     {
         let sceneWidth = this.scene.width;
         let sceneHeight = this.scene.height;

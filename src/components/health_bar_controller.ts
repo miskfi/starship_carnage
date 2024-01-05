@@ -47,7 +47,7 @@ export class HealthBarController extends Colfio.Component
         }
     }
 
-    createHeart()
+    private createHeart()
     {
         const heart = createHeart(
             this.scene,
@@ -58,7 +58,7 @@ export class HealthBarController extends Colfio.Component
         this.hearts.push(heart);
     }
 
-    removeHeart()
+    private removeHeart()
     {
         const heart = this.hearts.pop();
         heart.destroy();

@@ -94,7 +94,7 @@ export class SceneManager extends Colfio.Component
         }
     }
 
-    onEnemyDestroyed(msg: Colfio.Message)
+    private onEnemyDestroyed(msg: Colfio.Message)
     {
         const enemyToDestroy = msg.data as Colfio.Container;
         const enemyType = enemyToDestroy.getAttribute<EnemyType>(Attributes.ENEMY_TYPE);
@@ -133,7 +133,7 @@ export class SceneManager extends Colfio.Component
         enemyToDestroy.destroy();
     }
 
-    loadLevel()
+    private loadLevel()
     {
         this.removePreviousComponent();
 
@@ -165,7 +165,7 @@ export class SceneManager extends Colfio.Component
         this.scene.assignGlobalAttribute(GlobalAttributes.GAME_STATE, {isRunning: true} as GameState);
     }
 
-    loadSceneComponent(componentType)
+    private loadSceneComponent(componentType)
     {
         this.owner.scene.findObjectByTag(Tags.GAME_OBJECT_CONTAINER)?.destroy();  // clear all game objects
         this.removePreviousComponent();
@@ -175,7 +175,7 @@ export class SceneManager extends Colfio.Component
         this.currentSceneComponent = component;
     }
 
-    removePreviousComponent()
+    private removePreviousComponent()
     {
         if (this.currentSceneComponent !== null)
             this.scene.removeGlobalComponent(this.scene.findGlobalComponentByName(this.currentSceneComponent.name));
