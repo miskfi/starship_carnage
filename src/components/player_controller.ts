@@ -35,7 +35,8 @@ export class PlayerController extends Colfio.Component
             if (boundRect.right < screenWidth)
                 pos.x += Math.min(movementDiff, screenWidth - boundRect.right);
         }
-        else if (this.controls["down"].some(key => this.keyInput.isKeyPressed(key)))
+
+        if (this.controls["down"].some(key => this.keyInput.isKeyPressed(key)))
         {
             if (boundRect.bottom < GAME_HEIGHT - STATUS_BAR_HEIGHT)
                 pos.y += Math.min(movementDiff, screenHeight - boundRect.bottom);
