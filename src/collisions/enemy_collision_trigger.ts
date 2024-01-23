@@ -20,11 +20,11 @@ export class EnemyCollisionTrigger extends CollisionTrigger
         {
             if (enemy === enemy2) continue;
 
-            const [collision, , , , , closest] =
-                this.collideRaycasting(delta, enemy, enemySize, enemyVelocity, enemySpeed, enemy2.getBounds())
-            if (collision)
+            const collisionInfo =
+                this.collideRaycasting(delta, enemy, enemySize, enemyVelocity, enemySpeed, enemy2.getBounds());
+            if (collisionInfo.collision)
                 this.sendMessage(Messages.ENEMY_COLLISION, {
-                    enemy, collider: enemy2, type: EnemyCollisionType.ENEMY, collisionData: closest
+                    enemy, collider: enemy2, type: EnemyCollisionType.ENEMY, collisionData: collisionInfo.closest
                 });
         }
 

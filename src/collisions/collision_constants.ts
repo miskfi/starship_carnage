@@ -27,3 +27,12 @@ export type EnemyCollisionMessage = {
     type: EnemyCollisionType;
     collisionData?: number;
 }
+
+export type RaycastingCollisionInfo = {
+    collision: boolean,
+    at: number,
+    bt: number,
+    ct: number
+    dt: number,
+    closest: number
+}

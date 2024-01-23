@@ -1,5 +1,6 @@
 import * as Colfio from "colfio";
 import * as PIXI from "pixi.js"
+import {RaycastingCollisionInfo} from "./collision_constants";
 
 export abstract class CollisionTrigger extends Colfio.Component
 {
@@ -21,7 +22,7 @@ export abstract class CollisionTrigger extends Colfio.Component
         ballVelocity: Colfio.Vector,
         ballSpeed: number,
         bounds: PIXI.Rectangle,
-    ): [boolean, number, number, number, number, number]
+    ): RaycastingCollisionInfo
     {
         const posX = ball.position.x;
         const posY = ball.position.y;
@@ -43,7 +44,7 @@ export abstract class CollisionTrigger extends Colfio.Component
         const t2 = Math.max(ct, dt);
 
         const closest = Math.min(at > 0 ? at : 10000, bt > 0 ? bt : 10000, ct > 0 ? ct : 10000, dt > 0 ? dt : 10000);
-        return [(Math.min(s2, t2) - Math.max(s1, t1)) > 0, at, bt, ct, dt, closest];
+        return {collision: (Math.min(s2, t2) - Math.max(s1, t1)) > 0, at, bt, ct, dt, closest} as RaycastingCollisionInfo;
     }
 
     /**
