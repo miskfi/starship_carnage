@@ -39,8 +39,8 @@ class Game
         PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
         sound.add(GameAssets.SOUND_SHOT, "sounds/shot.wav");
-        sound.add(GameAssets.SOUND_MUSIC_GAME, "sounds/music_game.wav");
-        sound.add(GameAssets.SOUND_MUSIC_MENU, "sounds/music_menu.wav");
+        sound.add(GameAssets.SOUND_MUSIC_GAME, "sounds/music_game.mp3");
+        sound.add(GameAssets.SOUND_MUSIC_MENU, "sounds/music_menu.mp3");
         sound.add(GameAssets.SOUND_GAME_OVER, "sounds/game_over.wav");
         sound.add(GameAssets.SOUND_LEVEL_FINISHED, "sounds/game_won.wav");
         sound.add(GameAssets.SOUND_BUTTON_CHANGE, "sounds/button_change.wav");
